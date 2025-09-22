@@ -1,0 +1,22 @@
+<template>
+  <v-toolbar density="compact" color="surface">
+    <v-btn
+      v-for="(subMenu, id) in menuStore.currentSubMenus"
+      :key="id"
+      :active="menuStore.selectedSubMenuId === id"
+      @click="menuStore.selectSubMenu(id)"
+    >
+      {{ subMenu.name }}
+    </v-btn>
+  </v-toolbar>
+</template>
+
+<script setup>
+import { useMenuStore } from '@/stores/menu' // 1. 스토어 import
+
+const menuStore = useMenuStore() // 2. 스토어 인스턴스 생성
+</script>
+
+<style scoped>
+/* 서브헤더에만 적용될 스타일이 있다면 여기에 작성합니다. */
+</style>
