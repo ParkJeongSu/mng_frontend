@@ -1,45 +1,62 @@
+// src/router/index.js
 import { createRouter, createWebHistory } from 'vue-router'
-import DashboardView from '@/views/DashboardView.vue'
-import UserManagementView from '@/views/UserManagementView.vue'
-import LoginView from '@/views/LoginView.vue'
-import DefaultLayout from '@/layouts/DefaultLayout.vue'
 import { useAuthStore } from '@/stores/auth'
+import { useTabsStore } from '@/stores/tabs' // tabs 스토어 import
+
+import DefaultLayout from '@/layouts/DefaultLayout.vue'
+import HomeView from '../views/HomeView.vue'
+import DashboardView from '../views/DashboardView.vue'
+import UserManagementView from '../views/UserManagementView.vue'
+import LoginView from '../views/LoginView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
-    // 1. 로그인 경로는 레이아웃이 없습니다.
     {
       path: '/login',
       name: 'login',
       component: LoginView,
     },
-    // 2. 그 외 모든 경로는 DefaultLayout을 사용하고, 로그인이 필요합니다.
     {
       path: '/',
-      component: DefaultLayout, // 이 경로에 접속하면 먼저 DefaultLayout을 렌더링
-      meta: { requiresAuth: true }, // 이 경로는 로그인이 필요하다고 표시
+      component: DefaultLayout,
+      meta: { requiresAuth: true },
       children: [
-        // DefaultLayout의 <router-view>에 렌더링될 자식 경로들
-        { path: 'dashboard/status1', name: 'dashboard-status1', component: DashboardView },
-        { path: 'dashboard/status2', name: 'dashboard-status2', component: DashboardView },
-        { path: 'management/users', name: 'user-management', component: UserManagementView },
+        { path: '/', name: 'home', component: HomeView, meta: { title: '홈' } },
+        {
+          path: 'dashboard/status1',
+          name: 'dashboard-status1',
+          component: DashboardView,
+          meta: { title: '현황 1' },
+        },
+        {
+          path: 'dashboard/status2',
+          name: 'dashboard-status2',
+          component: DashboardView,
+          meta: { title: '현황 2' },
+        },
+        {
+          path: 'management/users',
+          name: 'user-management',
+          component: UserManagementView,
+          meta: { title: '사용자 관리' },
+        },
       ],
     },
   ],
 })
 
-// 3. 네비게이션 가드 (문지기) 설정
-router.beforeEach((to, from, next) => {
+router.beforeEach(function (to, from, next) {
   const authStore = useAuthStore()
-  const requiresAuth = to.matched.some((record) => record.meta.requiresAuth)
+  const tabsStore = useTabsStore()
 
-  // 로그인이 필요한 페이지인데, 로그인이 안 되어있다면
-  if (requiresAuth && !authStore.isLoggedIn) {
-    // 로그인 페이지로 리다이렉트
+  if (to.meta.requiresAuth && !authStore.isLoggedIn) {
     next('/login')
   } else {
-    // 그 외의 경우는 정상적으로 페이지 이동
+    // 이동하려는 페이지가 탭으로 열릴 수 있는 페이지라면(meta.title이 있다면)
+    if (to.meta.title) {
+      tabsStore.addTab(to)
+    }
     next()
   }
 })

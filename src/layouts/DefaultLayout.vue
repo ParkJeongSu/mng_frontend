@@ -13,9 +13,7 @@
       <div class="main-container">
         <TheSidebar v-if="menuStore.selectedSubMenuId" />
 
-        <div class="content">
-          <router-view />
-        </div>
+        <TabView />
       </div>
     </v-main>
   </v-app>
@@ -26,6 +24,7 @@ import TheHeader from '@/components/layout/TheHeader.vue'
 import TheSubHeader from '@/components/layout/TheSubHeader.vue'
 import TheSidebar from '@/components/layout/TheSidebar.vue'
 import { useMenuStore } from '@/stores/menu' // 스토어 import
+import TabView from '@/components/layout/TabView.vue' // TabView import
 const menuStore = useMenuStore()
 </script>
 

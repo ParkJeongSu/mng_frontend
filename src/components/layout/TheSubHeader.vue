@@ -1,5 +1,7 @@
 <template>
-  <v-toolbar density="compact" color="surface">
+  <v-toolbar density="compact" color="primary">
+    <v-spacer></v-spacer>
+
     <v-btn
       v-for="(subMenu, id) in menuStore.currentSubMenus"
       :key="id"
@@ -8,6 +10,7 @@
     >
       {{ subMenu.name }}
     </v-btn>
+    <v-spacer></v-spacer>
   </v-toolbar>
 </template>
 
