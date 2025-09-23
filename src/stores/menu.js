@@ -8,7 +8,7 @@ export const useMenuStore = defineStore('menu', () => {
   // 1. State (상태): 컴포넌트들이 공유할 데이터
   // --------------------------------------------------
 
-  // 전체 메뉴 구조 (나중에는 API로 받아올 데이터)
+  // allMenus의 ref 값을 아래 내용으로 교체합니다.
   const allMenus = ref({
     systemA: {
       name: '시스템 A',
@@ -16,6 +16,7 @@ export const useMenuStore = defineStore('menu', () => {
         dashboard: {
           name: '대시보드',
           items: [
+            // 대시보드는 하위 메뉴가 없는 1단계 구조
             { title: '현황 1', icon: 'mdi-view-dashboard', to: '/dashboard/status1' },
             { title: '현황 2', icon: 'mdi-view-dashboard', to: '/dashboard/status2' },
           ],
@@ -23,8 +24,20 @@ export const useMenuStore = defineStore('menu', () => {
         management: {
           name: '운영 관리',
           items: [
-            { title: '사용자 관리', icon: 'mdi-account-group', to: '/management/users' },
-            { title: '그룹 관리', icon: 'mdi-account-multiple', to: '/management/groups' },
+            // 운영 관리는 하위 메뉴(children)가 있는 2단계 구조
+            {
+              title: '사용자 관리',
+              icon: 'mdi-account-group',
+              children: [
+                { title: '사용자 목록', to: '/management/users/list' },
+                { title: '사용자 등록', to: '/management/users/create' },
+              ],
+            },
+            {
+              title: '그룹 관리',
+              icon: 'mdi-account-multiple',
+              children: [{ title: '그룹 목록', to: '/management/groups/list' }],
+            },
           ],
         },
       },
@@ -43,7 +56,7 @@ export const useMenuStore = defineStore('menu', () => {
     },
     systemC: {
       name: '시스템 C',
-      subMenus: {}, // 시스템 C는 서브메뉴가 없음
+      subMenus: {},
     },
   })
 

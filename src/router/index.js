@@ -22,7 +22,7 @@ const router = createRouter({
       component: DefaultLayout,
       meta: { requiresAuth: true },
       children: [
-        { path: '/', name: 'home', component: HomeView, meta: { title: '홈' } },
+        { path: '', name: 'home', component: HomeView, meta: { title: '홈' } },
         {
           path: 'dashboard/status1',
           name: 'dashboard-status1',
@@ -35,11 +35,39 @@ const router = createRouter({
           component: DashboardView,
           meta: { title: '현황 2' },
         },
+
+        // 기존 'user-management'를 삭제하고 아래 구체적인 경로들을 추가합니다.
         {
-          path: 'management/users',
-          name: 'user-management',
+          path: 'management/users/list',
+          name: 'user-list',
           component: UserManagementView,
-          meta: { title: '사용자 관리' },
+          meta: { title: '사용자 목록' },
+        },
+        {
+          path: 'management/users/create',
+          name: 'user-create',
+          component: UserManagementView,
+          meta: { title: '사용자 등록' },
+        },
+        {
+          path: 'management/groups/list',
+          name: 'group-list',
+          component: UserManagementView,
+          meta: { title: '그룹 목록' },
+        },
+
+        // 통계 메뉴 경로 추가 (예시)
+        {
+          path: 'stats/daily',
+          name: 'stats-daily',
+          component: DashboardView,
+          meta: { title: '일별 통계' },
+        },
+        {
+          path: 'stats/monthly',
+          name: 'stats-monthly',
+          component: DashboardView,
+          meta: { title: '월별 통계' },
         },
       ],
     },
