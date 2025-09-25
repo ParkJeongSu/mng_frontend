@@ -47,8 +47,21 @@
           <v-card-title>상세 정보</v-card-title>
           <v-divider></v-divider>
           <v-card-text>
-            <p>이곳에 그리드 아이템의 상세 정보가 표시됩니다.</p>
-            <p>데이터 생성 및 수정 폼이 위치할 영역입니다.</p>
+            <div v-if="panelStore.selectedItem">
+              <v-text-field
+                v-for="(value, key) in panelStore.selectedItem"
+                :key="key"
+                :label="String(key)"
+                :model-value="value"
+                density="compact"
+                variant="outlined"
+                readonly
+                class="mb-2"
+              ></v-text-field>
+            </div>
+            <div v-else>
+              <p>표에서 항목을 선택하세요.</p>
+            </div>
           </v-card-text>
         </v-card>
       </div>

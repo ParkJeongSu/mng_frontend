@@ -9,6 +9,7 @@ import DashboardView from '../views/DashboardView.vue'
 import UserManagementView from '../views/UserManagementView.vue'
 import LoginView from '../views/LoginView.vue'
 import ProfileView from '../views/ProfileView.vue'
+import UserListView from '../views/management/UserListView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -31,6 +32,12 @@ const router = createRouter({
           meta: { title: '프로필' },
         },
         {
+          path: 'management/users/list',
+          name: 'user-list',
+          component: UserListView, // 여기를 수정
+          meta: { title: '사용자 목록' },
+        },
+        {
           path: 'dashboard/status1',
           name: 'dashboard-status1',
           component: DashboardView,
@@ -41,14 +48,6 @@ const router = createRouter({
           name: 'dashboard-status2',
           component: DashboardView,
           meta: { title: '현황 2' },
-        },
-
-        // 기존 'user-management'를 삭제하고 아래 구체적인 경로들을 추가합니다.
-        {
-          path: 'management/users/list',
-          name: 'user-list',
-          component: UserManagementView,
-          meta: { title: '사용자 목록' },
         },
         {
           path: 'management/users/create',
