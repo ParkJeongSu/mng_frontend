@@ -1,5 +1,5 @@
 <template>
-  <v-navigation-drawer permanent>
+  <v-navigation-drawer>
     <v-list v-model:opened="openGroups" density="compact" nav open-strategy="multiple">
       <template v-for="item in menuStore.currentSidebarItems" :key="item.title">
         <v-list-group v-if="item.children" :value="item.title">

@@ -63,7 +63,8 @@ export const useMenuStore = defineStore('menu', () => {
   // 현재 사용자가 선택한 시스템과 서브메뉴의 ID
   const selectedSystemId = ref(null) // 예: 'systemA'
   const selectedSubMenuId = ref(null) // 예: 'dashboard'
-
+  // 사이드바 표시 여부를 제어하는 상태 추가
+  const isSidebarOpen = ref(true)
   // --------------------------------------------------
   // 2. Getters (계산된 상태): State를 기반으로 동적으로 계산되는 값
   // --------------------------------------------------
@@ -97,6 +98,11 @@ export const useMenuStore = defineStore('menu', () => {
     selectedSubMenuId.value = subMenuId
   }
 
+  // 사이드바를 토글하는 함수 추가
+  function toggleSidebar() {
+    isSidebarOpen.value = !isSidebarOpen.value
+  }
+
   // --------------------------------------------------
   // 4. Return: 외부에서 사용할 수 있도록 노출
   // --------------------------------------------------
@@ -108,5 +114,7 @@ export const useMenuStore = defineStore('menu', () => {
     currentSidebarItems,
     selectSystem,
     selectSubMenu,
+    isSidebarOpen,
+    toggleSidebar,
   }
 })

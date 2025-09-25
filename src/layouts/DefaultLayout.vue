@@ -1,21 +1,21 @@
 <template>
   <v-app>
     <TheHeader>
-      <template
-        v-if="menuStore.selectedSystemId && Object.keys(menuStore.currentSubMenus).length > 0"
-        v-slot:extension
-      >
+      <template v-slot:extension>
         <TheSubHeader />
       </template>
     </TheHeader>
 
     <v-main>
       <div class="main-container">
-        <TheSidebar v-if="menuStore.selectedSubMenuId" />
+        <TheSidebar v-model="menuStore.isSidebarOpen" />
 
         <TabView />
       </div>
     </v-main>
+    <v-footer app class="d-flex justify-center" style="height: 40px">
+      <div class="text-caption">© 2025 MNG. All rights reserved.</div>
+    </v-footer>
   </v-app>
 </template>
 

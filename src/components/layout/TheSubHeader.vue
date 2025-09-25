@@ -1,15 +1,17 @@
 <template>
   <v-toolbar density="compact" color="primary">
+    <v-app-bar-nav-icon @click="menuStore.toggleSidebar"></v-app-bar-nav-icon>
     <v-spacer></v-spacer>
-
-    <v-btn
-      v-for="(subMenu, id) in menuStore.currentSubMenus"
-      :key="id"
-      :active="menuStore.selectedSubMenuId === id"
-      @click="menuStore.selectSubMenu(id)"
-    >
-      {{ subMenu.name }}
-    </v-btn>
+    <div class="d-flex justify-center flex-grow-1">
+      <v-btn
+        v-for="(subMenu, id) in menuStore.currentSubMenus"
+        :key="id"
+        :active="menuStore.selectedSubMenuId === id"
+        @click="menuStore.selectSubMenu(id)"
+      >
+        {{ subMenu.name }}
+      </v-btn>
+    </div>
     <v-spacer></v-spacer>
   </v-toolbar>
 </template>

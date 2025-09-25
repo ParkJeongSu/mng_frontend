@@ -105,6 +105,7 @@ function closeOtherTabs() {
   flex-direction: column;
   height: 100%;
   background-color: #f0f2f5; /* 전체 배경색을 약간 어둡게 변경 */
+  /* width: 100%; */
 }
 
 /* 탭 바 전체를 감싸는 영역 스타일 */

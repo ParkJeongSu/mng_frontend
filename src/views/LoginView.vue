@@ -1,46 +1,53 @@
 <template>
-  <v-container class="fill-height d-flex justify-center align-center login-page-container">
-    <v-card class="login-card">
-      <v-card-title class="text-center text-h5 py-4">Sign in</v-card-title>
-      <v-card-text>
-        <v-text-field
-          v-model="username"
-          label="ID"
-          variant="outlined"
-          density="compact"
-          class="mb-2"
-          @keyup.enter="handleLogin"
-        ></v-text-field>
+  <v-app>
+    <v-main>
+      <v-container class="fill-height d-flex justify-center align-center login-page-container">
+        <v-card class="login-card">
+          <v-card-title class="text-center text-h5 py-4">Sign in</v-card-title>
+          <v-card-text>
+            <v-text-field
+              v-model="username"
+              label="ID"
+              variant="outlined"
+              density="compact"
+              class="mb-2"
+              @keyup.enter="handleLogin"
+            ></v-text-field>
 
-        <v-text-field
-          v-model="password"
-          label="Password"
-          :type="passwordFieldType"
-          variant="outlined"
-          density="compact"
-          @keyup.enter="handleLogin"
-          :append-inner-icon="passwordFieldIcon"
-          @click:append-inner="togglePasswordVisibility"
-        ></v-text-field>
-        <v-alert v-if="loginError" type="error" density="compact" class="mb-4">
-          {{ loginError }}
-        </v-alert>
-      </v-card-text>
+            <v-text-field
+              v-model="password"
+              label="Password"
+              :type="passwordFieldType"
+              variant="outlined"
+              density="compact"
+              @keyup.enter="handleLogin"
+              :append-inner-icon="passwordFieldIcon"
+              @click:append-inner="togglePasswordVisibility"
+            ></v-text-field>
+            <v-alert v-if="loginError" type="error" density="compact" class="mb-4">
+              {{ loginError }}
+            </v-alert>
+          </v-card-text>
 
-      <v-card-actions class="px-4 pb-4">
-        <v-btn
-          @click="handleLogin"
-          variant="elevated"
-          color="primary"
-          block
-          size="large"
-          :loading="submitting"
-          :disabled="submitting"
-          >Login</v-btn
-        >
-      </v-card-actions>
-    </v-card>
-  </v-container>
+          <v-card-actions class="px-4 pb-4">
+            <v-btn
+              @click="handleLogin"
+              variant="elevated"
+              color="primary"
+              block
+              size="large"
+              :loading="submitting"
+              :disabled="submitting"
+              >Login</v-btn
+            >
+          </v-card-actions>
+        </v-card>
+      </v-container>
+    </v-main>
+    <v-footer app class="d-flex justify-center" style="height: 40px">
+      <div class="text-caption">© 2025 MNG. All rights reserved.</div>
+    </v-footer>
+  </v-app>
 </template>
 
 <script setup>

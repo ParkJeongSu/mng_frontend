@@ -22,44 +22,72 @@
 
     <v-spacer></v-spacer>
 
-    <div class="d-flex align-center">
-      <span class="user-id">test@test.com</span>
-      <v-icon class="user-icon">mdi-account-circle</v-icon>
-      <!--
-      <v-btn icon @click="toggleTheme">
-        <v-icon>mdi-theme-light-dark</v-icon>
-      </v-btn>
-      -->
-    </div>
+    <v-menu offset-y>
+      <template v-slot:activator="{ props }">
+        <div v-bind="props" class="d-flex align-center cursor-pointer">
+          <span class="user-id">test@test.com</span>
+          <v-icon class="user-icon">mdi-account-circle</v-icon>
+        </div>
+      </template>
+
+      <v-list density="compact">
+        <v-list-item to="/profile" prepend-icon="mdi-account">
+          <v-list-item-title>프로필</v-list-item-title>
+        </v-list-item>
+        <v-list-item @click="openLogoutDialog" prepend-icon="mdi-logout">
+          <v-list-item-title>로그아웃</v-list-item-title>
+        </v-list-item>
+      </v-list>
+    </v-menu>
 
     <template v-slot:extension>
       <slot name="extension"></slot>
     </template>
   </v-app-bar>
+
+  <ConfirmDialog
+    v-model:show="showLogoutConfirm"
+    title="로그아웃"
+    message="정말 로그아웃 하시겠습니까?"
+    @confirm="handleLogout"
+  />
 </template>
 
 <script setup>
+import { ref } from 'vue'
 import { useMenuStore } from '@/stores/menu'
-// import { useTheme } from 'vuetify'
+import { useAuthStore } from '@/stores/auth' // auth 스토어 import
+import ConfirmDialog from '@/components/common/ConfirmDialog.vue' // ConfirmDialog import
 
 const menuStore = useMenuStore()
-// const theme = useTheme()
+const authStore = useAuthStore()
 
-// function toggleTheme() {
-//   theme.global.name.value = theme.global.current.value.dark ? 'light' : 'dark'
-// }
+const showLogoutConfirm = ref(false) // 다이얼로그 표시 상태
+
+// '로그아웃' 메뉴 클릭 시 다이얼로그를 엽니다.
+function openLogoutDialog() {
+  showLogoutConfirm.value = true
+}
+
+// 다이얼로그에서 '확인'을 눌렀을 때 실제 로그아웃을 처리합니다.
+function handleLogout() {
+  authStore.logout()
+}
 </script>
 
 <style scoped>
+/* 3. 메뉴를 클릭할 수 있도록 커서 모양을 추가합니다. */
+.cursor-pointer {
+  cursor: pointer;
+}
+
 .company-logo {
   margin-left: 12px;
 }
 .company-title {
   margin-left: 8px;
-  /* flex-grow: 0;  */
-  /* 제목이 너무 많은 공간을 차지하지 않도록 설정 */
-  flex: 0 1 auto; /* grow=0, shrink=1, basis=auto */
-  min-width: max-content; /* 내용만큼은 최소 확보 */
+  flex: 0 1 auto;
+  min-width: max-content;
 }
 .user-id {
   font-size: 14px;
