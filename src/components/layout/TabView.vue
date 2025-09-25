@@ -34,7 +34,7 @@
         </router-view>
       </div>
     </div>
-
+    <!-- right panel -->
     <div class="side-panel-container">
       <div class="panel-toggle-button" @click="panelStore.togglePanel">
         <v-icon>
@@ -44,25 +44,47 @@
 
       <div v-if="panelStore.isPanelOpen" class="side-panel">
         <v-card class="fill-height" flat>
-          <v-card-title>상세 정보</v-card-title>
+          <v-card-title>
+            <span v-if="panelStore.formMode === 'create'">사용자 생성</span>
+            <span v-else-if="panelStore.formMode === 'edit'">사용자 수정</span>
+            <span v-else>상세 정보</span>
+          </v-card-title>
           <v-divider></v-divider>
+
           <v-card-text>
-            <div v-if="panelStore.selectedItem">
-              <v-text-field
-                v-for="(value, key) in panelStore.selectedItem"
-                :key="key"
-                :label="String(key)"
-                :model-value="value"
+            <div v-if="panelStore.formMode">
+              <component
+                v-for="field in panelStore.formSchema"
+                :key="field.key"
+                :is="componentMap[field.component]"
+                :label="field.label"
+                :items="field.items"
+                v-model="panelStore.formData[field.key]"
                 density="compact"
                 variant="outlined"
-                readonly
                 class="mb-2"
-              ></v-text-field>
+              ></component>
             </div>
-            <div v-else>
-              <p>표에서 항목을 선택하세요.</p>
+            <div v-else-if="panelStore.selectedItem">
+              <component
+                v-for="field in panelStore.formSchema"
+                :key="field.key"
+                :is="componentMap[field.component]"
+                :label="field.label"
+                :items="field.items"
+                :model-value="panelStore.selectedItem[field.key]"
+                density="compact"
+                variant="outlined"
+                class="mb-2"
+              ></component>
             </div>
           </v-card-text>
+
+          <v-card-actions v-if="panelStore.formMode">
+            <v-spacer></v-spacer>
+            <v-btn @click="panelStore.closePanel">취소</v-btn>
+            <v-btn color="primary">저장</v-btn>
+          </v-card-actions>
         </v-card>
       </div>
     </div>
@@ -90,9 +112,18 @@ import { ref } from 'vue'
 import { useTabsStore } from '@/stores/tabs'
 import { usePanelStore } from '@/stores/panel' // panel 스토어 import
 import router from '@/router'
+// 1. 필요한 Vuetify 폼 컴포넌트를 직접 import 합니다.
+import { VTextField, VSelect } from 'vuetify/components'
 
 const tabsStore = useTabsStore()
 const panelStore = usePanelStore() // panel 스토어 인스턴스 생성
+
+// 2. 문자열 이름과 실제 컴포넌트를 매핑하는 객체를 만듭니다.
+const componentMap = {
+  'v-text-field': VTextField,
+  'v-select': VSelect,
+  // 나중에 v-textarea, v-checkbox 등을 추가할 수 있습니다.
+}
 
 const contextMenu = ref({
   show: false,

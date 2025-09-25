@@ -9,30 +9,61 @@ export const usePanelStore = defineStore('panel', () => {
   // 1. 선택된 아이템 데이터를 저장할 상태 추가
   const selectedItem = ref(null)
 
-  // Actions
-  function openPanel() {
-    isPanelOpen.value = true
-  }
+  // --- 새로 추가되는 상태들 ---
+  // 1. 폼을 그리기 위한 '설계도(Schema)'
+  const formSchema = ref([])
+  // 2. 폼에 바인딩 될 실제 데이터 객체
+  const formData = ref({})
+  // 3. 현재 폼의 모드 ('create' 또는 'edit')
+  const formMode = ref(null) // 'create', 'edit'
 
   function closePanel() {
     isPanelOpen.value = false
+    selectedItem.value = null
+    formSchema.value = [] // 폼 관련 상태 모두 초기화
+    formData.value = {}
+    formMode.value = null
+  }
+
+  /**
+   * (수정) Row 클릭 시 읽기용 패널을 여는 함수
+   * @param {object} item - 행 데이터
+   */
+  function openReadOnlyPanel(schema, item) {
+    selectedItem.value = item
+    formMode.value = null
+    isPanelOpen.value = true
+    formSchema.value = schema
+    formData.value = { ...item } // 원본 수정을 방지하기 위해 복사해서 사용
   }
 
   function togglePanel() {
     isPanelOpen.value = !isPanelOpen.value
   }
 
-  // 2. 선택된 아이템을 설정하는 함수 추가
-  function setSelectedItem(item) {
-    selectedItem.value = item
+  /**
+   * (신규) '생성' 또는 '수정'을 위한 폼 패널을 여는 함수
+   * @param {Array} schema - View에서 정의한 폼 설계도
+   * @param {object} initialData - 초기 데이터 (생성 시에는 빈 객체, 수정 시에는 원본 데이터)
+   * @param {string} mode - 'create' 또는 'edit'
+   */
+  function openFormPanel(schema, initialData, mode) {
+    selectedItem.value = null // 읽기용 데이터는 비워둠
+    formSchema.value = schema
+    formData.value = { ...initialData } // 원본 수정을 방지하기 위해 복사해서 사용
+    formMode.value = mode
+    isPanelOpen.value = true
   }
 
   return {
     isPanelOpen,
     selectedItem,
-    openPanel,
+    formSchema,
+    formData,
+    formMode,
     closePanel,
+    openReadOnlyPanel,
+    openFormPanel,
     togglePanel,
-    setSelectedItem,
   }
 })
