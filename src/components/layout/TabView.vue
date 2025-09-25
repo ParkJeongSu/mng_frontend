@@ -1,36 +1,57 @@
 <template>
-  <div class="tab-view-container">
-    <v-tabs
-      v-model="tabsStore.activeTabPath"
-      @update:model-value="onTabChange"
-      density="compact"
-      show-arrows
-      class="tab-bar"
-    >
-      <v-tab
-        v-for="tab in tabsStore.openTabs"
-        :key="tab.path"
-        :value="tab.path"
-        @contextmenu.prevent="onRightClick(tab, $event)"
+  <div class="tab-view-layout">
+    <div class="tab-view-container">
+      <v-tabs
+        v-model="tabsStore.activeTabPath"
+        @update:model-value="onTabChange"
+        density="compact"
+        show-arrows
+        class="tab-bar"
       >
-        {{ tab.title }}
-        <v-icon
-          v-if="tab.path !== '/'"
-          size="small"
-          class="ml-2 close-icon"
-          @click.stop="closeTab(tab)"
+        <v-tab
+          v-for="tab in tabsStore.openTabs"
+          :key="tab.path"
+          :value="tab.path"
+          @contextmenu.prevent="onRightClick(tab, $event)"
         >
-          mdi-close
-        </v-icon>
-      </v-tab>
-    </v-tabs>
+          {{ tab.title }}
+          <v-icon
+            v-if="tab.path !== '/'"
+            size="small"
+            class="ml-2 close-icon"
+            @click.stop="closeTab(tab)"
+          >
+            mdi-close
+          </v-icon>
+        </v-tab>
+      </v-tabs>
 
-    <div class="tab-content">
-      <router-view v-slot="{ Component }">
-        <keep-alive>
-          <component :is="Component" />
-        </keep-alive>
-      </router-view>
+      <div class="tab-content">
+        <router-view v-slot="{ Component }">
+          <keep-alive>
+            <component :is="Component" />
+          </keep-alive>
+        </router-view>
+      </div>
+    </div>
+
+    <div class="side-panel-container">
+      <div class="panel-toggle-button" @click="panelStore.togglePanel">
+        <v-icon>
+          {{ panelStore.isPanelOpen ? 'mdi-chevron-right' : 'mdi-chevron-left' }}
+        </v-icon>
+      </div>
+
+      <div v-if="panelStore.isPanelOpen" class="side-panel">
+        <v-card class="fill-height" flat>
+          <v-card-title>상세 정보</v-card-title>
+          <v-divider></v-divider>
+          <v-card-text>
+            <p>이곳에 그리드 아이템의 상세 정보가 표시됩니다.</p>
+            <p>데이터 생성 및 수정 폼이 위치할 영역입니다.</p>
+          </v-card-text>
+        </v-card>
+      </div>
     </div>
 
     <v-menu
@@ -54,11 +75,12 @@
 <script setup>
 import { ref } from 'vue'
 import { useTabsStore } from '@/stores/tabs'
+import { usePanelStore } from '@/stores/panel' // panel 스토어 import
 import router from '@/router'
 
 const tabsStore = useTabsStore()
+const panelStore = usePanelStore() // panel 스토어 인스턴스 생성
 
-// 컨텍스트 메뉴(우클릭 메뉴)의 상태
 const contextMenu = ref({
   show: false,
   x: 0,
@@ -66,23 +88,19 @@ const contextMenu = ref({
   targetTab: null,
 })
 
-// 탭을 클릭했을 때 해당 경로로 이동하는 함수
 function onTabChange(newPath) {
   router.push(newPath)
 }
 
-// 탭의 'x' 버튼을 클릭했을 때
 function closeTab(tab) {
   tabsStore.removeTab(tab)
 }
 
-// 탭에서 우클릭했을 때
 function onRightClick(tab, event) {
   contextMenu.value.show = true
   contextMenu.value.x = event.clientX
   contextMenu.value.y = event.clientY
   contextMenu.value.targetTab = tab
-  // 우클릭한 탭을 활성화
   tabsStore.activeTabPath = tab.path
   router.push(tab.path)
 }
@@ -99,23 +117,28 @@ function closeOtherTabs() {
 </script>
 
 <style scoped>
-/* 3. 아래의 스타일 코드를 추가/수정합니다. */
+/* 3. 새로운 Flexbox 레이아웃과 패널 스타일을 추가/수정합니다. */
+.tab-view-layout {
+  display: flex;
+  width: 100%;
+  height: 100%;
+}
+
 .tab-view-container {
+  /* flex-grow: 1을 통해 남는 공간을 모두 차지하도록 설정 */
+  flex-grow: 1;
   display: flex;
   flex-direction: column;
   height: 100%;
-  background-color: #f0f2f5; /* 전체 배경색을 약간 어둡게 변경 */
-  /* width: 100%; */
+  background-color: #f0f2f5;
+  transition: width 0.3s ease; /* 너비 변경 시 부드러운 애니메이션 효과 */
 }
 
-/* 탭 바 전체를 감싸는 영역 스타일 */
 .tab-bar {
-  /* Vuetify 기본 그림자 제거 */
   box-shadow: none;
   border-bottom: 1px solid #dcdfe6;
 }
 
-/* 탭 컨텐츠가 보여지는 영역 스타일 */
 .tab-content {
   flex-grow: 1;
   padding: 24px;
@@ -124,24 +147,53 @@ function closeOtherTabs() {
   border-left: 1px solid #dcdfe6;
 }
 
-/* Vuetify의 v-tab 기본 스타일을 덮어씁니다. */
+/* --- 상세 정보 패널 관련 스타일 --- */
+.side-panel-container {
+  display: flex;
+  align-items: center; /* 토글 버튼을 세로 중앙에 위치시키기 위함 */
+  position: relative; /* 토글 버튼의 위치 기준점 */
+}
+
+.panel-toggle-button {
+  /* 버튼을 패널 왼쪽에 세로로 길게 배치 */
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translate(-100%, -50%);
+  z-index: 10;
+  background-color: #1976d2; /* primary color */
+  color: white;
+  cursor: pointer;
+  padding: 12px 2px;
+  border-radius: 4px 0 0 4px;
+  box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.side-panel {
+  width: 400px;
+  height: 100%;
+  border-left: 1px solid #dcdfe6;
+  background-color: #fafafa;
+  /* 패널이 나타나고 사라질 때 부드러운 효과를 줌 */
+  transition: all 0.3s ease;
+}
+
+/* --- 기존 스타일은 유지 --- */
 :deep(.v-tab) {
-  text-transform: none !important; /* 영문 대문자 변환 방지 */
+  text-transform: none !important;
   border-right: 1px solid #dcdfe6;
   background-color: #f0f2f5;
   color: #606266;
   font-weight: 500;
 }
 
-/* 활성화된 탭 스타일 */
 :deep(.v-tab--selected) {
-  background-color: #ffffff; /* 컨텐츠 영역과 같은 흰색으로 변경 */
-  color: var(--v-theme-primary); /* Vuetify의 primary 색상 사용 */
+  background-color: #ffffff;
+  color: var(--v-theme-primary);
   font-weight: 700;
-  border-bottom-color: transparent; /* 아래쪽 경계선을 없애 컨텐츠와 이어진 느낌을 줌 */
+  border-bottom-color: transparent;
 }
 
-/* 닫기 아이콘 스타일 */
 .close-icon {
   border-radius: 50%;
   transition: background-color 0.2s ease-in-out;
