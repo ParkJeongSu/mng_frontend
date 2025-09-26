@@ -2,53 +2,70 @@
   <v-data-table
     :headers="headers"
     :items="items"
-    :item-value="itemKey"
     :show-select="showCheckbox"
-    :model-value="selectedCheckboxItems"
-    @update:model-value="$emit('update:selected', $event)"
+    v-model="selectedItems"
     class="flex-grow-1"
     density="compact"
-    fixed-header
     return-object
+    fixed-header
+    fixed-layout
+    :item-value="itemKey"
+    @click:row="handleRowClick"
+    :hover="isHover"
   >
-    <template v-slot:item="{ item, internalItem, isSelected }">
-      <tr
-        :class="{ 'selected-row': selectedRowItem && selectedRowItem[itemKey] === item[itemKey] }"
-        @click="$emit('row-click', item)"
-      >
-        <td v-if="showCheckbox">
-          <v-checkbox-btn
-            :model-value="isSelected(internalItem)"
-            @click.stop="$emit('toggle-select', internalItem)"
-          ></v-checkbox-btn>
-        </td>
-        <td v-for="header in headers" :key="header.key" :class="`text-${header.align || 'start'}`">
-          {{ item[header.key] }}
-        </td>
-      </tr>
-    </template>
   </v-data-table>
 </template>
 
 <script setup>
-defineProps({
+import { ref, watch } from 'vue'
+
+const props = defineProps({
   headers: { type: Array, required: true },
   items: { type: Array, required: true },
   itemKey: { type: String, required: true },
   showCheckbox: { type: Boolean, default: false },
   selectedRowItem: { type: Object, default: null }, // 부모로부터 어떤 행이 선택되었는지 받음
-  selectedCheckboxItems: { type: Array, default: () => [] }, // 부모로부터 어떤 체크박스가 선택되었는지 받음
+  isHover: { type: Boolean, default: false }, // 부모로부터 어떤 행이 선택되었는지 받음
 })
 
-defineEmits(['row-click', 'update:selected', 'toggle-select'])
+const emit = defineEmits(['row-click', 'update:selected'])
+
+// v-data-table의 v-model과 연결될 내부 상태
+const selectedItems = ref([])
+
+// 행 클릭 이벤트는 그대로 부모에게 전달
+function handleRowClick(event, { item }) {
+  emit('row-click', item)
+}
+
+// 체크박스 선택이 변경되면 부모에게 알림
+watch(selectedItems, (newValue) => {
+  emit('update:selected', newValue)
+})
 </script>
 
 <style scoped>
-:deep(tbody tr) {
-  cursor: pointer;
+/*
+  prop으로 해결되지 않을 경우를 대비한 CSS 보험입니다.
+  :deep()을 이용해 자식인 v-data-table 내부의 table 태그에
+  '쪼그라들지 말라'는 규칙을 한 번 더 강제로 적용합니다.
+*/
+:deep(.v-data-table__wrapper table) {
+  table-layout: fixed;
 }
-.selected-row {
-  background-color: #e3f2fd;
-  font-weight: bold;
+
+/*
+  헤더의 텍스트가 길 경우 줄바꿈되면서 컬럼 너비에 영향을 주는 것을
+  방지하기 위한 추가 설정입니다.
+*/
+:deep(th) {
+  white-space: nowrap;
+  border-left-style: solid;
+  border-color: black;
+  border-width: 1px;
+}
+
+:deep(td) {
+  white-space: nowrap;
 }
 </style>
