@@ -34,60 +34,6 @@
         </router-view>
       </div>
     </div>
-    <!-- right panel -->
-    <div class="side-panel-container">
-      <div class="panel-toggle-button" @click="panelStore.togglePanel">
-        <v-icon>
-          {{ panelStore.isPanelOpen ? 'mdi-chevron-right' : 'mdi-chevron-left' }}
-        </v-icon>
-      </div>
-
-      <div v-if="panelStore.isPanelOpen" class="side-panel">
-        <v-card class="fill-height" flat>
-          <v-card-title>
-            <span v-if="panelStore.formMode === 'create'">사용자 생성</span>
-            <span v-else-if="panelStore.formMode === 'edit'">사용자 수정</span>
-            <span v-else>상세 정보</span>
-          </v-card-title>
-          <v-divider></v-divider>
-
-          <v-card-text>
-            <div v-if="panelStore.formMode">
-              <component
-                v-for="field in panelStore.formSchema"
-                :key="field.key"
-                :is="componentMap[field.component]"
-                :label="field.label"
-                :items="field.items"
-                v-model="panelStore.formData[field.key]"
-                density="compact"
-                variant="outlined"
-                class="mb-2"
-              ></component>
-            </div>
-            <div v-else-if="panelStore.selectedItem">
-              <component
-                v-for="field in panelStore.formSchema"
-                :key="field.key"
-                :is="componentMap[field.component]"
-                :label="field.label"
-                :items="field.items"
-                :model-value="panelStore.selectedItem[field.key]"
-                density="compact"
-                variant="outlined"
-                class="mb-2"
-              ></component>
-            </div>
-          </v-card-text>
-
-          <v-card-actions v-if="panelStore.formMode">
-            <v-spacer></v-spacer>
-            <v-btn @click="panelStore.closePanel">취소</v-btn>
-            <v-btn color="primary">저장</v-btn>
-          </v-card-actions>
-        </v-card>
-      </div>
-    </div>
 
     <v-menu
       v-model="contextMenu.show"
@@ -110,20 +56,9 @@
 <script setup>
 import { ref } from 'vue'
 import { useTabsStore } from '@/stores/tabs'
-import { usePanelStore } from '@/stores/panel' // panel 스토어 import
 import router from '@/router'
-// 1. 필요한 Vuetify 폼 컴포넌트를 직접 import 합니다.
-import { VTextField, VSelect } from 'vuetify/components'
 
 const tabsStore = useTabsStore()
-const panelStore = usePanelStore() // panel 스토어 인스턴스 생성
-
-// 2. 문자열 이름과 실제 컴포넌트를 매핑하는 객체를 만듭니다.
-const componentMap = {
-  'v-text-field': VTextField,
-  'v-select': VSelect,
-  // 나중에 v-textarea, v-checkbox 등을 추가할 수 있습니다.
-}
 
 const contextMenu = ref({
   show: false,
@@ -196,37 +131,6 @@ function closeOtherTabs() {
   overflow-y: auto;
   /* background-color: #ffffff; */
   border-left: 1px solid #dcdfe6;
-}
-
-/* --- 상세 정보 패널 관련 스타일 --- */
-.side-panel-container {
-  display: flex;
-  align-items: center; /* 토글 버튼을 세로 중앙에 위치시키기 위함 */
-  position: relative; /* 토글 버튼의 위치 기준점 */
-}
-
-.panel-toggle-button {
-  /* 버튼을 패널 왼쪽에 세로로 길게 배치 */
-  position: absolute;
-  left: 0;
-  top: 50%;
-  transform: translate(-100%, -50%);
-  z-index: 10;
-  background-color: #1976d2; /* primary color */
-  color: white;
-  cursor: pointer;
-  padding: 12px 2px;
-  border-radius: 4px 0 0 4px;
-  box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
-}
-
-.side-panel {
-  width: 400px;
-  height: 100%;
-  border-left: 1px solid #dcdfe6;
-  background-color: #fafafa;
-  /* 패널이 나타나고 사라질 때 부드러운 효과를 줌 */
-  transition: all 0.3s ease;
 }
 
 /* --- 기존 스타일은 유지 --- */
