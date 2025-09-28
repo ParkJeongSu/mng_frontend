@@ -60,9 +60,10 @@ watch(selectedItems, (newValue) => {
 */
 :deep(th) {
   white-space: nowrap;
-  border-left-style: solid;
+
+  /* border-left-style: solid;
   border-color: black;
-  border-width: 1px;
+  border-width: 1px; */
 }
 
 :deep(td) {

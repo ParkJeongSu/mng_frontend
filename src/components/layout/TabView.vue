@@ -174,7 +174,7 @@ function closeOtherTabs() {
   display: flex;
   flex-direction: column;
   height: 100%;
-  background-color: #f0f2f5;
+  /* background-color: #f0f2f5; */
   transition: width 0.3s ease; /* 너비 변경 시 부드러운 애니메이션 효과 */
   /*✨ 이게 핵심! 내용이 길어져도 부모 너비를 넘어가지 않게 함 */
   min-width: 0;
@@ -194,7 +194,7 @@ function closeOtherTabs() {
   /* flex-grow: 1; */
   padding: 24px;
   overflow-y: auto;
-  background-color: #ffffff;
+  /* background-color: #ffffff; */
   border-left: 1px solid #dcdfe6;
 }
 

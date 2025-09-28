@@ -1,6 +1,5 @@
 <template>
-  <v-toolbar density="compact" color="primary">
-    <v-app-bar-nav-icon @click="menuStore.toggleSidebar"></v-app-bar-nav-icon>
+  <v-toolbar density="compact" color="white" app>
     <v-spacer></v-spacer>
     <div class="d-flex justify-center flex-grow-1">
       <v-btn

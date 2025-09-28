@@ -1,0 +1,32 @@
+/* Pretendard Variable (한/영) */
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable.css");
+
+/* Noto Sans KR (한글) + Inter (영문) */
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300..900&family=Inter:wght@300..900&display=swap");
+
+/* 전역 폰트 변수 정의 */
+:root {
+  --app-font: "Pretendard Variable", "Noto Sans KR", Inter, Roboto,
+              "Segoe UI", Arial, "Malgun Gothic",
+              "Apple SD Gothic Neo", "Apple Color Emoji", "Segoe UI Emoji", sans-serif;
+}
+
+/* 전역 적용 */
+html, body, #app {
+  font-family: var(--app-font);
+  font-synthesis: none;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* Vuetify 앱 루트에 보수적으로 한 번 더 지정 */
+.v-application {
+  font-family: var(--app-font) !important;
+}
+
+/* 코드 블록/등줄 글꼴은 모노스페이스로 별도 */
+code, pre, kbd, samp {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono",
+               "Courier New", monospace;
+}

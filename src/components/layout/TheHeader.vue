@@ -1,5 +1,5 @@
 <template>
-  <v-app-bar color="primary" density="compact">
+  <v-app-bar density="compact" color="white" app>
     <v-img
       class="company-logo"
       src="https://cdn.vuetifyjs.com/images/logos/vuetify-logo-dark.png"
