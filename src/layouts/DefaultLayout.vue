@@ -16,67 +16,65 @@
 
           <TabView />
         </div>
-          <div class="side-panel-container">
+        <div class="side-panel-container">
           <div class="panel-toggle-button" @click="panelStore.togglePanel">
             <v-icon>
-              {{ panelStore.isPanelOpen ? 'mdi-chevron-right' : 'mdi-chevron-left' }}
+              {{ panelToggleIcon }}
             </v-icon>
           </div>
           <div v-if="panelStore.isPanelOpen" class="side-panel">
-                   <v-card class="fill-height" flat>
-          <v-card-title>
-            <span v-if="panelStore.formMode === 'create'">사용자 생성</span>
-            <span v-else-if="panelStore.formMode === 'edit'">사용자 수정</span>
-            <span v-else>상세 정보</span>
-          </v-card-title>
-          <v-divider></v-divider>
+            <v-card class="fill-height" flat>
+              <v-card-title>
+                <span v-if="panelStore.formMode === 'create'">사용자 생성</span>
+                <span v-else-if="panelStore.formMode === 'edit'">사용자 수정</span>
+                <span v-else>상세 정보</span>
+              </v-card-title>
+              <v-divider></v-divider>
 
-          <v-card-text>
-            <div v-if="panelStore.formMode">
-              <component
-                v-for="field in panelStore.formSchema"
-                :key="field.key"
-                :is="componentMap[field.component]"
-                :label="field.label"
-                :items="field.items"
-                v-model="panelStore.formData[field.key]"
-                density="compact"
-                variant="outlined"
-                class="mb-2"
-              ></component>
-            </div>
-            <div v-else-if="panelStore.selectedItem">
-              <component
-                v-for="field in panelStore.formSchema"
-                :key="field.key"
-                :is="componentMap[field.component]"
-                :label="field.label"
-                :items="field.items"
-                :model-value="panelStore.selectedItem[field.key]"
-                density="compact"
-                variant="outlined"
-                class="mb-2"
-              ></component>
-            </div>
-          </v-card-text>
+              <v-card-text>
+                <div v-if="panelStore.formMode">
+                  <component
+                    v-for="field in panelStore.formSchema"
+                    :key="field.key"
+                    :is="componentMap[field.component]"
+                    :label="field.label"
+                    :items="field.items"
+                    v-model="panelStore.formData[field.key]"
+                    density="compact"
+                    variant="outlined"
+                    class="mb-2"
+                  ></component>
+                </div>
+                <div v-else-if="panelStore.selectedItem">
+                  <component
+                    v-for="field in panelStore.formSchema"
+                    :key="field.key"
+                    :is="componentMap[field.component]"
+                    :label="field.label"
+                    :items="field.items"
+                    :model-value="panelStore.selectedItem[field.key]"
+                    density="compact"
+                    variant="outlined"
+                    class="mb-2"
+                  ></component>
+                </div>
+              </v-card-text>
 
-          <v-card-actions v-if="panelStore.formMode">
-            <v-spacer></v-spacer>
-            <v-btn @click="panelStore.closePanel">취소</v-btn>
-            <v-btn color="primary">저장</v-btn>
-          </v-card-actions>
-        </v-card>
+              <v-card-actions v-if="panelStore.formMode">
+                <v-spacer></v-spacer>
+                <v-btn @click="panelStore.closePanel">취소</v-btn>
+                <v-btn color="primary">저장</v-btn>
+              </v-card-actions>
+            </v-card>
           </div>
         </div>
       </div>
     </v-main>
 
-    <v-footer app class="pa-0 footer" >
+    <v-footer app class="pa-0 footer">
       <div class="footer-container">
         <AlarmBar />
-        <div class="footer-content">
-          © 2025 MNG. All rights reserved.
-        </div>
+        <div class="footer-content">© 2025 MNG. All rights reserved.</div>
       </div>
     </v-footer>
   </v-app>
@@ -91,7 +89,8 @@ import TabView from '@/components/layout/TabView.vue' // TabView import
 import AlarmBar from '@/components/layout/AlarmBar.vue'
 import { usePanelStore } from '@/stores/panel' // panel 스토어 import
 // 1. 필요한 Vuetify 폼 컴포넌트를 직접 import 합니다.
-import { VTextField, VSelect,VTextarea } from 'vuetify/components'
+import { VTextField, VSelect, VTextarea } from 'vuetify/components'
+import { computed } from 'vue'
 
 const menuStore = useMenuStore()
 const panelStore = usePanelStore() // panel 스토어 인스턴스 생성
@@ -101,7 +100,9 @@ const componentMap = {
   'v-select': VSelect,
   'v-textarea': VTextarea, // 나중에 사용할 수도 있으니 추가해둡니다.
 }
-
+const panelToggleIcon = computed(function () {
+  return panelStore.isPanelOpen ? 'mdi-chevron-right' : 'mdi-chevron-left'
+})
 </script>
 
 <style scoped>
@@ -110,7 +111,7 @@ const componentMap = {
   background-color: #f5f5f5;
 }
 
-.footer{
+.footer {
   height: auto;
 }
 .main-container {
@@ -165,9 +166,10 @@ const componentMap = {
 .side-panel-container {
   display: flex;
   align-items: center; /* 토글 버튼을 세로 중앙에 위치시키기 위함 */
-   /* 토글 버튼의 위치 기준점 */
-   /* position: relative; */
+  /* 토글 버튼의 위치 기준점 */
+  /* position: relative; */
   flex-shrink: 0;
+  background-color: white;
 }
 
 .panel-toggle-button {

@@ -3,8 +3,6 @@
     <v-img
       class="company-logo"
       src="https://cdn.vuetifyjs.com/images/logos/vuetify-logo-dark.png"
-      max-height="32"
-      max-width="32"
       contain
     ></v-img>
     <v-app-bar-title class="company-title">MNG</v-app-bar-title>
@@ -83,6 +81,8 @@ function handleLogout() {
 
 .company-logo {
   margin-left: 12px;
+  max-height: 32px;
+  max-width: 32px;
 }
 .company-title {
   margin-left: 8px;

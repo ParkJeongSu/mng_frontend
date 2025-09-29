@@ -61,7 +61,6 @@ const router = createRouter({
           component: UserManagementView,
           meta: { title: '그룹 목록' },
         },
-
         // 통계 메뉴 경로 추가 (예시)
         {
           path: 'stats/daily',

@@ -44,7 +44,7 @@
         </v-card>
       </v-container>
     </v-main>
-    <v-footer app class="d-flex justify-center" style="height: 40px">
+    <v-footer app class="d-flex justify-center footer">
       <div class="text-caption">© 2025 MNG. All rights reserved.</div>
     </v-footer>
   </v-app>
@@ -86,6 +86,10 @@ const handleLogin = function () {
 </script>
 
 <style scoped>
+.footer {
+  height: 40px;
+}
+
 .fill-height {
   height: 100vh;
 }

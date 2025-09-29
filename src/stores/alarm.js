@@ -35,9 +35,7 @@ export const useAlarmStore = defineStore('alarm', function () {
       '데이터베이스 연결 성공',
     ]
     const randomIndex = Math.floor(Math.random() * sampleMessages.length)
-    const message = `[${new Date().toLocaleTimeString()}] ${
-      sampleMessages[randomIndex]
-    }`
+    const message = `[${new Date().toLocaleTimeString()}] ${sampleMessages[randomIndex]}`
     addAlarm(message)
   }
 

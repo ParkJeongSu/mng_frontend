@@ -15,9 +15,7 @@
     </div>
 
     <div class="alarm-actions">
-      <v-btn size="small" @click="alarmStore.addSampleAlarm">
-        테스트 알람 추가
-      </v-btn>
+      <v-btn size="small" @click="alarmStore.addSampleAlarm"> 테스트 알람 추가 </v-btn>
     </div>
   </div>
 </template>
