@@ -31,6 +31,7 @@ export const useMenuStore = defineStore('menu', () => {
               children: [
                 { title: '사용자 목록', to: '/management/users/list' },
                 { title: '사용자 등록', to: '/management/users/create' },
+                { title: 'Product-List', to: '/product-list' },
               ],
             },
             {

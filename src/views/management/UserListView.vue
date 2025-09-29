@@ -110,6 +110,186 @@ const items = ref([
     role: '관리자',
     status: '활성',
   },
+  {
+    name: 'item1',
+    email: 'item1@example.com',
+    role: '관리자',
+    status: '활성',
+  },
+  {
+    name: 'item2',
+    email: 'item2@example.com',
+    role: '관리자',
+    status: '활성',
+  },
+  {
+    name: 'item3',
+    email: 'item3@example.com',
+    role: '관리자',
+    status: '활성',
+  },
+  {
+    name: 'item4',
+    email: 'item4@example.com',
+    role: '관리자',
+    status: '활성',
+  },
+  {
+    name: 'item5',
+    email: 'item5@example.com',
+    role: '관리자',
+    status: '활성',
+  },
+  {
+    name: 'item6',
+    email: 'item6@example.com',
+    role: '관리자',
+    status: '활성',
+  },
+  {
+    name: 'item7',
+    email: 'item7@example.com',
+    role: '관리자',
+    status: '활성',
+  },
+  {
+    name: 'item8',
+    email: 'item8@example.com',
+    role: '관리자',
+    status: '활성',
+  },
+  {
+    name: 'item9',
+    email: 'item9@example.com',
+    role: '관리자',
+    status: '활성',
+  },
+  {
+    name: 'item10',
+    email: 'item10@example.com',
+    role: '관리자',
+    status: '활성',
+  },
+  {
+    name: 'item11',
+    email: 'item11@example.com',
+    role: '관리자',
+    status: '활성',
+  },
+  {
+    name: 'item12',
+    email: 'item12@example.com',
+    role: '관리자',
+    status: '활성',
+  },
+  {
+    name: 'item13',
+    email: 'item13@example.com',
+    role: '관리자',
+    status: '활성',
+  },
+  {
+    name: 'item14',
+    email: 'item14@example.com',
+    role: '관리자',
+    status: '활성',
+  },
+  {
+    name: 'item15',
+    email: 'item15@example.com',
+    role: '관리자',
+    status: '활성',
+  },
+  {
+    name: 'item16',
+    email: 'item16@example.com',
+    role: '관리자',
+    status: '활성',
+  },
+  {
+    name: 'item17',
+    email: 'item17@example.com',
+    role: '관리자',
+    status: '활성',
+  },
+  {
+    name: 'item18',
+    email: 'item18@example.com',
+    role: '관리자',
+    status: '활성',
+  },
+  {
+    name: 'item19',
+    email: 'item19@example.com',
+    role: '관리자',
+    status: '활성',
+  },
+  {
+    name: 'item20',
+    email: 'item20@example.com',
+    role: '관리자',
+    status: '활성',
+  },
+  {
+    name: 'item21',
+    email: 'item21@example.com',
+    role: '관리자',
+    status: '활성',
+  },
+  {
+    name: 'item22',
+    email: 'item22@example.com',
+    role: '관리자',
+    status: '활성',
+  },
+  {
+    name: 'item23',
+    email: 'item23@example.com',
+    role: '관리자',
+    status: '활성',
+  },
+  {
+    name: 'item24',
+    email: 'item24@example.com',
+    role: '관리자',
+    status: '활성',
+  },
+  {
+    name: 'item25',
+    email: 'item25@example.com',
+    role: '관리자',
+    status: '활성',
+  },
+  {
+    name: 'item26',
+    email: 'item26@example.com',
+    role: '관리자',
+    status: '활성',
+  },
+  {
+    name: 'item27',
+    email: 'item27@example.com',
+    role: '관리자',
+    status: '활성',
+  },
+  {
+    name: 'item28',
+    email: 'item28@example.com',
+    role: '관리자',
+    status: '활성',
+  },
+  {
+    name: 'item29',
+    email: 'item29@example.com',
+    role: '관리자',
+    status: '활성',
+  },
+  {
+    name: 'item30',
+    email: 'item30@example.com',
+    role: '관리자',
+    status: '활성',
+  },
 ])
 
 function updateCheckedItems(selected) {
@@ -150,7 +330,7 @@ function handleEditClick() {
 .table-wrapper {
   /* ✨ 가로로 내용이 넘칠 때만 스크롤바 표시 */
   overflow-x: auto;
-
+  overflow-y: auto;
   /* 세로 레이아웃 관련 (선택 사항) */
   flex: 1;
   display: flex;

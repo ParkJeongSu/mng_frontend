@@ -88,18 +88,11 @@ import { useMenuStore } from '@/stores/menu' // 스토어 import
 import TabView from '@/components/layout/TabView.vue' // TabView import
 import AlarmBar from '@/components/layout/AlarmBar.vue'
 import { usePanelStore } from '@/stores/panel' // panel 스토어 import
-// 1. 필요한 Vuetify 폼 컴포넌트를 직접 import 합니다.
-import { VTextField, VSelect, VTextarea } from 'vuetify/components'
 import { computed } from 'vue'
+import { componentMap } from '@/constants/componentMap' // componentMap import
 
 const menuStore = useMenuStore()
 const panelStore = usePanelStore() // panel 스토어 인스턴스 생성
-// componentMap 정의
-const componentMap = {
-  'v-text-field': VTextField,
-  'v-select': VSelect,
-  'v-textarea': VTextarea, // 나중에 사용할 수도 있으니 추가해둡니다.
-}
 const panelToggleIcon = computed(function () {
   return panelStore.isPanelOpen ? 'mdi-chevron-right' : 'mdi-chevron-left'
 })

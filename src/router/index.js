@@ -10,6 +10,7 @@ import UserManagementView from '../views/UserManagementView.vue'
 import LoginView from '../views/LoginView.vue'
 import ProfileView from '../views/ProfileView.vue'
 import UserListView from '../views/management/UserListView.vue'
+import ProductListPage from '@/views/management/ProductListPage.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -25,6 +26,12 @@ const router = createRouter({
       meta: { requiresAuth: true },
       children: [
         { path: '', name: 'home', component: HomeView, meta: { title: '홈' } },
+        {
+          path: 'product-list',
+          name: 'product-list',
+          component: ProductListPage,
+          meta: { title: '프로덕트 목록' },
+        },
         {
           path: 'profile',
           name: 'profile',
