@@ -5,7 +5,9 @@
       :headers="productHeaders"
       api-endpoint="/api/products"
       :actions="['add', 'edit', 'delete', 'excelExport', 'excelImport']"
-      @add="onAddProduct"
+      isHover
+      showCheckbox
+      :user-form-schema="productFormSchema"
     >
       <template v-slot:item.status="{ item }">
         <v-chip :color="item.status === '판매중' ? 'green' : 'red'" small>
@@ -31,17 +33,29 @@ const productSearchSchema = ref([
   },
 ])
 
+const productFormSchema = ref([
+  { key: 'productCode', label: '제품 코드', component: 'v-text-field' },
+  { key: 'productName', label: '제품명', component: 'v-text-field' },
+  {
+    key: 'status',
+    label: '상태',
+    component: 'v-select',
+    items: ['판매중', '품절', '단종'],
+  },
+  {
+    key: 'price',
+    label: '가격',
+    component: 'v-text-field',
+    type: 'number',
+  },
+])
+
 const productHeaders = ref([
   { title: '제품 코드', key: 'productCode' },
   { title: '제품명', key: 'productName' },
   { title: '상태', key: 'status' },
   { title: '가격', key: 'price' },
 ])
-
-function onAddProduct() {
-  console.log('추가 버튼이 부모 페이지에서 클릭되었습니다. 다이얼로그를 엽니다.')
-  // 여기에 추가 다이얼로그를 여는 로직 구현
-}
 </script>
 <style scoped>
 /* 이 스타일 블록이 핵심입니다.

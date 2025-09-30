@@ -8,7 +8,7 @@
     <v-card-title class="text-h6 flex-shrink-0">서버 사이드 데이터 테이블</v-card-title>
     <v-card class="pa-2 mb-1 flex-shrink-0" flat outlined>
       <v-row dense>
-        <v-col v-for="item in props.searchSchema" :key="item.key" cols="12" md="3">
+        <v-col v-for="item in props.searchSchema" :key="item.key" cols="12" md="2">
           <component
             :is="componentMap[item.component]"
             v-model="searchParams[item.key]"
@@ -31,9 +31,11 @@
       <v-toolbar-title class="text-subtitle-1">조회 결과</v-toolbar-title>
       <v-spacer></v-spacer>
       <slot name="actions.prepend"></slot>
-      <v-btn v-if="props.actions.includes('add')" class="ml-2" @click="emit('add')">추가</v-btn>
-      <v-btn v-if="props.actions.includes('edit')" class="ml-2" @click="emit('edit')">변경</v-btn>
-      <v-btn v-if="props.actions.includes('delete')" class="ml-2" @click="emit('delete')"
+      <v-btn v-if="props.actions.includes('add')" class="ml-2" @click="handleAddClick">추가</v-btn>
+      <v-btn v-if="props.actions.includes('edit')" class="ml-2" @click="handleEditClick"
+        >변경</v-btn
+      >
+      <v-btn v-if="props.actions.includes('delete')" class="ml-2" @click="handleDeleteClick"
         >삭제</v-btn
       >
       <v-btn v-if="props.actions.includes('excelExport')" class="ml-2">Excel Export</v-btn>
@@ -54,8 +56,12 @@
         :items="serverItems"
         :loading="loading"
         fixed-header
+        return-object
         height="100%"
         @update:options="loadItems"
+        @click:row="handleRowClick"
+        :show-select="showCheckbox"
+        :hover="isHover"
       >
         <!--
         fixed-layout
@@ -72,13 +78,23 @@
 </template>
 
 <script setup>
-import { ref, reactive, onMounted } from 'vue'
+import { ref, reactive } from 'vue'
 import { componentMap } from '@/constants/componentMap' // componentMap import
+
+import { usePanelStore } from '@/stores/panel'
+
+const panelStore = usePanelStore()
+const selectedItemLocal = ref(null)
+// v-data-table의 v-model과 연결될 내부 상태
+const selectedItems = ref([])
 
 const props = defineProps({
   searchSchema: { type: Array, required: true },
   headers: { type: Array, required: true },
   apiEndpoint: { type: String, required: true },
+  showCheckbox: { type: Boolean, default: false },
+  isHover: { type: Boolean, default: false }, // 부모로부터 어떤 행이 선택되었는지 받음
+  userFormSchema: { type: Array, required: true }, // 부모로부터 폼 스키마 받음
   actions: {
     type: Array,
     default: function () {
@@ -86,8 +102,6 @@ const props = defineProps({
     },
   },
 })
-
-const emit = defineEmits(['add', 'edit', 'delete'])
 
 const searchParams = reactive({})
 // searchSchema를 기반으로 searchParams 초기화
@@ -157,7 +171,30 @@ function search() {
   loadItems()
 }
 
-onMounted(() => {})
+function handleRowClick(event, { item }) {
+  selectedItemLocal.value = item
+  panelStore.openReadOnlyPanel(props.userFormSchema, item) // 스키마 전달
+}
+
+function handleDeleteClick() {
+  console.log('삭제할 항목들:', selectedItems.value)
+  alert(`${selectedItems.value.length}개의 항목을 삭제합니다. (콘솔 확인)`)
+}
+
+function handleAddClick() {
+  if (selectedItemLocal.value) {
+    panelStore.openFormPanel(props.userFormSchema, selectedItemLocal.value, 'create')
+  } else {
+    const newItem = { name: '', email: '', role: '사용자', status: '활성' }
+    panelStore.openFormPanel(props.userFormSchema, newItem, 'create')
+  }
+}
+
+function handleEditClick() {
+  if (selectedItemLocal.value) {
+    panelStore.openFormPanel(props.userFormSchema, selectedItemLocal.value, 'edit')
+  }
+}
 </script>
 <style scoped>
 .datatable-wrapper {
