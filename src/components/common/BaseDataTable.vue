@@ -7,7 +7,7 @@
       <v-btn
         density="compact"
         icon="mdi-plus"
-        title="추가"
+        :title="$t('dataTable.add')"
         class="ml-2"
         @click="handleAddClick"
       ></v-btn>
@@ -15,7 +15,7 @@
         :disabled="!selectedItemLocal"
         density="compact"
         icon="mdi-pencil"
-        title="수정"
+        :title="$t('dataTable.edit')"
         class="ml-2"
         @click="handleEditClick"
       ></v-btn>
@@ -23,7 +23,7 @@
         :disabled="selectedItems.length === 0"
         density="compact"
         icon="mdi-delete"
-        title="삭제"
+        :title="$t('dataTable.delete')"
         class="ml-2"
         @click="handleDeleteClick"
       ></v-btn>

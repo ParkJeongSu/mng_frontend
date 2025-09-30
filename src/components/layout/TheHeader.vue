@@ -19,7 +19,8 @@
     </v-btn>
 
     <v-spacer></v-spacer>
-
+    <v-btn @click="localeStore.setLocale('ko')">한국어</v-btn>
+    <v-btn @click="localeStore.setLocale('en')">English</v-btn>
     <v-menu offset-y>
       <template v-slot:activator="{ props }">
         <div v-bind="props" class="d-flex align-center cursor-pointer">
@@ -33,7 +34,7 @@
           <v-list-item-title>프로필</v-list-item-title>
         </v-list-item>
         <v-list-item @click="openLogoutDialog" prepend-icon="mdi-logout">
-          <v-list-item-title>로그아웃</v-list-item-title>
+          <v-list-item-title>{{ $t('auth.logout') }}</v-list-item-title>
         </v-list-item>
       </v-list>
     </v-menu>
@@ -45,8 +46,8 @@
 
   <ConfirmDialog
     v-model:show="showLogoutConfirm"
-    title="로그아웃"
-    message="정말 로그아웃 하시겠습니까?"
+    :title="$t('auth.logout')"
+    :message="$t('messages.logoutConfirm')"
     @confirm="handleLogout"
   />
 </template>
@@ -56,6 +57,9 @@ import { ref } from 'vue'
 import { useMenuStore } from '@/stores/menu'
 import { useAuthStore } from '@/stores/auth' // auth 스토어 import
 import ConfirmDialog from '@/components/common/ConfirmDialog.vue' // ConfirmDialog import
+import { useLocaleStore } from '@/stores/locale'
+
+const localeStore = useLocaleStore()
 
 const menuStore = useMenuStore()
 const authStore = useAuthStore()

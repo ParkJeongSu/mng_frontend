@@ -21,7 +21,7 @@
         </v-col>
         <v-col class="d-flex justify-end align-center">
           <slot name="search-bar.append"></slot>
-          <v-btn color="primary" @click="search">조회</v-btn>
+          <v-btn color="primary" @click="search">{{ $t('dataTable.search') }}</v-btn>
         </v-col>
       </v-row>
     </v-card>
@@ -31,13 +31,15 @@
       <v-toolbar-title class="text-subtitle-1">조회 결과</v-toolbar-title>
       <v-spacer></v-spacer>
       <slot name="actions.prepend"></slot>
-      <v-btn v-if="props.actions.includes('add')" class="ml-2" @click="handleAddClick">추가</v-btn>
-      <v-btn v-if="props.actions.includes('edit')" class="ml-2" @click="handleEditClick"
-        >변경</v-btn
-      >
-      <v-btn v-if="props.actions.includes('delete')" class="ml-2" @click="handleDeleteClick"
-        >삭제</v-btn
-      >
+      <v-btn v-if="props.actions.includes('add')" class="ml-2" @click="handleAddClick">{{
+        $t('dataTable.add')
+      }}</v-btn>
+      <v-btn v-if="props.actions.includes('edit')" class="ml-2" @click="handleEditClick">{{
+        $t('dataTable.edit')
+      }}</v-btn>
+      <v-btn v-if="props.actions.includes('delete')" class="ml-2" @click="handleDeleteClick">{{
+        $t('dataTable.delete')
+      }}</v-btn>
       <v-btn v-if="props.actions.includes('excelExport')" class="ml-2">Excel Export</v-btn>
       <v-btn v-if="props.actions.includes('excelImport')" class="ml-2">Excel Import</v-btn>
     </v-toolbar>

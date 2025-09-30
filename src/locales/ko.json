@@ -1,0 +1,15 @@
+{
+  "dataTable": {
+    "search": "조회",
+    "add": "추가",
+    "edit": "변경",
+    "delete": "삭제"
+  },
+  "auth": {
+    "logout": "로그아웃"
+  },
+  "messages": {
+    "deleteConfirm": "{count}개의 항목을 삭제하시겠습니까?",
+    "logoutConfirm": "정말 로그아웃 하시겠습니까?"
+  }
+}

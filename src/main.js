@@ -2,6 +2,7 @@
 
 // 1. Vuetify와 관련된 모든 것을 최상단으로 옮깁니다.
 import vuetify from './plugins/vuetify' // Vuetify 설정
+import i18n from './plugins/i18n' // i18n 설정
 //import './assets/fonts.css'
 
 // 2. Vue와 App, Router 등 핵심 라이브러리를 import 합니다.
@@ -18,5 +19,6 @@ const app = createApp(App)
 app.use(createPinia())
 app.use(router)
 app.use(vuetify) // Vuetify 플러그인을 Vue 앱에 등록합니다.
+app.use(i18n) // Vuetify 플러그인을 Vue 앱에 등록합니다.
 
 app.mount('#app')
