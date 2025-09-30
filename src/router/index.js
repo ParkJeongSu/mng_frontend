@@ -45,6 +45,12 @@ const router = createRouter({
           meta: { title: '사용자 목록' },
         },
         {
+          path: 'management/users/list2',
+          name: 'user-list2',
+          component: () => import('../views/management/UserListView2.vue'),
+          meta: { title: '사용자 목록' },
+        },
+        {
           path: 'dashboard/status1',
           name: 'dashboard-status1',
           component: DashboardView,

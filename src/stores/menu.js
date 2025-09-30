@@ -30,6 +30,7 @@ export const useMenuStore = defineStore('menu', () => {
               icon: 'mdi-account-group',
               children: [
                 { title: '사용자 목록', to: '/management/users/list' },
+                { title: '사용자 목록2', to: '/management/users/list2' },
                 { title: '사용자 등록', to: '/management/users/create' },
                 { title: 'Product-List', to: '/product-list' },
               ],
@@ -65,7 +66,7 @@ export const useMenuStore = defineStore('menu', () => {
   const selectedSystemId = ref(null) // 예: 'systemA'
   const selectedSubMenuId = ref(null) // 예: 'dashboard'
   // 사이드바 표시 여부를 제어하는 상태 추가
-  const isSidebarOpen = ref(true)
+  const isSidebarOpen = ref(false)
   // --------------------------------------------------
   // 2. Getters (계산된 상태): State를 기반으로 동적으로 계산되는 값
   // --------------------------------------------------
@@ -97,6 +98,10 @@ export const useMenuStore = defineStore('menu', () => {
   // 서브메뉴를 선택했을 때 호출될 함수
   function selectSubMenu(subMenuId) {
     selectedSubMenuId.value = subMenuId
+    // 2. 만약 사이드바가 닫혀있다면, 연다는 추가적인 상태 변경을 수행합니다.
+    if (!isSidebarOpen.value) {
+      isSidebarOpen.value = true
+    }
   }
 
   // 사이드바를 토글하는 함수 추가

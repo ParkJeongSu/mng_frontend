@@ -1,50 +1,116 @@
 <template>
-  <v-data-table
-    :headers="headers"
-    :items="items"
-    :show-select="showCheckbox"
-    v-model="selectedItems"
-    class="flex-grow-1"
-    density="compact"
-    return-object
-    fixed-header
-    fixed-layout
-    :item-value="itemKey"
-    @click:row="handleRowClick"
-    :hover="isHover"
-  >
-  </v-data-table>
+  <v-card flat class="d-flex flex-column flex-grow-1 h-100">
+    <v-card-title class="d-flex align-center pe-2">
+      <v-icon icon="mdi-account-group" /> &nbsp; 사용자 목록
+      <v-spacer></v-spacer>
+      <v-btn density="compact" icon="mdi-magnify" title="조회"> </v-btn>
+      <v-btn
+        density="compact"
+        icon="mdi-plus"
+        title="추가"
+        class="ml-2"
+        @click="handleAddClick"
+      ></v-btn>
+      <v-btn
+        :disabled="!selectedItemLocal"
+        density="compact"
+        icon="mdi-pencil"
+        title="수정"
+        class="ml-2"
+        @click="handleEditClick"
+      ></v-btn>
+      <v-btn
+        :disabled="selectedItems.length === 0"
+        density="compact"
+        icon="mdi-delete"
+        title="삭제"
+        class="ml-2"
+        @click="handleDeleteClick"
+      ></v-btn>
+    </v-card-title>
+
+    <v-divider></v-divider>
+    <v-card-text class="d-flex flex-column flex-grow-1 pa-0 table-wrapper">
+      <v-data-table
+        :headers="headers"
+        :items="items"
+        :show-select="showCheckbox"
+        v-model="selectedItems"
+        class="flex-grow-1"
+        density="compact"
+        return-object
+        fixed-header
+        fixed-layout
+        :item-value="itemKey"
+        height="100%"
+        @click:row="handleRowClick"
+        :hover="isHover"
+      >
+      </v-data-table>
+    </v-card-text>
+  </v-card>
 </template>
 
 <script setup>
-import { ref, watch } from 'vue'
+import { ref } from 'vue'
+import { usePanelStore } from '@/stores/panel'
+
+const panelStore = usePanelStore()
+const selectedItemLocal = ref(null)
+// v-data-table의 v-model과 연결될 내부 상태
+const selectedItems = ref([])
 
 const props = defineProps({
   headers: { type: Array, required: true },
   items: { type: Array, required: true },
   itemKey: { type: String, required: true },
   showCheckbox: { type: Boolean, default: false },
-  selectedRowItem: { type: Object, default: null }, // 부모로부터 어떤 행이 선택되었는지 받음
   isHover: { type: Boolean, default: false }, // 부모로부터 어떤 행이 선택되었는지 받음
+  userFormSchema: { type: Array, required: true }, // 부모로부터 폼 스키마 받음
 })
 
-const emit = defineEmits(['row-click', 'update:selected'])
-
-// v-data-table의 v-model과 연결될 내부 상태
-const selectedItems = ref([])
-
-// 행 클릭 이벤트는 그대로 부모에게 전달
 function handleRowClick(event, { item }) {
-  emit('row-click', item)
+  selectedItemLocal.value = item
+  panelStore.openReadOnlyPanel(props.userFormSchema, item) // 스키마 전달
 }
 
-// 체크박스 선택이 변경되면 부모에게 알림
-watch(selectedItems, (newValue) => {
-  emit('update:selected', newValue)
-})
+function handleDeleteClick() {
+  console.log('삭제할 항목들:', selectedItems.value)
+  alert(`${selectedItems.value.length}개의 항목을 삭제합니다. (콘솔 확인)`)
+}
+
+function handleAddClick() {
+  if (selectedItemLocal.value) {
+    panelStore.openFormPanel(props.userFormSchema, selectedItemLocal.value, 'create')
+  } else {
+    const newItem = { name: '', email: '', role: '사용자', status: '활성' }
+    panelStore.openFormPanel(props.userFormSchema, newItem, 'create')
+  }
+}
+
+function handleEditClick() {
+  if (selectedItemLocal.value) {
+    panelStore.openFormPanel(props.userFormSchema, selectedItemLocal.value, 'edit')
+  }
+}
 </script>
 
 <style scoped>
+.table-wrapper {
+  /* ✨ 가로로 내용이 넘칠 때만 스크롤바 표시 */
+  overflow-x: auto;
+  overflow-y: auto;
+  /* 세로 레이아웃 관련 (선택 사항) */
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+:deep(.v-data-table) {
+  height: 100%;
+  display: flex;
+  /* wrapper가 남은 높이를 먹도록 */
+  flex-direction: column;
+}
 /*
   prop으로 해결되지 않을 경우를 대비한 CSS 보험입니다.
   :deep()을 이용해 자식인 v-data-table 내부의 table 태그에
