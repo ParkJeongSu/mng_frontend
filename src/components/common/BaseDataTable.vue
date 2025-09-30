@@ -1,12 +1,12 @@
 <template>
   <v-card flat class="d-flex flex-column flex-grow-1 h-100">
     <v-card-title class="d-flex align-center pe-2">
-      <v-icon icon="mdi-account-group" /> &nbsp; 사용자 목록
+      <v-icon icon="$accountGroup" /> &nbsp; 사용자 목록
       <v-spacer></v-spacer>
-      <v-btn density="compact" icon="mdi-magnify" title="조회"> </v-btn>
+      <v-btn density="compact" icon="$magnify" title="조회"> </v-btn>
       <v-btn
         density="compact"
-        icon="mdi-plus"
+        icon="$plus"
         :title="$t('dataTable.add')"
         class="ml-2"
         @click="handleAddClick"
@@ -14,7 +14,7 @@
       <v-btn
         :disabled="!selectedItemLocal"
         density="compact"
-        icon="mdi-pencil"
+        icon="$pencil"
         :title="$t('dataTable.edit')"
         class="ml-2"
         @click="handleEditClick"
@@ -22,7 +22,7 @@
       <v-btn
         :disabled="selectedItems.length === 0"
         density="compact"
-        icon="mdi-delete"
+        icon="$delete"
         :title="$t('dataTable.delete')"
         class="ml-2"
         @click="handleDeleteClick"

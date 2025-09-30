@@ -25,15 +25,15 @@
       <template v-slot:activator="{ props }">
         <div v-bind="props" class="d-flex align-center cursor-pointer">
           <span class="user-id">test@test.com</span>
-          <v-icon class="user-icon">mdi-account-circle</v-icon>
+          <v-icon class="user-icon">$accountCircle</v-icon>
         </div>
       </template>
 
       <v-list density="compact">
-        <v-list-item to="/profile" prepend-icon="mdi-account">
+        <v-list-item to="/profile" prepend-icon="$account">
           <v-list-item-title>프로필</v-list-item-title>
         </v-list-item>
-        <v-list-item @click="openLogoutDialog" prepend-icon="mdi-logout">
+        <v-list-item @click="openLogoutDialog" prepend-icon="$logout">
           <v-list-item-title>{{ $t('auth.logout') }}</v-list-item-title>
         </v-list-item>
       </v-list>

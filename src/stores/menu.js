@@ -17,8 +17,8 @@ export const useMenuStore = defineStore('menu', () => {
           name: '대시보드',
           items: [
             // 대시보드는 하위 메뉴가 없는 1단계 구조
-            { title: '현황 1', icon: 'mdi-view-dashboard', to: '/dashboard/status1' },
-            { title: '현황 2', icon: 'mdi-view-dashboard', to: '/dashboard/status2' },
+            { title: '현황 1', icon: '$dashboard', to: '/dashboard/status1' },
+            { title: '현황 2', icon: '$dashboard', to: '/dashboard/status2' },
           ],
         },
         management: {
@@ -27,7 +27,7 @@ export const useMenuStore = defineStore('menu', () => {
             // 운영 관리는 하위 메뉴(children)가 있는 2단계 구조
             {
               title: '사용자 관리',
-              icon: 'mdi-account-group',
+              icon: '$accountGroup',
               children: [
                 { title: '사용자 목록', to: '/management/users/list' },
                 { title: '사용자 목록2', to: '/management/users/list2' },
@@ -37,7 +37,7 @@ export const useMenuStore = defineStore('menu', () => {
             },
             {
               title: '그룹 관리',
-              icon: 'mdi-account-multiple',
+              icon: '$accountMultiple',
               children: [{ title: '그룹 목록', to: '/management/groups/list' }],
             },
           ],
@@ -50,8 +50,8 @@ export const useMenuStore = defineStore('menu', () => {
         stats: {
           name: '통계',
           items: [
-            { title: '일별 통계', icon: 'mdi-chart-bar', to: '/stats/daily' },
-            { title: '월별 통계', icon: 'mdi-chart-line', to: '/stats/monthly' },
+            { title: '일별 통계', icon: '$chartBar', to: '/stats/daily' },
+            { title: '월별 통계', icon: '$chartLine', to: '/stats/monthly' },
           ],
         },
       },

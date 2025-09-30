@@ -107,7 +107,7 @@ const cardData = computed(function () {
       title: '오늘 생산 목표',
       value: productionTarget,
       unit: ' EA',
-      icon: 'mdi-bullseye-arrow',
+      icon: '$bullseyeArrow',
       colorClass: 'gradient-blue',
     },
     {
@@ -115,7 +115,7 @@ const cardData = computed(function () {
       title: '현재 생산량',
       value: currentProduction,
       unit: ' EA',
-      icon: 'mdi-chart-line',
+      icon: '$chartLine',
       colorClass: 'gradient-green',
     },
     {
@@ -123,7 +123,7 @@ const cardData = computed(function () {
       title: '달성률',
       value: achievementRate,
       unit: '%',
-      icon: 'mdi-progress-check',
+      icon: '$progressCheck',
       colorClass: 'gradient-orange',
     },
     {
@@ -131,7 +131,7 @@ const cardData = computed(function () {
       title: '진행중인 LOT',
       value: 15,
       unit: ' 개',
-      icon: 'mdi-package-variant-closed',
+      icon: '$packageVariant',
       colorClass: 'gradient-purple',
     },
   ]

@@ -94,7 +94,7 @@ import { componentMap } from '@/constants/componentMap' // componentMap import
 const menuStore = useMenuStore()
 const panelStore = usePanelStore() // panel 스토어 인스턴스 생성
 const panelToggleIcon = computed(function () {
-  return panelStore.isPanelOpen ? 'mdi-chevron-right' : 'mdi-chevron-left'
+  return panelStore.isPanelOpen ? '$next' : '$prev'
 })
 </script>
 

@@ -21,7 +21,7 @@
             class="ml-2 close-icon"
             @click.stop="closeTab(tab)"
           >
-            mdi-close
+            $close
           </v-icon>
         </v-tab>
       </v-tabs>

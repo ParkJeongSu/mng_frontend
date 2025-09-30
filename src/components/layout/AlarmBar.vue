@@ -8,7 +8,7 @@
         color="indigo"
         label
         size="small"
-        prepend-icon="mdi-bell-outline"
+        prepend-icon="$bellOutline"
       >
         {{ alarm.text }}
       </v-chip>
