@@ -51,22 +51,23 @@ function onAddProduct() {
 .page-container {
   /* Vuetify의 기본 앱 바 높이(48px)를 뺀 나머지 전체 높이 */
   height: calc(100vh - 48px);
-  /* height: calc(100vh - 64px - 32px); */
   display: flex;
   flex-direction: column;
   flex: 1 1 auto;
-  min-height: 0; /* 🔑 스크롤 영역이 제대로 계산되도록 */
+  /* 🔑 스크롤 영역이 제대로 계산되도록 */
+  min-height: 0;
   padding: 0;
   margin: 0;
 }
 
 /* v-container 안의 ServerSideDataTable 컴포넌트가 남은 공간을 모두 차지하도록 함 */
 .page-container > :deep(.v-card) {
-  flex-grow: 1;
+  /* flex-grow: 1; */
 }
 /* ServerSideDataTable 카드가 남은 공간을 모두 차지하고 0까지 줄어들 수 있도록 */
 .page-container > :deep(.datatable-wrapper) {
-  flex: 1 1 0;
-  min-height: 0; /* 🔑 */
+  /* flex: 1 1 0; */
+  /* 🔑 */
+  /* min-height: 0;  */
 }
 </style>

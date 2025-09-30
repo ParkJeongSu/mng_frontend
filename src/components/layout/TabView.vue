@@ -126,11 +126,12 @@ function closeOtherTabs() {
   /* 내부 컨텐츠를 채우기 위한 설정 */
   display: flex;
   flex-direction: column;
-  /* flex-grow: 1; */
   padding: 24px;
   overflow-y: auto;
   /* background-color: #ffffff; */
   border-left: 1px solid #dcdfe6;
+  padding-bottom: 0;
+  padding-top: 10px;
 }
 
 /* --- 기존 스타일은 유지 --- */

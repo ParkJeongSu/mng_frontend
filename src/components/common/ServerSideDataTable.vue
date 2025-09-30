@@ -3,7 +3,7 @@
     컴포넌트의 최상위 루트를 Flex Container로 만듭니다.
     이 카드가 부모로부터 받은 전체 높이를 차지하게 됩니다.
   -->
-  <v-card class="bg-white pa-3 datatable-wrapper" flat outlined>
+  <v-card class="bg-white pa-3 d-flex flex-column datatable-wrapper" flat outlined>
     <!-- 제목과 검색 바는 높이가 고정되어야 하므로, 공간이 줄어들 때 수축하지 않도록 합니다. -->
     <v-card-title class="text-h6 flex-shrink-0">서버 사이드 데이터 테이블</v-card-title>
     <v-card class="pa-2 mb-1 flex-shrink-0" flat outlined>
@@ -57,7 +57,7 @@
         height="100%"
         @update:options="loadItems"
       >
-        <!-- height="100%"
+        <!--
         fixed-layout
         fixed-footer
         -->
@@ -163,9 +163,8 @@ onMounted(() => {})
 .datatable-wrapper {
   height: 100%;
   width: 100%;
-  display: flex;
-  flex-direction: column;
-  min-height: 0; /* 🔑 내부 스크롤을 위해 필요 */
+  /* 🔑 내부 스크롤을 위해 필요 */
+  min-height: 0;
 }
 .table-wrapper {
   position: relative;
@@ -173,19 +172,22 @@ onMounted(() => {})
     내용이 넘치는 것을 숨겨서, 자식인 v-data-table-server가
     height: 100%를 정확히 계산하도록 돕습니다.
   */
-  overflow: hidden;
-  flex: 1 1 0; /* 남은 공간 모두 차지 */
-  min-height: 0; /* 🔑 자식이 0까지 줄어들 수 있어야 overflow 영역 생성 */
+  overflow: auto;
+  /* 남은 공간 모두 차지 */
+  flex: 1 1 0;
+  /* 🔑 자식이 0까지 줄어들 수 있어야 overflow 영역 생성 */
+  min-height: 0;
 }
 /* Vuetify v-data-table이 100% 높이를 제대로 채우도록 강제 */
 .table-wrapper :deep(.v-data-table) {
   height: 100%;
   display: flex;
-  flex-direction: column; /* wrapper가 남은 높이를 먹도록 */
+  /* wrapper가 남은 높이를 먹도록 */
+  flex-direction: column;
 }
 
 /* (선택) 푸터 고정 시 */
 .table-wrapper :deep(.v-data-table__bottom) {
-  flex-shrink: 0;
+  /* flex-shrink: 0; */
 }
 </style>
