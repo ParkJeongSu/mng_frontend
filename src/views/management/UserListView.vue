@@ -7,7 +7,23 @@
       :show-checkbox="true"
       :is-hover="true"
       :user-form-schema="userFormSchema"
-    />
+    >
+      <!-- 2) 특정 컬럼만 원하는 방식으로 (headers의 key와 동일해야 함) -->
+      <!-- slot props 전체 받기 -->
+      <template v-slot:item.status="slotProps">
+        <!-- slotProps.value === slotProps.item[slotProps.column.key] -->
+        <v-chip
+          size="small"
+          variant="tonal"
+          :color="
+            slotProps.value === '활성' ? 'success' : slotProps.value === '중지' ? 'error' : 'info'
+          "
+          :title="`상태: ${slotProps.value}`"
+        >
+          {{ slotProps.value }}
+        </v-chip>
+      </template>
+    </BaseDataTable>
   </v-container>
 </template>
 

@@ -7,7 +7,21 @@
       :show-checkbox="true"
       :is-hover="true"
       :user-form-schema="userFormSchema"
-    />
+    >
+      <template v-slot:item.status="slotProps">
+        <!-- slotProps.value === slotProps.item[slotProps.column.key] -->
+        <v-chip
+          size="small"
+          variant="tonal"
+          :color="
+            slotProps.value === '활성' ? 'success' : slotProps.value === '중지' ? 'error' : 'info'
+          "
+          :title="`상태: ${slotProps.value}`"
+        >
+          {{ slotProps.value }}
+        </v-chip>
+      </template>
+    </BaseDataTable>
   </v-container>
 </template>
 
