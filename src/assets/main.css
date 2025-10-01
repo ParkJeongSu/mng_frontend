@@ -1,3 +1,15 @@
 .v-application {
   background-color: #f0f2f5 !important;
 }
+
+.page-container {
+  /* Vuetify의 기본 앱 바 높이(48px)를 뺀 나머지 전체 높이 */
+  height: calc(100vh - 48px);
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  /* 🔑 스크롤 영역이 제대로 계산되도록 */
+  min-height: 0;
+  padding: 0;
+  margin: 0;
+}

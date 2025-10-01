@@ -1,6 +1,7 @@
 <template>
   <v-container fluid>
     <v-card class="outer-card pa-4" rounded="lg" elevation="4">
+      <v-card-title>{{ year + ' ' + month + '-' + day }} 오늘의 생산 정보</v-card-title>
       <v-row>
         <!-- v-for를 사용해 cardData 배열의 각 항목에 대해 v-col과 v-card를 생성합니다. -->
         <v-col v-for="item in cardData" :key="item.key" cols="12" sm="6" lg="3">
@@ -233,6 +234,11 @@ const ganttChartOptions = {
     },
   },
 }
+
+let today = new Date()
+let year = today.getFullYear()
+let month = (today.getMonth() + 1).toString().padStart(2, '0')
+let day = today.getDate().toString().padStart(2, '0')
 </script>
 <style scoped>
 /* 바깥쪽 카드에 마우스를 올렸을 때 부드러운 효과를 주기 위한 트랜지션입니다. */

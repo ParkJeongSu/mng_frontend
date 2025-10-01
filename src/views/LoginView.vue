@@ -1,12 +1,14 @@
 <template>
   <v-app>
     <v-main>
-      <v-container class="fill-height d-flex justify-center align-center login-page-container">
-        <v-card class="login-card" flat>
-          <v-icon icon="$home" size="48"></v-icon>
+      <v-container fluid class="d-flex justify-center align-center login-page-container">
+        <v-card class="login-image-card" flat>
+          <v-img :src="logoUrl" height="120" alt="taegutec"></v-img>
         </v-card>
-        <v-card class="login-card" flat>
-          <v-icon icon="$home" size="48"></v-icon>
+        <v-card class="login-input-card" flat>
+          <v-card flat class="d-flex justify-center pa-4 login-icon-card">
+            <v-icon icon="$accountLock" color="purple" size="108"></v-icon>
+          </v-card>
           <v-card-text>
             <v-text-field
               v-model="username"
@@ -69,6 +71,7 @@
 <script setup>
 import { ref, computed } from 'vue'
 import { useAuthStore } from '@/stores/auth'
+import logoUrl from '@/assets/logo.png'
 
 const authStore = useAuthStore()
 
@@ -127,21 +130,20 @@ const handleLogin = function () {
   height: 40px;
   background-color: #f0f2f5;
 }
-
-.fill-height {
-  height: 100vh;
+.login-image-card {
+  width: 500px;
+  background-color: #f0f2f5;
 }
-
-/* 2. login-card 클래스에 대한 스타일을 정의합니다. */
-.login-card {
+.login-input-card {
   width: 400px;
+  background-color: #f0f2f5;
+}
+.login-icon-card {
   background-color: #f0f2f5;
 }
 
 .login-page-container {
   min-height: 100vh;
-  display: grid;
-  place-items: center;
   background-color: #f0f2f5;
 }
 </style>

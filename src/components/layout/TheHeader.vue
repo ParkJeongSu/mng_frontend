@@ -1,11 +1,8 @@
 <template>
   <v-app-bar density="compact" color="white" app>
-    <v-img
-      class="company-logo"
-      src="https://cdn.vuetifyjs.com/images/logos/vuetify-logo-dark.png"
-      contain
-    ></v-img>
-    <v-app-bar-title class="company-title">MNG</v-app-bar-title>
+    <v-img class="company-logo" :src="logoUrl" max-width="130"></v-img>
+
+    <!-- <v-app-bar-title class="company-title">MNG</v-app-bar-title> -->
 
     <v-spacer></v-spacer>
 
@@ -58,6 +55,7 @@ import { useMenuStore } from '@/stores/menu'
 import { useAuthStore } from '@/stores/auth' // auth 스토어 import
 import ConfirmDialog from '@/components/common/ConfirmDialog.vue' // ConfirmDialog import
 import { useLocaleStore } from '@/stores/locale'
+import logoUrl from '@/assets/logo.png'
 
 const localeStore = useLocaleStore()
 

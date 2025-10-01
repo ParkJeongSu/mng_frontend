@@ -62,18 +62,6 @@ const productHeaders = ref([
   페이지 컨테이너가 화면 전체 높이를 차지하고, 내부 컨텐츠(ServerSideDataTable)가
   그 공간을 꽉 채우도록 만듭니다.
 */
-.page-container {
-  /* Vuetify의 기본 앱 바 높이(48px)를 뺀 나머지 전체 높이 */
-  height: calc(100vh - 48px);
-  display: flex;
-  flex-direction: column;
-  flex: 1 1 auto;
-  /* 🔑 스크롤 영역이 제대로 계산되도록 */
-  min-height: 0;
-  padding: 0;
-  margin: 0;
-}
-
 /* v-container 안의 ServerSideDataTable 컴포넌트가 남은 공간을 모두 차지하도록 함 */
 .page-container > :deep(.v-card) {
   /* flex-grow: 1; */

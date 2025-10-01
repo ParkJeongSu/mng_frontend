@@ -40,6 +40,7 @@ import {
   mdiCheckboxBlankOutline, // <--- 추가
   mdiPageFirst, // <--- 추가
   mdiPageLast, // <--- 추가
+  mdiAccountLock,
 } from '@mdi/js' // 로그인 폼에서 사용한 아이콘들
 
 // 아이콘 별칭(alias)을 만듭니다.
@@ -88,6 +89,7 @@ const aliases = {
   checkboxOff: mdiCheckboxBlankOutline, // v-checkbox의 체크 안된 상태
   first: mdiPageFirst, // v-pagination의 맨 처음 페이지
   last: mdiPageLast, // v-pagination의 맨 마지막 페이지
+  accountLock: mdiAccountLock, // 잠긴 사용자 계정
 }
 
 // 설정들을 export 합니다.
