@@ -9,60 +9,64 @@
           <v-card flat class="d-flex justify-center pa-4 login-icon-card" color="background">
             <v-icon icon="$accountLock" color="purple" size="108"></v-icon>
           </v-card>
-          <v-card-text>
-            <v-text-field
-              v-model="username"
-              label="ID"
-              variant="outlined"
-              density="compact"
-              class="mb-2 no-border-field"
-              prepend-inner-icon="$account"
-              @keyup.enter="handleLogin"
-              :hide-details="false"
-            ></v-text-field>
+          <v-form @submit.prevent="handleLogin">
+            <v-card-text>
+              <v-text-field
+                v-model="username"
+                label="ID"
+                variant="outlined"
+                density="compact"
+                class="mb-2 no-border-field"
+                prepend-inner-icon="$account"
+                @keyup.enter="handleLogin"
+                :hide-details="false"
+                autocomplete="username"
+              ></v-text-field>
 
-            <v-text-field
-              v-model="password"
-              label="Password"
-              :type="passwordFieldType"
-              variant="outlined"
-              density="compact"
-              @keyup.enter="handleLogin"
-              prepend-inner-icon="$lock"
-              :append-inner-icon="passwordFieldIcon"
-              class="no-border-field"
-              @click:append-inner="togglePasswordVisibility"
-              :hide-details="false"
-            ></v-text-field>
-            <v-select
-              v-model="language"
-              :items="languageItems"
-              item-title="title"
-              item-value="value"
-              label="Language"
-              variant="outlined"
-              density="compact"
-              class="mb-2 no-border-field"
-              prepend-inner-icon="$web"
-              :hide-details="false"
-            ></v-select>
-            <v-alert v-if="loginError" type="error" density="compact" class="mb-4">
-              {{ loginError }}
-            </v-alert>
-          </v-card-text>
+              <v-text-field
+                v-model="password"
+                label="Password"
+                :type="passwordFieldType"
+                variant="outlined"
+                density="compact"
+                @keyup.enter="handleLogin"
+                prepend-inner-icon="$lock"
+                :append-inner-icon="passwordFieldIcon"
+                class="no-border-field"
+                autocomplete="current-password"
+                @click:append-inner="togglePasswordVisibility"
+                :hide-details="false"
+              ></v-text-field>
+              <v-select
+                v-model="language"
+                :items="languageItems"
+                item-title="title"
+                item-value="value"
+                label="Language"
+                variant="outlined"
+                density="compact"
+                class="mb-2 no-border-field"
+                prepend-inner-icon="$web"
+                :hide-details="false"
+              ></v-select>
+              <v-alert v-if="loginError" type="error" density="compact" class="mb-4">
+                {{ loginError }}
+              </v-alert>
+            </v-card-text>
 
-          <v-card-actions class="px-4 pb-4">
-            <v-btn
-              @click="handleLogin"
-              variant="elevated"
-              class="login-btn"
-              block
-              size="large"
-              :loading="submitting"
-              :disabled="submitting"
-              >Login</v-btn
-            >
-          </v-card-actions>
+            <v-card-actions class="px-4 pb-4">
+              <v-btn
+                variant="elevated"
+                class="login-btn"
+                type="submit"
+                block
+                size="large"
+                :loading="submitting"
+                :disabled="submitting"
+                >Login</v-btn
+              >
+            </v-card-actions>
+          </v-form>
         </v-card>
       </v-container>
     </v-main>

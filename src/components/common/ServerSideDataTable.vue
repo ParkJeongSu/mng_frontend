@@ -1,13 +1,9 @@
 <template>
-  <!--
-    컴포넌트의 최상위 루트를 Flex Container로 만듭니다.
-    이 카드가 부모로부터 받은 전체 높이를 차지하게 됩니다.
-  -->
-  <v-card class="bg-white pa-3 d-flex flex-column datatable-wrapper" flat outlined>
+  <v-card class="datatable-card d-flex flex-column" flat color="surface">
     <!-- 제목과 검색 바는 높이가 고정되어야 하므로, 공간이 줄어들 때 수축하지 않도록 합니다. -->
-    <v-card-title class="text-h6 flex-shrink-0">서버 사이드 데이터 테이블</v-card-title>
-    <v-card class="pa-2 mb-1 flex-shrink-0" flat outlined>
-      <v-row dense>
+    <v-card-title class="datatable-title text-h6">서버 사이드 데이터 테이블</v-card-title>
+    <v-card class="search-panel" color="surface" flat>
+      <v-row class="search-row" dense>
         <v-col v-for="item in props.searchSchema" :key="item.key" cols="12" md="2">
           <component
             :is="componentMap[item.component]"
@@ -19,7 +15,7 @@
             hide-details
           ></component>
         </v-col>
-        <v-col class="d-flex justify-end align-center">
+        <v-col class="search-actions d-flex justify-end align-center">
           <slot name="search-bar.append"></slot>
           <v-btn @click="search">{{ $t('dataTable.search') }}</v-btn>
         </v-col>
@@ -27,7 +23,7 @@
     </v-card>
 
     <!-- 툴바 역시 높이가 고정됩니다. -->
-    <v-toolbar class="flex-shrink-0" dense flat>
+    <v-toolbar class="results-toolbar" density="comfortable" flat color="surface">
       <v-toolbar-title class="text-subtitle-1">조회 결과</v-toolbar-title>
       <v-spacer></v-spacer>
       <slot name="actions.prepend"></slot>
@@ -52,26 +48,37 @@
     -->
     <div class="table-wrapper flex-grow-1">
       <v-data-table-server
+        density="compact"
         v-model:items-per-page="options.itemsPerPage"
         :headers="props.headers"
         :items-length="totalItems"
         :items="serverItems"
         :loading="loading"
+        class="server-table pro-table"
         fixed-header
         return-object
         height="100%"
-        @update:options="loadItems"
-        @click:row="handleRowClick"
         :show-select="showCheckbox"
         :hover="isHover"
+        @update:options="loadItems"
+        @click:row="handleRowClick"
       >
         <!--
-        fixed-layout
-        fixed-footer
-        -->
         <template v-for="header in props.headers" v-slot:[`item.${header.key}`]="{ value, item }">
           <slot :name="`item.${header.key}`" :item="item">
             {{ value }}
+          </slot>
+        </template>
+        -->
+        <template
+          v-for="header in props.headers"
+          :key="header.key"
+          v-slot:[`item.${header.key}`]="slotProps"
+        >
+          <slot :name="`item.${header.key}`" v-bind="slotProps">
+            <span class="cell-ellipsis" :title="String(slotProps.value ?? '')">
+              {{ slotProps.value }}
+            </span>
           </slot>
         </template>
       </v-data-table-server>
@@ -228,5 +235,189 @@ function handleEditClick() {
 /* (선택) 푸터 고정 시 */
 .table-wrapper :deep(.v-data-table__bottom) {
   /* flex-shrink: 0; */
+}
+
+/* ServerSideDataTable 업그레이드 */
+/* 루트 카드: 가로/세로 풀 채움 + 평평한 베이스 */
+.datatable-card {
+  width: 100%;
+  height: 100%;
+  min-height: 0; /* 내부 스크롤 허용 */
+  border: none;
+  box-shadow: none;
+  background: rgb(var(--v-theme-surface));
+}
+
+/* 타이틀: 높이/여백 절제 */
+.datatable-title {
+  min-height: 44px;
+  padding-block: 6px;
+  color: rgba(var(--v-theme-on-surface), 0.9);
+}
+
+/* 검색 패널: 얕은 경계선 + 조밀한 그리드 */
+.search-panel {
+  margin: 4px 0 8px 0;
+  padding: 10px 12px;
+  border: 1px solid rgba(var(--v-theme-on-surface), 0.06);
+  background: rgb(var(--v-theme-surface));
+  border-radius: 8px;
+}
+.search-row {
+  row-gap: 8px;
+}
+.search-actions .v-btn + .v-btn {
+  margin-left: 8px;
+}
+
+/* 툴바: 하단 경계선으로 영역 구분 */
+.results-toolbar {
+  min-height: 42px;
+  padding-inline: 8px;
+  border-bottom: 1px solid rgba(var(--v-theme-on-surface), 0.08);
+}
+.results-toolbar .v-toolbar-title {
+  color: rgba(var(--v-theme-on-surface), 0.82);
+}
+
+/* 테이블 래퍼: 스크롤 컨테이너 */
+.table-wrapper {
+  position: relative;
+  overflow: auto;
+  flex: 1 1 0;
+  min-height: 0;
+  background: rgb(var(--v-theme-surface));
+}
+
+/* v-data-table-server 베이스 (BaseDataTable과 톤 통일) */
+:deep(.server-table) {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: rgb(var(--v-theme-surface));
+  border: none;
+  box-shadow: none;
+}
+
+/* 헤더: sticky + 분리선 */
+:deep(.server-table .v-data-table__thead) {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background: rgb(var(--v-theme-surface));
+  border-bottom: 1px solid rgba(var(--v-theme-on-surface), 0.12);
+}
+:deep(.server-table th) {
+  white-space: nowrap;
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: rgba(var(--v-theme-on-surface), 0.78);
+  height: 38px;
+  padding: 0 12px;
+}
+
+/* 바디 셀: 라인 최소화 + 가독성 */
+:deep(.server-table td) {
+  white-space: nowrap;
+  font-size: 0.92rem;
+  color: rgba(var(--v-theme-on-surface), 0.87);
+  height: 38px;
+  padding: 0 12px;
+  border-bottom: 1px solid rgba(var(--v-theme-on-surface), 0.06);
+}
+
+/* Zebra (은은하게) */
+:deep(.server-table .v-data-table__tbody tr:nth-child(even)) {
+  background-color: rgba(var(--v-theme-on-surface), 0.02);
+}
+
+/* Hover: primary 아주 약하게 */
+:deep(.server-table .v-data-table__tbody tr:hover) {
+  background-color: rgba(var(--v-theme-primary), 0.06);
+}
+
+/* Selected: primary 조금 더 진하게 + 좌측 인디케이터 */
+:deep(.server-table .v-data-table__tbody tr.v-data-table__selected) {
+  background-color: rgba(var(--v-theme-primary), 0.12) !important;
+  position: relative;
+}
+:deep(.server-table .v-data-table__tbody tr.v-data-table__selected::before) {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background-color: rgb(var(--v-theme-primary));
+}
+
+/* Focus(키보드 탐색) */
+:deep(.server-table .v-data-table__tbody tr:focus-visible) {
+  outline: 2px solid rgba(var(--v-theme-primary), 0.8);
+  outline-offset: -2px;
+}
+
+/* 긴 문자열 처리 */
+.cell-ellipsis {
+  display: inline-block;
+  max-width: 320px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  vertical-align: middle;
+}
+
+/* 실제 스크롤은 wrapper가 담당 */
+:deep(.v-data-table__wrapper) {
+  overflow: auto;
+}
+:deep(.v-data-table__wrapper table) {
+  table-layout: fixed;
+  width: 100%;
+}
+
+/* 체크박스/액션 컬럼 폭 조정 */
+:deep(th.v-data-table__td--checkbox),
+:deep(td.v-data-table__td--checkbox) {
+  width: 44px;
+  padding: 0 8px;
+}
+
+/* 빈/로딩 상태 톤 */
+.empty-state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 180px;
+  color: rgba(var(--v-theme-on-surface), 0.6);
+}
+
+/* sticky footer(페이지네이션) */
+:deep(.server-table .v-data-table__bottom) {
+  position: sticky;
+  bottom: 0;
+  z-index: 1;
+  background: rgb(var(--v-theme-surface));
+  border-top: 1px solid rgba(var(--v-theme-on-surface), 0.12);
+}
+
+/* 스크롤바 정리 (선택) */
+.table-wrapper::-webkit-scrollbar {
+  height: 10px;
+  width: 10px;
+}
+.table-wrapper::-webkit-scrollbar-thumb {
+  background: rgba(var(--v-theme-on-surface), 0.2);
+  border-radius: 8px;
+}
+.table-wrapper::-webkit-scrollbar-thumb:hover {
+  background: rgba(var(--v-theme-on-surface), 0.3);
+}
+
+/* 다크 모드 미세 조정 */
+:deep(.v-theme--dark .server-table .v-data-table__tbody tr:nth-child(even)) {
+  background-color: rgba(255, 255, 255, 0.02);
+}
+:deep(.v-theme--dark .server-table td) {
+  border-bottom-color: rgba(255, 255, 255, 0.06);
 }
 </style>

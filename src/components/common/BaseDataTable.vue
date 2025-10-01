@@ -41,7 +41,6 @@
         density="compact"
         return-object
         fixed-header
-        fixed-layout
         :item-value="itemKey"
         height="100%"
         :hover="isHover"
@@ -288,5 +287,24 @@ function handleEditClick() {
 }
 :deep(.v-theme--dark .pro-table td) {
   border-bottom-color: rgba(255, 255, 255, 0.06);
+}
+
+/* zebra는 td에 직접 적용 */
+:deep(.pro-table .v-table__wrapper table > tbody > tr:nth-child(even) > td) {
+  background-color: rgba(var(--v-theme-on-surface), 0.04); /* 0.02 → 0.04~0.06 추천 */
+  transition: background-color 0.15s ease;
+}
+
+/* hover/selected가 zebra 위에 자연스럽게 올라오도록 td에 적용 */
+:deep(.pro-table .v-table__wrapper table > tbody > tr:hover > td) {
+  background-color: rgba(var(--v-theme-primary), 0.06);
+}
+:deep(.pro-table .v-table__wrapper table > tbody > tr.v-data-table__selected > td) {
+  background-color: rgba(var(--v-theme-primary), 0.12) !important;
+}
+
+/* 혹시 Vuetify가 td에 배경을 깔고 있으면 투명화 */
+:deep(.pro-table td) {
+  background-color: transparent; /* 중요: tr배경을 보이게 */
 }
 </style>
