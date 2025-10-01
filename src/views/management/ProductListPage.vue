@@ -57,19 +57,4 @@ const productHeaders = ref([
   { title: '가격', key: 'price' },
 ])
 </script>
-<style scoped>
-/* 이 스타일 블록이 핵심입니다.
-  페이지 컨테이너가 화면 전체 높이를 차지하고, 내부 컨텐츠(ServerSideDataTable)가
-  그 공간을 꽉 채우도록 만듭니다.
-*/
-/* v-container 안의 ServerSideDataTable 컴포넌트가 남은 공간을 모두 차지하도록 함 */
-.page-container > :deep(.v-card) {
-  /* flex-grow: 1; */
-}
-/* ServerSideDataTable 카드가 남은 공간을 모두 차지하고 0까지 줄어들 수 있도록 */
-.page-container > :deep(.datatable-wrapper) {
-  /* flex: 1 1 0; */
-  /* 🔑 */
-  /* min-height: 0;  */
-}
-</style>
+<style scoped></style>

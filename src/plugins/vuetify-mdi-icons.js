@@ -1,4 +1,5 @@
 // vuetify의 mdi-svg 설정과 사용할 아이콘을 @mdi/js에서 직접 가져옵니다.
+// https://pictogrammers.com/library/mdi/
 import { mdi } from 'vuetify/iconsets/mdi-svg'
 import {
   mdiHome,
@@ -20,7 +21,6 @@ import {
   mdiAlert,
   mdiDelete,
   mdiCancel,
-  // === 새로 추가된 아이콘 ===
   mdiAccountCircle,
   mdiMenu,
   mdiBullseyeArrow,
@@ -37,11 +37,14 @@ import {
   mdiAccountMultiple,
   mdiChartBar,
   mdiChevronUp,
-  mdiCheckboxBlankOutline, // <--- 추가
-  mdiPageFirst, // <--- 추가
-  mdiPageLast, // <--- 추가
+  mdiCheckboxBlankOutline,
+  mdiPageFirst,
+  mdiPageLast,
   mdiAccountLock,
-} from '@mdi/js' // 로그인 폼에서 사용한 아이콘들
+  mdiTranslate,
+  mdiWeatherNight,
+  mdiWeatherSunny,
+} from '@mdi/js'
 
 // 아이콘 별칭(alias)을 만듭니다.
 const aliases = {
@@ -67,7 +70,6 @@ const aliases = {
   delete: mdiDelete, // (자주 사용)
   cancel: mdiCancel, // (자주 사용)
   close: mdiClose, // (자주 사용)
-  // === 새로 추가된 별칭 ===
   accountCircle: mdiAccountCircle,
   menu: mdiMenu,
   bullseyeArrow: mdiBullseyeArrow,
@@ -85,11 +87,13 @@ const aliases = {
   accountMultiple: mdiAccountMultiple,
   chartBar: mdiChartBar,
   collapse: mdiChevronUp,
-  // 2. 예약된 별칭 이름으로 새 아이콘들을 등록합니다.
   checkboxOff: mdiCheckboxBlankOutline, // v-checkbox의 체크 안된 상태
   first: mdiPageFirst, // v-pagination의 맨 처음 페이지
   last: mdiPageLast, // v-pagination의 맨 마지막 페이지
   accountLock: mdiAccountLock, // 잠긴 사용자 계정
+  translate: mdiTranslate, // 번역 아이콘
+  weatherNight: mdiWeatherNight, // 다크 모드 아이콘
+  weatherSunny: mdiWeatherSunny, // 라이트 모드 아이콘
 }
 
 // 설정들을 export 합니다.

@@ -6,13 +6,15 @@
         @update:model-value="onTabChange"
         density="compact"
         show-arrows
-        class="tab-bar"
+        class="tab-bar underline"
       >
         <v-tab
           v-for="tab in tabsStore.openTabs"
           :key="tab.path"
           :value="tab.path"
           @contextmenu.prevent="onRightClick(tab, $event)"
+          @click.middle.prevent="closeTab(tab)"
+          class="tab-item"
         >
           {{ tab.title }}
           <v-icon
@@ -109,7 +111,6 @@ function closeOtherTabs() {
   display: flex;
   flex-direction: column;
   height: 100%;
-  /* background-color: #f0f2f5; */
   transition: width 0.3s ease; /* 너비 변경 시 부드러운 애니메이션 효과 */
   /*✨ 이게 핵심! 내용이 길어져도 부모 너비를 넘어가지 않게 함 */
   min-width: 0;
@@ -117,7 +118,7 @@ function closeOtherTabs() {
 
 .tab-bar {
   box-shadow: none;
-  border-bottom: 1px solid #dcdfe6;
+  /* border-bottom: 1px solid #dcdfe6; */
 }
 
 .tab-content {
@@ -128,8 +129,7 @@ function closeOtherTabs() {
   flex-direction: column;
   padding: 24px;
   overflow-y: auto;
-  /* background-color: #ffffff; */
-  border-left: 1px solid #dcdfe6;
+  /* border-left: 1px solid #dcdfe6; */
   padding-bottom: 0;
   padding-top: 10px;
 }
@@ -137,14 +137,14 @@ function closeOtherTabs() {
 /* --- 기존 스타일은 유지 --- */
 :deep(.v-tab) {
   text-transform: none !important;
-  border-right: 1px solid #dcdfe6;
-  background-color: #f0f2f5;
+  /* border-right: 1px solid #dcdfe6; */
+  /* background-color: #f0f2f5; */
   color: #606266;
   font-weight: 500;
 }
 
 :deep(.v-tab--selected) {
-  background-color: #ffffff;
+  /* background-color: #ffffff; */
   color: var(--v-theme-primary);
   font-weight: 700;
   border-bottom-color: transparent;
@@ -157,4 +157,141 @@ function closeOtherTabs() {
 .close-icon:hover {
   background-color: rgba(0, 0, 0, 0.1);
 }
+
+/*패턴 C) “크롬(브라우저)”형 (파일/문서 에디터처럼 보이게)*/
+/* 크롬형 */
+:deep(.tab-bar.chrome) {
+  background-color: rgb(var(--v-theme-surface));
+  border-bottom: 1px solid rgba(var(--v-theme-on-surface), 0.12);
+  padding-inline: 4px;
+}
+
+:deep(.tab-bar.chrome .v-tab) {
+  text-transform: none;
+  color: rgba(var(--v-theme-on-surface), 0.72);
+  margin: 0 2px;
+  min-height: 34px;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  padding-inline: 10px;
+}
+
+:deep(.tab-bar.chrome .v-tab--selected) {
+  color: rgb(var(--v-theme-primary));
+  background-color: rgb(var(--v-theme-surface));
+  border: 1px solid rgba(var(--v-theme-on-surface), 0.12);
+  border-bottom-color: transparent; /* 위로 떠 보이게 */
+  font-weight: 700;
+}
+
+/* 인디케이터 숨김, 카드 테두리를 강조 */
+:deep(.tab-bar.chrome .v-tabs__slider) {
+  display: none;
+}
 </style>
+
+<!--
+
+/* A) 머티리얼 “언더라인”형 (가장 깔끔·산업용 대시보드에 적합) */
+/* 언더라인형 */
+:deep(.tab-bar.underline) {
+  background-color: rgb(var(--v-theme-surface));
+  border-bottom: 1px solid rgba(var(--v-theme-on-surface), 0.12);
+}
+
+:deep(.tab-bar.underline .v-tab) {
+  text-transform: none;
+  color: rgba(var(--v-theme-on-surface), 0.72);
+  font-weight: 500;
+  min-height: 38px;
+}
+
+:deep(.tab-bar.underline .v-slide-group__content) {
+  /* 스크롤 영역 패딩 줄이기 */
+  padding-inline: 4px;
+}
+
+:deep(.tab-bar.underline .v-tab--selected) {
+  color: rgb(var(--v-theme-primary));
+  font-weight: 700;
+}
+
+/* 하단 인디케이터 두께/색 커스터마이즈 */
+:deep(.tab-bar.underline .v-tabs__slider) {
+  height: 2px;
+  background-color: rgb(var(--v-theme-primary)) !important;
+}
+
+/* 닫기 아이콘: 기본 숨김, hover 시 노출 */
+:deep(.tab-item .close-icon) {
+  border-radius: 50%;
+  width: 22px;
+  height: 22px;
+  display: none;
+}
+:deep(.tab-item:hover .close-icon) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.06);
+}
+:deep(.v-theme--dark .tab-item:hover .close-icon) {
+  background-color: rgba(255, 255, 255, 0.08);
+}
+
+/*패턴 B) “필(Pill)·세그먼트”형 (필터/모드 전환형 탭에 적합)*/
+/* 필형 */
+:deep(.tab-bar.pills) {
+  background-color: transparent;
+  padding: 6px 8px;
+}
+
+:deep(.tab-bar.pills .v-tab) {
+  text-transform: none;
+  color: rgba(var(--v-theme-on-surface), 0.72);
+  border-radius: 999px;
+  margin: 0 4px;
+  padding-inline: 10px;
+  min-height: 34px;
+}
+
+:deep(.tab-bar.pills .v-tab--selected) {
+  color: rgb(var(--v-theme-primary));
+  background-color: rgba(var(--v-theme-primary), 0.12);
+  font-weight: 700;
+}
+
+/* 인디케이터 숨김 (필형은 보통 배경으로 강조) */
+:deep(.tab-bar.pills .v-tabs__slider) { display: none; }
+
+
+/*패턴 C) “크롬(브라우저)”형 (파일/문서 에디터처럼 보이게)*/
+/* 크롬형 */
+:deep(.tab-bar.chrome) {
+  background-color: rgb(var(--v-theme-surface));
+  border-bottom: 1px solid rgba(var(--v-theme-on-surface), 0.12);
+  padding-inline: 4px;
+}
+
+:deep(.tab-bar.chrome .v-tab) {
+  text-transform: none;
+  color: rgba(var(--v-theme-on-surface), 0.72);
+  margin: 0 2px;
+  min-height: 34px;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  padding-inline: 10px;
+}
+
+:deep(.tab-bar.chrome .v-tab--selected) {
+  color: rgb(var(--v-theme-primary));
+  background-color: rgb(var(--v-theme-surface));
+  border: 1px solid rgba(var(--v-theme-on-surface), 0.12);
+  border-bottom-color: transparent; /* 위로 떠 보이게 */
+  font-weight: 700;
+}
+
+/* 인디케이터 숨김, 카드 테두리를 강조 */
+:deep(.tab-bar.chrome .v-tabs__slider) { display: none; }
+
+-->

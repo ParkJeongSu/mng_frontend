@@ -6,14 +6,13 @@
       </template>
     </TheHeader>
 
-    <v-main class="main-background">
+    <v-main>
       <div class="main-container">
         <TheSidebar v-model="menuStore.isSidebarOpen" />
         <div class="content-wrapper">
-          <div class="toolbar-area">
-            <v-app-bar-nav-icon @click="menuStore.toggleSidebar"></v-app-bar-nav-icon>
-          </div>
-
+          <v-app-bar color="surface" flat>
+            <v-app-bar-nav-icon @click="menuStore.toggleSidebar" />
+          </v-app-bar>
           <TabView />
         </div>
         <div class="side-panel-container">
@@ -63,7 +62,7 @@
               <v-card-actions v-if="panelStore.formMode">
                 <v-spacer></v-spacer>
                 <v-btn @click="panelStore.closePanel">취소</v-btn>
-                <v-btn color="primary">저장</v-btn>
+                <v-btn>저장</v-btn>
               </v-card-actions>
             </v-card>
           </div>
@@ -99,11 +98,6 @@ const panelToggleIcon = computed(function () {
 </script>
 
 <style scoped>
-/* 2. v-main의 배경색을 지정하는 스타일을 추가합니다. */
-.main-background {
-  background-color: #f5f5f5;
-}
-
 .footer {
   height: auto;
 }
@@ -123,28 +117,11 @@ const panelToggleIcon = computed(function () {
   min-width: 0;
 }
 
-.toolbar-area {
-  display: flex;
-  align-items: center;
-  padding: 0 16px;
-  height: 48px;
-  border-bottom: 1px solid #e0e0e0;
-  background-color: white;
-  /* flex-shrink: 0 을 추가하여 이 영역은 줄어들지 않도록 고정합니다. */
-  flex-shrink: 0;
-}
-
-.content {
-  flex-grow: 1;
-  padding: 20px;
-}
-
 /* 2. v-footer 내부 레이아웃을 위한 스타일 추가 */
 .footer-container {
   width: 100%;
   display: flex;
   flex-direction: column;
-  background-color: #f5f5f5;
 }
 
 .footer-content {
@@ -162,13 +139,11 @@ const panelToggleIcon = computed(function () {
   /* 토글 버튼의 위치 기준점 */
   /* position: relative; */
   flex-shrink: 0;
-  background-color: white;
 }
 
 .panel-toggle-button {
   height: 48px;
   width: 24px;
-  background-color: #ffffff;
   border-radius: 4px 0 0 4px;
   display: flex;
   align-items: center;
@@ -183,8 +158,7 @@ const panelToggleIcon = computed(function () {
 .side-panel {
   width: 400px; /* 고정 너비 */
   height: 100%;
-  border-left: 1px solid #dcdfe6;
-  background-color: #fafafa;
+  /* border-left: 1px solid #dcdfe6; */
   transition: all 0.3s ease;
   display: flex;
   flex-direction: column;

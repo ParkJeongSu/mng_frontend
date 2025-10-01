@@ -1,5 +1,5 @@
 <template>
-  <v-toolbar density="compact" color="white" app>
+  <v-toolbar density="compact" app>
     <v-spacer></v-spacer>
     <div class="d-flex justify-center flex-grow-1">
       <v-btn

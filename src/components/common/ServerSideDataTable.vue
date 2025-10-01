@@ -21,13 +21,13 @@
         </v-col>
         <v-col class="d-flex justify-end align-center">
           <slot name="search-bar.append"></slot>
-          <v-btn color="primary" @click="search">{{ $t('dataTable.search') }}</v-btn>
+          <v-btn @click="search">{{ $t('dataTable.search') }}</v-btn>
         </v-col>
       </v-row>
     </v-card>
 
     <!-- 툴바 역시 높이가 고정됩니다. -->
-    <v-toolbar class="bg-black flex-shrink-0" dense flat>
+    <v-toolbar class="flex-shrink-0" dense flat>
       <v-toolbar-title class="text-subtitle-1">조회 결과</v-toolbar-title>
       <v-spacer></v-spacer>
       <slot name="actions.prepend"></slot>

@@ -2,11 +2,11 @@
   <v-app>
     <v-main>
       <v-container fluid class="d-flex justify-center align-center login-page-container">
-        <v-card class="login-image-card" flat>
+        <v-card color="background" class="login-image-card" flat>
           <v-img :src="logoUrl" height="120" alt="taegutec"></v-img>
         </v-card>
-        <v-card class="login-input-card" flat>
-          <v-card flat class="d-flex justify-center pa-4 login-icon-card">
+        <v-card class="login-input-card" color="background" flat>
+          <v-card flat class="d-flex justify-center pa-4 login-icon-card" color="background">
             <v-icon icon="$accountLock" color="purple" size="108"></v-icon>
           </v-card>
           <v-card-text>
@@ -15,9 +15,10 @@
               label="ID"
               variant="outlined"
               density="compact"
-              class="mb-2"
+              class="mb-2 no-border-field"
               prepend-inner-icon="$account"
               @keyup.enter="handleLogin"
+              :hide-details="false"
             ></v-text-field>
 
             <v-text-field
@@ -29,7 +30,9 @@
               @keyup.enter="handleLogin"
               prepend-inner-icon="$lock"
               :append-inner-icon="passwordFieldIcon"
+              class="no-border-field"
               @click:append-inner="togglePasswordVisibility"
+              :hide-details="false"
             ></v-text-field>
             <v-select
               v-model="language"
@@ -39,8 +42,9 @@
               label="Language"
               variant="outlined"
               density="compact"
-              class="mb-2"
+              class="mb-2 no-border-field"
               prepend-inner-icon="$web"
+              :hide-details="false"
             ></v-select>
             <v-alert v-if="loginError" type="error" density="compact" class="mb-4">
               {{ loginError }}
@@ -62,7 +66,7 @@
         </v-card>
       </v-container>
     </v-main>
-    <v-footer app class="d-flex justify-center footer">
+    <v-footer app class="d-flex justify-center footer" color="background">
       <div class="text-caption">© {{ new Date().getFullYear() }} MNG. All rights reserved.</div>
     </v-footer>
   </v-app>
@@ -128,22 +132,24 @@ const handleLogin = function () {
 }
 .footer {
   height: 40px;
-  background-color: #f0f2f5;
 }
+
 .login-image-card {
   width: 500px;
-  background-color: #f0f2f5;
+  border: none !important;
+  box-shadow: none !important;
 }
 .login-input-card {
   width: 400px;
-  background-color: #f0f2f5;
+  border: none !important;
+  box-shadow: none !important;
 }
 .login-icon-card {
-  background-color: #f0f2f5;
+  border: none !important;
+  box-shadow: none !important;
 }
 
 .login-page-container {
   min-height: 100vh;
-  background-color: #f0f2f5;
 }
 </style>

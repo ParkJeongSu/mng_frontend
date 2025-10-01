@@ -5,7 +5,7 @@
         v-for="alarm in alarmStore.latestAlarms"
         :key="alarm.id"
         class="ma-1"
-        color="indigo"
+        color="secondary"
         label
         size="small"
         prepend-icon="$bellOutline"
@@ -34,8 +34,10 @@ const alarmStore = useAlarmStore()
   height: 40px;
   width: 100%; /* 부모 컴포넌트(v-footer)의 너비를 꽉 채우도록 설정 */
   padding: 0 16px;
-  background-color: #f5f5f5;
-  border-bottom: 1px solid #e0e0e0; /* 푸터와 구분하기 위해 border-top 대신 bottom 사용 */
+  /* border-bottom: 1px solid #e0e0e0; */
+  /* 푸터와 구분하기 위해 border-top 대신 bottom 사용 */
+  /* border-width: 1px; */
+  /* border-style: solid; */
   overflow: hidden;
   white-space: nowrap;
 }
