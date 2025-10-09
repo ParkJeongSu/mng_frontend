@@ -7,7 +7,7 @@ import DefaultLayout from '@/layouts/DefaultLayout.vue'
 import HomeView from '../views/HomeView.vue'
 import DashboardView from '../views/DashboardView.vue'
 import UserManagementView from '../views/UserManagementView.vue'
-import LoginView from '../views/LoginView.vue'
+import LoginView from '../layouts/LoginView.vue'
 import ProfileView from '../views/ProfileView.vue'
 import UserListView from '../views/management/UserListView.vue'
 import ProductListPage from '@/views/management/ProductListPage.vue'
@@ -96,7 +96,7 @@ router.beforeEach(function (to, from, next) {
   const authStore = useAuthStore()
   const tabsStore = useTabsStore()
 
-  if (to.meta.requiresAuth && !authStore.isLoggedIn) {
+  if (to.meta.requiresAuth && !authStore.token) {
     next('/login')
   } else {
     // 이동하려는 페이지가 탭으로 열릴 수 있는 페이지라면(meta.title이 있다면)

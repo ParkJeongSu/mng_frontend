@@ -4,7 +4,8 @@ import { useAuthStore } from '@/stores/auth' // 토큰 관리를 위해 auth 스
 // 1. Axios 인스턴스 생성
 const apiClient = axios.create({
   // .env 파일에 정의된 API 서버 주소를 사용합니다.
-  baseURL: import.meta.env.VITE_API_BASE_URL,
+  //baseURL: import.meta.env.VITE_API_BASE_URL,
+  baseURL: '/',
   // 요청 타임아웃 설정 (예: 10초)
   timeout: 10000,
   headers: {

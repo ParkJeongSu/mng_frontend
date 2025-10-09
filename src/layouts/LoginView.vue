@@ -49,8 +49,8 @@
                 prepend-inner-icon="$web"
                 :hide-details="false"
               ></v-select>
-              <v-alert v-if="loginError" type="error" density="compact" class="mb-4">
-                {{ loginError }}
+              <v-alert v-if="errorMessage" type="error" density="compact" class="mb-4">
+                {{ errorMessage }}
               </v-alert>
             </v-card-text>
 
@@ -80,7 +80,9 @@
 import { ref, computed } from 'vue'
 import { useAuthStore } from '@/stores/auth'
 import logoUrl from '@/assets/logo.png'
-
+import {login} from "@/api/auth";
+import { useRouter } from 'vue-router'
+const router = useRouter();
 const authStore = useAuthStore()
 
 const username = ref('')
@@ -95,10 +97,7 @@ const languageItems = ref([
   { title: 'English', value: 'en' },
 ])
 
-// 1. 스토어의 loginError를 감시하는 computed 속성을 만듭니다.
-const loginError = computed(function () {
-  return authStore.loginError
-})
+const errorMessage = ref('');
 
 const passwordFieldType = computed(function () {
   return showPassword.value ? 'text' : 'password'
@@ -112,10 +111,29 @@ function togglePasswordVisibility() {
   showPassword.value = !showPassword.value
 }
 
-const handleLogin = function () {
-  submitting.value = true
-  authStore.login(username.value, password.value)
-  submitting.value = false
+const handleLogin = async function () {
+
+  try {
+    submitting.value = true
+    const response = await login(
+      {
+        email: username.value,
+        password: password.value,
+      }
+    );
+    // 5. API 호출 성공 시, 응답으로 받은 토큰 정보를 추출합니다.
+    const token = response.data.accessToken;
+    authStore.setToken(token);
+    // 7. 로그인이 성공했으므로 메인 페이지나 대시보드로 이동합니다.
+
+    await router.push('/');
+  } catch (error) {
+    // 8. API 호출 실패 시 (예: 아이디/비번 불일치), 에러 메시지를 표시합니다.
+    console.error('로그인 실패:', error);
+    errorMessage.value = '이메일 또는 비밀번호가 올바르지 않습니다.';
+  }finally {
+    submitting.value = false
+  }
 }
 </script>
 
