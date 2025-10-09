@@ -122,8 +122,11 @@ const handleLogin = async function () {
       }
     );
     // 5. API 호출 성공 시, 응답으로 받은 토큰 정보를 추출합니다.
-    const token = response.data.accessToken;
-    authStore.setToken(token);
+    //const accessToken = response.data.accessToken;
+    //const refreshToken = response.data.refreshToken;
+    //authStore.setTokens(accessToken,refreshToken);
+    authStore.login(response.data);
+
     // 7. 로그인이 성공했으므로 메인 페이지나 대시보드로 이동합니다.
 
     await router.push('/');

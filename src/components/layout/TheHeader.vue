@@ -34,17 +34,17 @@
 
       <v-list density="compact">
         <v-list-item>
-          <v-btn @click="localeStore.setLocale('ko')">한국어</v-btn>
+          <v-btn color="surface" @click="localeStore.setLocale('ko')">한국어</v-btn>
         </v-list-item>
         <v-list-item>
-          <v-btn @click="localeStore.setLocale('en')">English</v-btn>
+          <v-btn color="surface" @click="localeStore.setLocale('en')">English</v-btn>
         </v-list-item>
       </v-list>
     </v-menu>
     <v-menu offset-y>
       <template v-slot:activator="{ props }">
         <div v-bind="props" class="d-flex align-center cursor-pointer">
-          <span class="user-id">test@test.com</span>
+          <span class="user-id">{{email}} {{ $t('messages.welcome') }}</span>
           <v-icon class="user-icon">$accountCircle</v-icon>
         </div>
       </template>
@@ -80,10 +80,17 @@ import ConfirmDialog from '@/components/common/ConfirmDialog.vue' // ConfirmDial
 import { useLocaleStore } from '@/stores/locale'
 import logoUrl from '@/assets/logo.png'
 import { useTheme } from 'vuetify'
+import { storeToRefs } from 'pinia'
+import { useRouter } from 'vue-router'
+const router = useRouter();
 
 const localeStore = useLocaleStore()
 const menuStore = useMenuStore()
 const authStore = useAuthStore()
+
+// storeToRefs를 사용해 스토어의 상태를 반응형 ref로 가져옵니다.
+// 이렇게 해야 구조 분해 할당을 해도 반응성이 유지됩니다.
+const { isAuthenticated, email } = storeToRefs(authStore);
 
 // 1. useTheme 헬퍼 함수로 현재 테마 상태를 가져옵니다.
 const theme = useTheme()
@@ -115,6 +122,7 @@ function openLogoutDialog() {
 // 다이얼로그에서 '확인'을 눌렀을 때 실제 로그아웃을 처리합니다.
 function handleLogout() {
   authStore.logout()
+  router.push('/login'); // 로그아웃 후 로그인 페이지로 이동
 }
 </script>
 

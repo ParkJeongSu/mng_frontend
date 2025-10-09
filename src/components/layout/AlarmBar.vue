@@ -15,14 +15,20 @@
     </div>
 
     <div class="alarm-actions">
-      <v-btn size="small" @click="alarmStore.addSampleAlarm"> 테스트 알람 추가 </v-btn>
+      <v-btn size="small" @click="addSampleAlarm"> 테스트 알람 추가 </v-btn>
     </div>
   </div>
 </template>
 
 <script setup>
 import { useAlarmStore } from '@/stores/alarm'
+import {test} from '@/api/common';
 const alarmStore = useAlarmStore()
+function addSampleAlarm() {
+  alarmStore.addSampleAlarm();
+  test();
+}
+
 </script>
 
 <style scoped>

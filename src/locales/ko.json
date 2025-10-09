@@ -10,6 +10,7 @@
   },
   "messages": {
     "deleteConfirm": "{count}개의 항목을 삭제하시겠습니까?",
-    "logoutConfirm": "정말 로그아웃 하시겠습니까?"
+    "logoutConfirm": "정말 로그아웃 하시겠습니까?",
+    "welcome": "님 환영합니다."
   }
 }

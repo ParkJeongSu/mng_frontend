@@ -96,7 +96,7 @@ router.beforeEach(function (to, from, next) {
   const authStore = useAuthStore()
   const tabsStore = useTabsStore()
 
-  if (to.meta.requiresAuth && !authStore.token) {
+  if (to.meta.requiresAuth && !authStore.accessToken) {
     next('/login')
   } else {
     // 이동하려는 페이지가 탭으로 열릴 수 있는 페이지라면(meta.title이 있다면)

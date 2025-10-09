@@ -21,3 +21,14 @@ export function login(credentials) {
 export function signup(memberInfo) {
   return apiClient.post('/api/members/join', memberInfo);
 }
+
+/**
+ * 토큰 재발급 API 호출
+ * @param {object} tokens
+ * @param {string} tokens.accessToken - 만료된 액세스 토큰
+ * @param {string} tokens.refreshToken - 리프레시 토큰
+ * @returns {Promise} Axios 응답 Promise (새로운 TokenDto 객체 포함)
+ */
+export function reissue(tokens) {
+  return apiClient.post('/api/members/reissue', tokens);
+}
