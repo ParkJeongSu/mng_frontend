@@ -80,9 +80,9 @@
 import { ref, computed } from 'vue'
 import { useAuthStore } from '@/stores/auth'
 import logoUrl from '@/assets/logo.png'
-import {login} from "@/api/auth";
+import { login } from '@/api/auth'
 import { useRouter } from 'vue-router'
-const router = useRouter();
+const router = useRouter()
 const authStore = useAuthStore()
 
 const username = ref('')
@@ -97,7 +97,7 @@ const languageItems = ref([
   { title: 'English', value: 'en' },
 ])
 
-const errorMessage = ref('');
+const errorMessage = ref('')
 
 const passwordFieldType = computed(function () {
   return showPassword.value ? 'text' : 'password'
@@ -112,29 +112,26 @@ function togglePasswordVisibility() {
 }
 
 const handleLogin = async function () {
-
   try {
     submitting.value = true
-    const response = await login(
-      {
-        email: username.value,
-        password: password.value,
-      }
-    );
+    const response = await login({
+      userId: username.value,
+      password: password.value,
+    })
     // 5. API 호출 성공 시, 응답으로 받은 토큰 정보를 추출합니다.
     //const accessToken = response.data.accessToken;
     //const refreshToken = response.data.refreshToken;
     //authStore.setTokens(accessToken,refreshToken);
-    authStore.login(response.data);
+    authStore.login(response.data)
 
     // 7. 로그인이 성공했으므로 메인 페이지나 대시보드로 이동합니다.
 
-    await router.push('/');
+    await router.push('/')
   } catch (error) {
     // 8. API 호출 실패 시 (예: 아이디/비번 불일치), 에러 메시지를 표시합니다.
-    console.error('로그인 실패:', error);
-    errorMessage.value = '이메일 또는 비밀번호가 올바르지 않습니다.';
-  }finally {
+    console.error('로그인 실패:', error)
+    errorMessage.value = '이메일 또는 비밀번호가 올바르지 않습니다.'
+  } finally {
     submitting.value = false
   }
 }
