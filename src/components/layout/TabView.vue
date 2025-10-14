@@ -16,7 +16,7 @@
           @click.middle.prevent="closeTab(tab)"
           class="tab-item"
         >
-          {{ tab.title }}
+          {{ $t('menuNames.' + tab.title, tab.title) }}
           <v-icon
             v-if="tab.path !== '/'"
             size="small"

@@ -44,6 +44,7 @@ import {
   mdiTranslate,
   mdiWeatherNight,
   mdiWeatherSunny,
+  mdiAccountKey,
 } from '@mdi/js'
 
 // 아이콘 별칭(alias)을 만듭니다.
@@ -94,6 +95,7 @@ const aliases = {
   translate: mdiTranslate, // 번역 아이콘
   weatherNight: mdiWeatherNight, // 다크 모드 아이콘
   weatherSunny: mdiWeatherSunny, // 라이트 모드 아이콘
+  accountKey: mdiAccountKey, // 비밀번호 아이콘
 }
 
 // 설정들을 export 합니다.

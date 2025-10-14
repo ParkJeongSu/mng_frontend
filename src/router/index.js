@@ -27,6 +27,12 @@ const router = createRouter({
       children: [
         { path: '', name: 'home', component: HomeView, meta: { title: '홈' } },
         {
+          path: 'system/user',
+          name: 'userListPage',
+          component: () => import('../views/user/UserListPage.vue'),
+          meta: { title: 'User' },
+        },
+        {
           path: 'product-list',
           name: 'product-list',
           component: ProductListPage,

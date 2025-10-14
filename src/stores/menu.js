@@ -1,7 +1,7 @@
 // src/stores/menu.js
 import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
-import { fetchListData } from '@/api/common.js'
+import { fetchListData } from '@/api/menus'
 import { useAuthStore } from './auth'
 
 // 'menu'라는 이름의 스토어를 정의합니다.

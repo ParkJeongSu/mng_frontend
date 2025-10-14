@@ -63,6 +63,13 @@
         @update:options="loadItems"
         @click:row="handleRowClick"
       >
+        <!--
+        <template v-for="header in props.headers" v-slot:[`item.${header.key}`]="{ value, item }">
+          <slot :name="`item.${header.key}`" :item="item">
+            {{ value }}
+          </slot>
+        </template>
+        -->
         <template
           v-for="header in props.headers"
           :key="header.key"
@@ -82,8 +89,8 @@
 <script setup>
 import { ref, reactive } from 'vue'
 import { componentMap } from '@/constants/componentMap' // componentMap import
+
 import { usePanelStore } from '@/stores/panel'
-import { fetchListData } from '@/api/common' // 공통 API 함수 import
 
 const panelStore = usePanelStore()
 const selectedItemLocal = ref(null)
@@ -121,50 +128,55 @@ const options = ref({
 })
 
 // 데이터 로드 함수
-async function loadItems(newOptions) {
-  // v-data-table-server의 options가 변경될 때마다 이 함수가 호출됩니다.
-  // newOptions 파라미터에 최신 페이지, 정렬 정보가 담겨있습니다.
-  if (newOptions) {
-    options.value = newOptions
-  }
-
+function loadItems() {
   loading.value = true
-
-  // 1. API로 보낼 쿼리 파라미터를 준비합니다.
   const query = {
-    ...searchParams, // 검색 조건
-    page: options.value.page, // 현재 페이지
-    limit: options.value.itemsPerPage, // 페이지 당 항목 수
-    // 정렬 조건 처리 (배열의 첫 번째 항목 사용)
+    ...searchParams,
+    page: options.value.page,
+    limit: options.value.itemsPerPage,
     sortBy: options.value.sortBy.length ? options.value.sortBy[0].key : null,
     sortOrder: options.value.sortBy.length ? options.value.sortBy[0].order : null,
   }
 
-  try {
-    // 2. 공통 API 함수를 호출하고 결과를 받습니다.
-    const responseData = await fetchListData(props.apiEndpoint, query)
+  // Fake API Call (실제로는 axios 등으로 props.apiEndpoint 호출)
+  console.log(`Calling API: ${props.apiEndpoint} with params`, query)
+  setTimeout(function () {
+    // ===== 생성된 더미 데이터 100건 시작 =====
+    const items = []
+    const statuses = ['판매중', '판매중', '판매중', '품절', '단종'] // '판매중'이 더 자주 나오도록 가중치 부여
+    const productPrefixes = ['스마트', '울트라', '에코', '프리미엄', '디럭스', '게이밍']
+    const productTypes = [
+      '모니터',
+      '키보드',
+      '마우스',
+      '헤드셋',
+      '웹캠',
+      '스피커',
+      '노트북',
+      '태블릿',
+    ]
 
-    // 3. 컴포넌트의 상태를 업데이트합니다.
-    serverItems.value = responseData.items
-    totalItems.value = responseData.total
-  } catch (error) {
-    // fetchListData 내부에서 에러를 처리하지만,
-    // 컴포넌트 레벨에서 추가적인 에러 처리가 필요하다면 여기에 작성합니다.
-    console.error('An error occurred in the component while loading data:', error)
-    serverItems.value = []
-    totalItems.value = 0
-  } finally {
-    // 4. API 호출 성공/실패와 관계없이 로딩 상태를 해제합니다.
+    for (let i = 1; i <= 100; i++) {
+      const prefix = productPrefixes[Math.floor(Math.random() * productPrefixes.length)]
+      const type = productTypes[Math.floor(Math.random() * productTypes.length)]
+
+      items.push({
+        productCode: 'PROD-' + String(i).padStart(5, '0'),
+        productName: prefix + ' ' + type + ' X' + (2000 + i),
+        status: statuses[Math.floor(Math.random() * statuses.length)],
+        price: (Math.floor(Math.random() * 450) + 50) * 1000, // 50,000원에서 500,000원 사이 가격
+      })
+    }
+    serverItems.value = items
+    // ===== 생성된 더미 데이터 100건 끝 =====
+    totalItems.value = 100 // 서버에서 받은 전체 개수
     loading.value = false
-  }
+  }, 1000)
 }
 
 // 조회 버튼 클릭 시 1페이지로 리셋 후 조회
 function search() {
   options.value.page = 1
-  // page만 바꾸고 loadItems를 직접 호출하면 정렬 등의 다른 옵션이 누락될 수 있습니다.
-  // v-data-table-server는 options가 변경되면 자동으로 @update:options 이벤트를 발생시키므로
-  // loadItems()를 직접 호출할 필요가 없습니다. 하지만 명시적으로 호출하는 것이 더 직관적일 수 있습니다.
   loadItems()
 }
 

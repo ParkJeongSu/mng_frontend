@@ -20,5 +20,24 @@
     "settings": "Settings",
     "profile": "Profile",
     "userList1": "User List 1"
+  },
+  "tableHeaders": {
+    "id": "id",
+    "userId": "userId",
+    "authorityId": "authorityId",
+    "userName": "userName",
+    "password": "password",
+    "email": "email",
+    "phone1": "phone1",
+    "phone2": "phone2",
+    "checkOutState": "checkOutState",
+    "checkOutTime": "checkOutTime",
+    "checkOutUser": "checkOutUser",
+    "dataState": "dataState",
+    "eventName": "eventName",
+    "timeKey": "timeKey",
+    "eventTime": "eventTime",
+    "eventUser": "eventUser",
+    "eventComment": "eventComment"
   }
 }

@@ -1,28 +1,29 @@
 <template>
   <v-navigation-drawer app>
     <v-list v-model:opened="openGroups" density="compact" nav open-strategy="multiple">
-      <template v-for="item in menuStore.currentSidebarItems" :key="item.title">
-        <v-list-group v-if="item.children" :value="item.title">
+      <template v-for="(item, i) in menuStore.currentSidebarItems" :key="item.title + '-' + i">
+        <v-list-group v-if="item.children" :value="item.title + '-' + i">
           <template v-slot:activator="{ props }">
             <v-list-item v-bind="props" :prepend-icon="item.icon" :title="item.title"></v-list-item>
           </template>
 
           <v-list-item
-            v-for="child in item.children"
-            :key="child.title"
+            v-for="(child, j) in item.children"
+            :key="child.title + '-' + i + '-' + j"
             :title="$t('menuNames.' + child.title, child.title)"
             :to="child.to"
-            :value="child.title"
+            :value="child.title + '-' + i + '-' + j"
             active-class="selected-tree-item"
           ></v-list-item>
         </v-list-group>
 
         <v-list-item
           v-else
+          :key="item.title + '-' + i"
           :prepend-icon="item.icon"
           :title="$t('menuNames.' + item.title, item.title)"
           :to="item.to"
-          :value="item.title"
+          :value="item.title + '-' + i"
           active-class="selected-tree-item"
         ></v-list-item>
         <!-- :value="child.title"  :value="item.title" -->
