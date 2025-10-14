@@ -9,7 +9,8 @@
         @click="menuStore.selectSubMenu(id)"
         class="no-uppercase"
       >
-        {{ subMenu.name }}
+        {{ $t('menuNames.' + subMenu.name, subMenu.name) }}
+        <!-- {{ subMenu.name }} -->
       </v-btn>
     </div>
     <v-spacer></v-spacer>

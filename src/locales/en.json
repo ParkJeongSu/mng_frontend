@@ -12,5 +12,13 @@
     "deleteConfirm": "Are you sure you want to delete {count} items?",
     "logoutConfirm": "do you really want to log out?",
     "welcome": "welcome. "
+  },
+  "menuNames": {
+    "dashboard": "Dashboard",
+    "System": "Systems",
+    "users": "Users",
+    "settings": "Settings",
+    "profile": "Profile",
+    "userList1": "User List 1"
   }
 }

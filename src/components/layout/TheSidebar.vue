@@ -10,7 +10,7 @@
           <v-list-item
             v-for="child in item.children"
             :key="child.title"
-            :title="child.title"
+            :title="$t('menuNames.' + child.title, child.title)"
             :to="child.to"
             :value="child.title"
             active-class="selected-tree-item"
@@ -20,11 +20,12 @@
         <v-list-item
           v-else
           :prepend-icon="item.icon"
-          :title="item.title"
+          :title="$t('menuNames.' + item.title, item.title)"
           :to="item.to"
           :value="item.title"
           active-class="selected-tree-item"
         ></v-list-item>
+        <!-- :value="child.title"  :value="item.title" -->
       </template>
     </v-list>
   </v-navigation-drawer>

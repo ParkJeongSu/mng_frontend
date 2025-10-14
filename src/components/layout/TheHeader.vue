@@ -13,7 +13,8 @@
       @click="menuStore.selectSystem(id)"
       class="no-uppercase"
     >
-      {{ system.name }}
+      {{ $t('menuNames.' + system.name, system.name) }}
+      <!-- {{ system.name }}-->
     </v-btn>
 
     <v-spacer></v-spacer>
