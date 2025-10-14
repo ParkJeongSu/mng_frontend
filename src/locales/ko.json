@@ -8,6 +8,9 @@
   "auth": {
     "logout": "로그아웃"
   },
+  "title": {
+    "deleteConfirm": "삭제 확인"
+  },
   "messages": {
     "deleteConfirm": "{count}개의 항목을 삭제하시겠습니까?",
     "logoutConfirm": "정말 로그아웃 하시겠습니까?",

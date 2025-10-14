@@ -58,6 +58,30 @@ export async function fetchListData(endpoint, params) {
   }
 }
 
+/**
+ * 서버에 여러 항목의 삭제를 요청하는 공통 API 함수
+ * @param {string} endpoint - API 엔드포인트
+ * @param {Array<number|string>} idList - 삭제할 ID의 배열
+ * @returns {Promise<void>}
+ */
+export async function deleteItems(endpoint, idList) {
+  if (!idList || idList.length === 0) {
+    console.warn('No items selected for deletion.')
+    return
+  }
+
+  try {
+    // axios.delete 요청 시 body를 보내려면 data 속성을 사용해야 합니다.
+    await apiClient.delete(endpoint, {
+      data: { ids: idList }, // Spring의 UserDeleteRequest DTO 형식에 맞게 전송
+    })
+  } catch (error) {
+    console.error(`[API Error] Failed to delete items from ${endpoint}:`, error)
+    // 에러를 다시 던져서 컴포넌트에서 후속 처리를 할 수 있게 합니다.
+    throw error
+  }
+}
+
 // 필요하다면 범용 상세 조회, 삭제 등의 함수도 만들 수 있습니다.
 export function fetchItemData(endpoint, id) {
   return apiClient.get(`${endpoint}/${id}`)

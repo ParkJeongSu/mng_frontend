@@ -33,9 +33,12 @@
       <v-btn v-if="props.actions.includes('edit')" class="ml-2" @click="handleEditClick">{{
         $t('dataTable.edit')
       }}</v-btn>
-      <v-btn v-if="props.actions.includes('delete')" class="ml-2" @click="handleDeleteClick">{{
-        $t('dataTable.delete')
-      }}</v-btn>
+      <v-btn
+        v-if="props.actions.includes('delete')"
+        class="ml-2"
+        @click="openDeleteConfirmDialog"
+        >{{ $t('dataTable.delete') }}</v-btn
+      >
       <v-btn v-if="props.actions.includes('excelExport')" class="ml-2">Excel Export</v-btn>
       <v-btn v-if="props.actions.includes('excelImport')" class="ml-2">Excel Import</v-btn>
     </v-toolbar>
@@ -48,6 +51,7 @@
     -->
     <div class="table-wrapper flex-grow-1">
       <v-data-table-server
+        v-model="selectedItems"
         density="compact"
         v-model:items-per-page="options.itemsPerPage"
         :headers="props.headers"
@@ -77,13 +81,23 @@
       </v-data-table-server>
     </div>
   </v-card>
+
+  <ConfirmDialog
+    v-model:show="showDeleteConfirm"
+    :title="$t('title.deleteConfirm')"
+    :message="$t('messages.deleteConfirm')"
+    @confirm="handleDeleteClick"
+  />
 </template>
 
 <script setup>
 import { ref, reactive } from 'vue'
 import { componentMap } from '@/constants/componentMap' // componentMap import
 import { usePanelStore } from '@/stores/panel'
-import { fetchListData } from '@/api/common' // 공통 API 함수 import
+import { fetchListData, deleteItems } from '@/api/common' // 공통 API 함수 import
+import ConfirmDialog from '@/components/common/ConfirmDialog.vue' // ConfirmDialog import
+
+const showDeleteConfirm = ref(false) // 다이얼로그 표시 상태
 
 const panelStore = usePanelStore()
 const selectedItemLocal = ref(null)
@@ -119,6 +133,16 @@ const options = ref({
   itemsPerPage: 10,
   sortBy: [],
 })
+
+function openDeleteConfirmDialog() {
+  // 1. 선택된 항목이 있는지 확인
+  if (selectedItems.value.length === 0) {
+    alert('삭제할 항목을 선택해주세요.')
+    return
+  }
+  // 2. 다이얼로그 표시
+  showDeleteConfirm.value = true
+}
 
 // 데이터 로드 함수
 async function loadItems(newOptions) {
@@ -173,9 +197,26 @@ function handleRowClick(event, { item }) {
   panelStore.openReadOnlyPanel(props.userFormSchema, item) // 스키마 전달
 }
 
-function handleDeleteClick() {
+async function handleDeleteClick() {
   console.log('삭제할 항목들:', selectedItems.value)
-  alert(`${selectedItems.value.length}개의 항목을 삭제합니다. (콘솔 확인)`)
+
+  try {
+    // 3. 선택된 항목들에서 ID만 추출하여 배열 생성
+    const idsToDelete = selectedItems.value.map((item) => item.id)
+    // 4. 공통 API 함수를 호출하여 삭제 요청
+    await deleteItems(props.apiEndpoint, idsToDelete)
+
+    // 5. 성공 처리
+    alert('성공적으로 삭제되었습니다.')
+    selectedItems.value = [] // 선택 상태 초기화
+    loadItems() // 데이터 테이블 새로고침
+  } catch (error) {
+    // 6. 실패 처리
+    alert('삭제 처리 중 오류가 발생했습니다.')
+    console.error('An error occurred while deleting items:', error)
+  } finally {
+    showDeleteConfirm.value = false // 다이얼로그 닫기
+  }
 }
 
 function handleAddClick() {

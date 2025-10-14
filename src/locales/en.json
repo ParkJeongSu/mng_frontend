@@ -8,6 +8,9 @@
   "auth": {
     "logout": "logout"
   },
+  "title": {
+    "deleteConfirm": "deleteConfirm"
+  },
   "messages": {
     "deleteConfirm": "Are you sure you want to delete {count} items?",
     "logoutConfirm": "do you really want to log out?",
