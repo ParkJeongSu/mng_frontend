@@ -87,13 +87,16 @@ import { useMenuStore } from '@/stores/menu' // 스토어 import
 import TabView from '@/components/layout/TabView.vue' // TabView import
 import AlarmBar from '@/components/layout/AlarmBar.vue'
 import { usePanelStore } from '@/stores/panel' // panel 스토어 import
-import { computed } from 'vue'
+import { computed, onMounted } from 'vue'
 import { componentMap } from '@/constants/componentMap' // componentMap import
 
 const menuStore = useMenuStore()
 const panelStore = usePanelStore() // panel 스토어 인스턴스 생성
 const panelToggleIcon = computed(function () {
   return panelStore.isPanelOpen ? '$next' : '$prev'
+})
+onMounted(() => {
+  menuStore.fetchAllAuthorityMenus()
 })
 </script>
 

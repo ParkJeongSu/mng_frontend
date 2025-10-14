@@ -7,6 +7,7 @@
         :key="id"
         :active="menuStore.selectedSubMenuId === id"
         @click="menuStore.selectSubMenu(id)"
+        class="no-uppercase"
       >
         {{ subMenu.name }}
       </v-btn>
@@ -23,4 +24,8 @@ const menuStore = useMenuStore() // 2. 스토어 인스턴스 생성
 
 <style scoped>
 /* 서브헤더에만 적용될 스타일이 있다면 여기에 작성합니다. */
+
+.no-uppercase {
+  text-transform: none !important;
+}
 </style>

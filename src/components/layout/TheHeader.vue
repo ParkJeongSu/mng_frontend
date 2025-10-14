@@ -11,6 +11,7 @@
       :key="id"
       :active="menuStore.selectedSystemId === id"
       @click="menuStore.selectSystem(id)"
+      class="no-uppercase"
     >
       {{ system.name }}
     </v-btn>
@@ -44,7 +45,7 @@
     <v-menu offset-y>
       <template v-slot:activator="{ props }">
         <div v-bind="props" class="d-flex align-center cursor-pointer">
-          <span class="user-id">{{email}} {{ $t('messages.welcome') }}</span>
+          <span class="user-id">{{ userId }} {{ $t('messages.welcome') }}</span>
           <v-icon class="user-icon">$accountCircle</v-icon>
         </div>
       </template>
@@ -82,7 +83,7 @@ import logoUrl from '@/assets/logo.png'
 import { useTheme } from 'vuetify'
 import { storeToRefs } from 'pinia'
 import { useRouter } from 'vue-router'
-const router = useRouter();
+const router = useRouter()
 
 const localeStore = useLocaleStore()
 const menuStore = useMenuStore()
@@ -90,7 +91,7 @@ const authStore = useAuthStore()
 
 // storeToRefs를 사용해 스토어의 상태를 반응형 ref로 가져옵니다.
 // 이렇게 해야 구조 분해 할당을 해도 반응성이 유지됩니다.
-const { isAuthenticated, email } = storeToRefs(authStore);
+const { isAuthenticated, userId } = storeToRefs(authStore)
 
 // 1. useTheme 헬퍼 함수로 현재 테마 상태를 가져옵니다.
 const theme = useTheme()
@@ -122,7 +123,7 @@ function openLogoutDialog() {
 // 다이얼로그에서 '확인'을 눌렀을 때 실제 로그아웃을 처리합니다.
 function handleLogout() {
   authStore.logout()
-  router.push('/login'); // 로그아웃 후 로그인 페이지로 이동
+  router.push('/login') // 로그아웃 후 로그인 페이지로 이동
 }
 </script>
 
@@ -175,5 +176,9 @@ function handleLogout() {
 }
 .user-icon {
   margin-right: 12px;
+}
+
+.no-uppercase {
+  text-transform: none !important;
 }
 </style>

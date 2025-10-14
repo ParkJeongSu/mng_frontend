@@ -1,14 +1,106 @@
 // src/stores/menu.js
 import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
+import { fetchListData } from '@/api/common.js'
+import { useAuthStore } from './auth'
 
 // 'menu'라는 이름의 스토어를 정의합니다.
 export const useMenuStore = defineStore('menu', () => {
   // --------------------------------------------------
   // 1. State (상태): 컴포넌트들이 공유할 데이터
   // --------------------------------------------------
+  const allMenus = ref({})
+  const authStore = useAuthStore()
 
-  // allMenus의 ref 값을 아래 내용으로 교체합니다.
+  // 현재 사용자가 선택한 시스템과 서브메뉴의 ID
+  const selectedSystemId = ref(null) // 예: 'systemA'
+  const selectedSubMenuId = ref(null) // 예: 'dashboard'
+  // 사이드바 표시 여부를 제어하는 상태 추가
+  const isSidebarOpen = ref(false)
+  // --------------------------------------------------
+  // 2. Getters (계산된 상태): State를 기반으로 동적으로 계산되는 값
+  // --------------------------------------------------
+
+  // 현재 선택된 시스템의 서브메뉴 목록
+  const currentSubMenus = computed(function () {
+    if (!selectedSystemId.value || !allMenus.value[selectedSystemId.value]) {
+      return {}
+    }
+    return allMenus.value[selectedSystemId.value].subMenus
+  })
+
+  // 현재 선택된 서브메뉴의 사이드바 아이템 목록
+  const currentSidebarItems = computed(function () {
+    if (
+      !selectedSystemId.value ||
+      !selectedSubMenuId.value ||
+      !allMenus.value[selectedSystemId.value]
+    ) {
+      return []
+    }
+    const subMenu = allMenus.value[selectedSystemId.value].subMenus[selectedSubMenuId.value]
+    return subMenu ? subMenu.items : []
+  })
+
+  // --------------------------------------------------
+  // 3. Actions (행동): State를 변경하는 함수들
+  // --------------------------------------------------
+
+  // [추가] DB에서 전체 메뉴 데이터를 가져오는 액션
+  async function fetchAllAuthorityMenus() {
+    try {
+      // 1. 백엔드 API를 호출합니다.
+      const response = await fetchListData('/api/menus', { userId: authStore.userId })
+      // 2. 응답받은 데이터로 allMenus 상태를 업데이트합니다.
+      allMenus.value = response.data
+    } catch (error) {
+      console.error('메뉴 데이터를 가져오는 데 실패했습니다:', error)
+      // 에러 발생 시 allMenus를 비워 초기 상태로 유지
+      allMenus.value = {}
+    }
+  }
+
+  // 시스템을 선택했을 때 호출될 함수
+  function selectSystem(systemId) {
+    selectedSystemId.value = systemId
+    // 시스템이 바뀌면 서브메뉴 선택은 초기화
+    selectedSubMenuId.value = null
+  }
+
+  // 서브메뉴를 선택했을 때 호출될 함수
+  function selectSubMenu(subMenuId) {
+    selectedSubMenuId.value = subMenuId
+    // 2. 만약 사이드바가 닫혀있다면, 연다는 추가적인 상태 변경을 수행합니다.
+    if (!isSidebarOpen.value) {
+      isSidebarOpen.value = true
+    }
+  }
+
+  // 사이드바를 토글하는 함수 추가
+  function toggleSidebar() {
+    isSidebarOpen.value = !isSidebarOpen.value
+  }
+
+  // --------------------------------------------------
+  // 4. Return: 외부에서 사용할 수 있도록 노출
+  // --------------------------------------------------
+  return {
+    allMenus,
+    selectedSystemId,
+    selectedSubMenuId,
+    currentSubMenus,
+    currentSidebarItems,
+    selectSystem,
+    selectSubMenu,
+    isSidebarOpen,
+    toggleSidebar,
+    fetchAllAuthorityMenus,
+  }
+})
+
+/**
+ *
+ // allMenus의 ref 값을 아래 내용으로 교체합니다.
   const allMenus = ref({
     systemA: {
       name: '시스템 A',
@@ -61,66 +153,5 @@ export const useMenuStore = defineStore('menu', () => {
       subMenus: {},
     },
   })
-
-  // 현재 사용자가 선택한 시스템과 서브메뉴의 ID
-  const selectedSystemId = ref(null) // 예: 'systemA'
-  const selectedSubMenuId = ref(null) // 예: 'dashboard'
-  // 사이드바 표시 여부를 제어하는 상태 추가
-  const isSidebarOpen = ref(false)
-  // --------------------------------------------------
-  // 2. Getters (계산된 상태): State를 기반으로 동적으로 계산되는 값
-  // --------------------------------------------------
-
-  // 현재 선택된 시스템의 서브메뉴 목록
-  const currentSubMenus = computed(() => {
-    if (!selectedSystemId.value) return {}
-    return allMenus.value[selectedSystemId.value].subMenus
-  })
-
-  // 현재 선택된 서브메뉴의 사이드바 아이템 목록
-  const currentSidebarItems = computed(() => {
-    if (!selectedSystemId.value || !selectedSubMenuId.value) return []
-    const subMenu = allMenus.value[selectedSystemId.value].subMenus[selectedSubMenuId.value]
-    return subMenu ? subMenu.items : []
-  })
-
-  // --------------------------------------------------
-  // 3. Actions (행동): State를 변경하는 함수들
-  // --------------------------------------------------
-
-  // 시스템을 선택했을 때 호출될 함수
-  function selectSystem(systemId) {
-    selectedSystemId.value = systemId
-    // 시스템이 바뀌면 서브메뉴 선택은 초기화
-    selectedSubMenuId.value = null
-  }
-
-  // 서브메뉴를 선택했을 때 호출될 함수
-  function selectSubMenu(subMenuId) {
-    selectedSubMenuId.value = subMenuId
-    // 2. 만약 사이드바가 닫혀있다면, 연다는 추가적인 상태 변경을 수행합니다.
-    if (!isSidebarOpen.value) {
-      isSidebarOpen.value = true
-    }
-  }
-
-  // 사이드바를 토글하는 함수 추가
-  function toggleSidebar() {
-    isSidebarOpen.value = !isSidebarOpen.value
-  }
-
-  // --------------------------------------------------
-  // 4. Return: 외부에서 사용할 수 있도록 노출
-  // --------------------------------------------------
-  return {
-    allMenus,
-    selectedSystemId,
-    selectedSubMenuId,
-    currentSubMenus,
-    currentSidebarItems,
-    selectSystem,
-    selectSubMenu,
-    isSidebarOpen,
-    toggleSidebar,
-  }
-})
+ *
+ */
