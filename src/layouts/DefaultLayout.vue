@@ -21,51 +21,7 @@
               {{ panelToggleIcon }}
             </v-icon>
           </div>
-          <div v-if="panelStore.isPanelOpen" class="side-panel">
-            <v-card class="fill-height" flat>
-              <v-card-title>
-                <span v-if="panelStore.formMode === 'create'">사용자 생성</span>
-                <span v-else-if="panelStore.formMode === 'edit'">사용자 수정</span>
-                <span v-else>상세 정보</span>
-              </v-card-title>
-              <v-divider></v-divider>
-
-              <v-card-text>
-                <div v-if="panelStore.formMode">
-                  <component
-                    v-for="field in panelStore.formSchema"
-                    :key="field.key"
-                    :is="componentMap[field.component]"
-                    :label="field.label"
-                    :items="field.items"
-                    v-model="panelStore.formData[field.key]"
-                    density="compact"
-                    variant="outlined"
-                    class="mb-2"
-                  ></component>
-                </div>
-                <div v-else-if="panelStore.selectedItem">
-                  <component
-                    v-for="field in panelStore.formSchema"
-                    :key="field.key"
-                    :is="componentMap[field.component]"
-                    :label="field.label"
-                    :items="field.items"
-                    :model-value="panelStore.selectedItem[field.key]"
-                    density="compact"
-                    variant="outlined"
-                    class="mb-2"
-                  ></component>
-                </div>
-              </v-card-text>
-
-              <v-card-actions v-if="panelStore.formMode">
-                <v-spacer></v-spacer>
-                <v-btn @click="panelStore.closePanel">취소</v-btn>
-                <v-btn>저장</v-btn>
-              </v-card-actions>
-            </v-card>
-          </div>
+          <SidePanel v-if="panelStore.isPanelOpen" />
         </div>
       </div>
     </v-main>
@@ -88,7 +44,7 @@ import TabView from '@/components/layout/TabView.vue' // TabView import
 import AlarmBar from '@/components/layout/AlarmBar.vue'
 import { usePanelStore } from '@/stores/panel' // panel 스토어 import
 import { computed, onMounted } from 'vue'
-import { componentMap } from '@/constants/componentMap' // componentMap import
+import SidePanel from '@/components/layout/SidePanel.vue' // SidePanel import
 
 const menuStore = useMenuStore()
 const panelStore = usePanelStore() // panel 스토어 인스턴스 생성
@@ -156,14 +112,5 @@ onMounted(() => {
   border-right: none;
   box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
   z-index: 10;
-}
-
-.side-panel {
-  width: 400px; /* 고정 너비 */
-  height: 100%;
-  /* border-left: 1px solid #dcdfe6; */
-  transition: all 0.3s ease;
-  display: flex;
-  flex-direction: column;
 }
 </style>
