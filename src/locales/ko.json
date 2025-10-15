@@ -27,7 +27,7 @@
     "SystemDef": "시스템설정",
     "home": "홈"
   },
-  "tableHeaders": {
+  "columns": {
     "id": "id",
     "userId": "계정명",
     "authorityId": "권한Id",

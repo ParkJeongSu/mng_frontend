@@ -25,7 +25,7 @@
     "userList1": "User List 1",
     "home": "home"
   },
-  "tableHeaders": {
+  "columns": {
     "id": "id",
     "userId": "userId",
     "authorityId": "authorityId",
