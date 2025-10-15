@@ -9,13 +9,6 @@
       showCheckbox
       :user-form-schema="productFormSchema"
     >
-      <!--
-      <template v-slot:item.status="{ item }">
-        <v-chip :color="item.status === '판매중' ? 'green' : 'red'" small>
-          {{ item.status }}
-        </v-chip>
-      </template>
--->
       <template v-slot:item.status="slotProps">
         <v-chip
           :color="slotProps.value === '판매중' ? 'green' : 'red'"
@@ -45,17 +38,17 @@ const productSearchSchema = ref([
 ])
 
 const productFormSchema = ref([
-  { key: 'productCode', label: '제품 코드', component: 'v-text-field' },
-  { key: 'productName', label: '제품명', component: 'v-text-field' },
+  { key: 'productCode', labelKey: '제품 코드', component: 'v-text-field' },
+  { key: 'productName', labelKey: '제품명', component: 'v-text-field' },
   {
     key: 'status',
-    label: '상태',
+    labelKey: '상태',
     component: 'v-select',
     items: ['판매중', '품절', '단종'],
   },
   {
     key: 'price',
-    label: '가격',
+    labelKey: '가격',
     component: 'v-text-field',
     type: 'number',
   },

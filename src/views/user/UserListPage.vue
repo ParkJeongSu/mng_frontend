@@ -11,7 +11,7 @@
     >
       <template v-slot:item.status="slotProps">
         <v-chip
-          :color="slotProps.value === '판매중' ? 'green' : 'red'"
+          :color="slotProps.value === 'Active' ? 'green' : 'red'"
           small
           :title="`상태: ${slotProps.value}`"
         >
@@ -26,6 +26,7 @@
 import ServerSideDataTable from '@/components/common/ServerSideDataTable.vue' // 만든 컴포넌트 임포트
 import { ref } from 'vue'
 
+// 검색 및 폼 스키마 정의
 const searchSchema = ref([
   { key: 'productCode', label: '제품 코드', component: 'v-text-field' },
   { key: 'productName', label: '제품명', component: 'v-text-field' },
@@ -37,18 +38,19 @@ const searchSchema = ref([
   },
 ])
 
+// 폼 스키마 정의 (추가/수정에 사용)
 const formSchema = ref([
-  { key: 'productCode', label: '제품 코드', component: 'v-text-field' },
-  { key: 'productName', label: '제품명', component: 'v-text-field' },
+  { key: 'userId', labelKey: 'tableHeaders.userId', component: 'v-text-field' },
+  { key: 'productName', labelKey: '제품명', component: 'v-text-field' },
   {
     key: 'status',
-    label: '상태',
+    labelKey: '상태',
     component: 'v-select',
     items: ['판매중', '품절', '단종'],
   },
   {
     key: 'price',
-    label: '가격',
+    labelKey: '가격',
     component: 'v-text-field',
     type: 'number',
   },
