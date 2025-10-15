@@ -9,13 +9,6 @@
       showCheckbox
       :user-form-schema="formSchema"
     >
-      <!--
-      <template v-slot:item.status="{ item }">
-        <v-chip :color="item.status === '판매중' ? 'green' : 'red'" small>
-          {{ item.status }}
-        </v-chip>
-      </template>
--->
       <template v-slot:item.status="slotProps">
         <v-chip
           :color="slotProps.value === '판매중' ? 'green' : 'red'"

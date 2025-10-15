@@ -22,13 +22,12 @@
 
 <script setup>
 import { useAlarmStore } from '@/stores/alarm'
-import {test} from '@/api/common';
+import { test } from '@/api/dataTable'
 const alarmStore = useAlarmStore()
 function addSampleAlarm() {
-  alarmStore.addSampleAlarm();
-  test();
+  alarmStore.addSampleAlarm()
+  test()
 }
-
 </script>
 
 <style scoped>

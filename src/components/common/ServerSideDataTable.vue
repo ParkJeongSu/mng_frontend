@@ -94,7 +94,7 @@
 import { ref, reactive, computed } from 'vue'
 import { componentMap } from '@/constants/componentMap' // componentMap import
 import { usePanelStore } from '@/stores/panel'
-import { fetchListData, deleteItems } from '@/api/common' // 공통 API 함수 import
+import { fetchListData, deleteItems } from '@/api/dataTable' // 공통 API 함수 import
 import ConfirmDialog from '@/components/common/ConfirmDialog.vue' // ConfirmDialog import
 import { useI18n } from 'vue-i18n' // 1. useI18n을 import 합니다.
 const { t } = useI18n() // 2. useI18n을 호출해서 't' 함수를 가져옵니다.
