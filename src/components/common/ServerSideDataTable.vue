@@ -4,7 +4,7 @@
     <v-card-title class="datatable-title text-h6">서버 사이드 데이터 테이블</v-card-title>
     <v-card class="search-panel" color="surface" flat>
       <v-row class="search-row" dense>
-        <v-col v-for="item in props.searchSchema" :key="item.key" cols="12" md="2">
+        <v-col v-for="item in translatedsearchSchema" :key="item.key" cols="12" md="2">
           <component
             :is="componentMap[item.component]"
             v-model="searchParams[item.key]"
@@ -97,7 +97,7 @@ import { usePanelStore } from '@/stores/panel'
 import { fetchListData, deleteItems } from '@/api/dataTable' // 공통 API 함수 import
 import ConfirmDialog from '@/components/common/ConfirmDialog.vue' // ConfirmDialog import
 import { useI18n } from 'vue-i18n' // 1. useI18n을 import 합니다.
-const { t } = useI18n() // 2. useI18n을 호출해서 't' 함수를 가져옵니다.
+const { t, locale } = useI18n() // 2. useI18n을 호출해서 't' 함수를 가져옵니다.
 
 const showDeleteConfirm = ref(false) // 다이얼로그 표시 상태
 
@@ -128,6 +128,28 @@ const translatedHeaders = computed(() => {
     ...header, // key, align 등 나머지 속성은 그대로 복사
     title: t(header.title, header.title), // title 속성만 번역
   }))
+})
+
+// formSchema를 스토어에서 직접 읽어 번역된 label을 만든다.
+// - 화살표 함수 사용 안 함
+// - locale.value를 touch해서 언어 변경 시 재계산
+const translatedsearchSchema = computed(function () {
+  // 언어 변경에 반응시키기 위한 접근
+  const _ = locale.value
+
+  return props.searchSchema.map(function (schema) {
+    // 안전한 키/라벨 폴백
+    const key = schema.labelKey != null ? schema.labelKey : schema.label != null ? schema.label : ''
+    // 키가 없으면 그냥 원래 label을 쓰고, 키가 있으면 번역 시도
+    let translated = key ? t(key) : ''
+    if (!translated || translated === key) {
+      // 번역 실패 시 원래 label이 있으면 사용
+      translated = schema.label != null ? schema.label : key
+    }
+
+    // 나머지 필드는 그대로 유지, label만 치환
+    return Object.assign({}, schema, { label: translated })
+  })
 })
 
 const searchParams = reactive({})

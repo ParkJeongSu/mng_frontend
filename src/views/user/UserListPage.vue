@@ -28,11 +28,11 @@ import { ref } from 'vue'
 
 // 검색 및 폼 스키마 정의
 const searchSchema = ref([
-  { key: 'productCode', label: '제품 코드', component: 'v-text-field' },
-  { key: 'productName', label: '제품명', component: 'v-text-field' },
+  { key: 'userId', labelKey: 'tableHeaders.userId', component: 'v-text-field' },
+  { key: 'productName', labelKey: '제품명', component: 'v-text-field' },
   {
     key: 'status',
-    label: '상태',
+    labelKey: '상태',
     component: 'v-select',
     items: ['판매중', '품절', '단종'],
   },
@@ -57,7 +57,7 @@ const formSchema = ref([
 ])
 
 const headers = ref([
-  { title: 'tableHeaders.id', key: 'id' },
+  //{ title: 'tableHeaders.id', key: 'id' },
   { title: 'tableHeaders.userId', key: 'userId' },
   { title: 'tableHeaders.authorityId', key: 'authorityId' },
   { title: 'tableHeaders.userName', key: 'userName' },
