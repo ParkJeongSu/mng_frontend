@@ -7,7 +7,7 @@ import router from '@/router'
 const HOME_TAB = {
   name: 'home',
   path: '/',
-  title: '홈',
+  meta: { titleKey: 'menuNames.home' },
 }
 
 export const useTabsStore = defineStore('tabs', function () {
@@ -31,7 +31,7 @@ export const useTabsStore = defineStore('tabs', function () {
       openTabs.value.push({
         name: route.name, // 라우트 이름
         path: route.path, // 라우트 경로
-        title: route.meta.title || 'Untitled', // 탭에 표시될 제목
+        meta: route.meta, // ✨ 가장 중요한 변경점
       })
     }
 

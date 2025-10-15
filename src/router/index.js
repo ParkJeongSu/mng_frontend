@@ -25,73 +25,78 @@ const router = createRouter({
       component: DefaultLayout,
       meta: { requiresAuth: true },
       children: [
-        { path: '', name: 'home', component: HomeView, meta: { title: '홈' } },
+        {
+          path: '',
+          name: 'home',
+          component: HomeView,
+          meta: { titleKey: 'menuNames.home' },
+        },
         {
           path: 'system/user',
           name: 'userListPage',
           component: () => import('../views/user/UserListPage.vue'),
-          meta: { title: 'User' },
+          meta: { titleKey: 'menuNames.users' },
         },
         {
           path: 'product-list',
           name: 'product-list',
           component: ProductListPage,
-          meta: { title: '프로덕트 목록' },
+          meta: { titleKey: '프로덕트 목록' },
         },
         {
           path: 'profile',
           name: 'profile',
           component: ProfileView,
-          meta: { title: '프로필' },
+          meta: { titleKey: '프로필' },
         },
         {
           path: 'management/users/list',
           name: 'user-list',
           component: UserListView, // 여기를 수정
-          meta: { title: '사용자 목록' },
+          meta: { titleKey: '사용자 목록' },
         },
         {
           path: 'management/users/list2',
           name: 'user-list2',
           component: () => import('../views/management/UserListView2.vue'),
-          meta: { title: '사용자 목록' },
+          meta: { titleKey: '사용자 목록' },
         },
         {
           path: 'dashboard/status1',
           name: 'dashboard-status1',
           component: DashboardView,
-          meta: { title: '현황 1' },
+          meta: { titleKey: '현황 1' },
         },
         {
           path: 'dashboard/status2',
           name: 'dashboard-status2',
           component: DashboardView,
-          meta: { title: '현황 2' },
+          meta: { titleKey: '현황 2' },
         },
         {
           path: 'management/users/create',
           name: 'user-create',
           component: UserManagementView,
-          meta: { title: '사용자 등록' },
+          meta: { titleKey: '사용자 등록' },
         },
         {
           path: 'management/groups/list',
           name: 'group-list',
           component: UserManagementView,
-          meta: { title: '그룹 목록' },
+          meta: { titleKey: '그룹 목록' },
         },
         // 통계 메뉴 경로 추가 (예시)
         {
           path: 'stats/daily',
           name: 'stats-daily',
           component: DashboardView,
-          meta: { title: '일별 통계' },
+          meta: { titleKey: '일별 통계' },
         },
         {
           path: 'stats/monthly',
           name: 'stats-monthly',
           component: DashboardView,
-          meta: { title: '월별 통계' },
+          meta: { titleKey: '월별 통계' },
         },
       ],
     },
@@ -106,7 +111,7 @@ router.beforeEach(function (to, from, next) {
     next('/login')
   } else {
     // 이동하려는 페이지가 탭으로 열릴 수 있는 페이지라면(meta.title이 있다면)
-    if (to.meta.title) {
+    if (to.meta.titleKey) {
       tabsStore.addTab(to)
     }
     next()

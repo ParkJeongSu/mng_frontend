@@ -24,7 +24,8 @@
     "profile": "Profile",
     "userList1": "유저 리스트 1",
     "Modeler": "모델러",
-    "SystemDef": "시스템설정"
+    "SystemDef": "시스템설정",
+    "home": "홈"
   },
   "tableHeaders": {
     "id": "id",

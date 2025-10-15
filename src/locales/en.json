@@ -22,7 +22,8 @@
     "users": "Users",
     "settings": "Settings",
     "profile": "Profile",
-    "userList1": "User List 1"
+    "userList1": "User List 1",
+    "home": "home"
   },
   "tableHeaders": {
     "id": "id",

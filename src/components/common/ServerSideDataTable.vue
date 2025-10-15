@@ -54,7 +54,7 @@
         v-model="selectedItems"
         density="compact"
         v-model:items-per-page="options.itemsPerPage"
-        :headers="props.headers"
+        :headers="translatedHeaders"
         :items-length="totalItems"
         :items="serverItems"
         :loading="loading"
@@ -91,11 +91,13 @@
 </template>
 
 <script setup>
-import { ref, reactive } from 'vue'
+import { ref, reactive, computed } from 'vue'
 import { componentMap } from '@/constants/componentMap' // componentMap import
 import { usePanelStore } from '@/stores/panel'
 import { fetchListData, deleteItems } from '@/api/common' // 공통 API 함수 import
 import ConfirmDialog from '@/components/common/ConfirmDialog.vue' // ConfirmDialog import
+import { useI18n } from 'vue-i18n' // 1. useI18n을 import 합니다.
+const { t } = useI18n() // 2. useI18n을 호출해서 't' 함수를 가져옵니다.
 
 const showDeleteConfirm = ref(false) // 다이얼로그 표시 상태
 
@@ -117,6 +119,15 @@ const props = defineProps({
       return []
     },
   },
+})
+// ✨ [추가] computed 속성을 만듭니다.
+// props.headers가 변경되거나, 언어가 변경(t 함수가 변경)될 때마다
+// 이 코드가 자동으로 다시 실행되어 새로운 번역된 헤더 배열을 만듭니다.
+const translatedHeaders = computed(() => {
+  return props.headers.map((header) => ({
+    ...header, // key, align 등 나머지 속성은 그대로 복사
+    title: t(header.title, header.title), // title 속성만 번역
+  }))
 })
 
 const searchParams = reactive({})

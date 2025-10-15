@@ -32,8 +32,6 @@
 <script setup>
 import ServerSideDataTable from '@/components/common/ServerSideDataTable.vue' // 만든 컴포넌트 임포트
 import { ref } from 'vue'
-import { useI18n } from 'vue-i18n' // 1. useI18n을 import 합니다.
-const { t } = useI18n() // 2. useI18n을 호출해서 't' 함수를 가져옵니다.
 
 const searchSchema = ref([
   { key: 'productCode', label: '제품 코드', component: 'v-text-field' },
@@ -64,23 +62,23 @@ const formSchema = ref([
 ])
 
 const headers = ref([
-  { title: t('id', 'id'), key: 'id' },
-  { title: t('userId', 'userId'), key: 'userId' },
-  { title: t('authorityId', 'authorityId'), key: 'authorityId' },
-  { title: t('userName', 'userName'), key: 'userName' },
-  { title: t('password', 'password'), key: 'password' },
-  { title: t('email', 'email'), key: 'email' },
-  { title: t('phone1', 'phone1'), key: 'phone1' },
-  { title: t('phone2', 'phone2'), key: 'phone2' },
-  { title: t('checkOutState', 'checkOutState'), key: 'checkOutState' },
-  { title: t('checkOutTime', 'checkOutTime'), key: 'checkOutTime' },
-  { title: t('checkOutUser', 'checkOutUser'), key: 'checkOutUser' },
-  { title: t('dataState', 'dataState'), key: 'dataState' },
-  { title: t('eventName', 'eventName'), key: 'eventName' },
-  { title: t('timeKey', 'timeKey'), key: 'timeKey' },
-  { title: t('eventTime', 'eventTime'), key: 'eventTime' },
-  { title: t('eventUser', 'eventUser'), key: 'eventUser' },
-  { title: t('eventComment', 'eventComment'), key: 'eventComment' },
+  { title: 'tableHeaders.id', key: 'id' },
+  { title: 'tableHeaders.userId', key: 'userId' },
+  { title: 'tableHeaders.authorityId', key: 'authorityId' },
+  { title: 'tableHeaders.userName', key: 'userName' },
+  { title: 'tableHeaders.password', key: 'password' },
+  { title: 'tableHeaders.email', key: 'email' },
+  { title: 'tableHeaders.phone1', key: 'phone1' },
+  { title: 'tableHeaders.phone2', key: 'phone2' },
+  { title: 'tableHeaders.checkOutState', key: 'checkOutState' },
+  { title: 'tableHeaders.checkOutTime', key: 'checkOutTime' },
+  { title: 'tableHeaders.checkOutUser', key: 'checkOutUser' },
+  { title: 'tableHeaders.dataState', key: 'dataState' },
+  { title: 'tableHeaders.eventName', key: 'eventName' },
+  { title: 'tableHeaders.timeKey', key: 'timeKey' },
+  { title: 'tableHeaders.eventTime', key: 'eventTime' },
+  { title: 'tableHeaders.eventUser', key: 'eventUser' },
+  { title: 'tableHeaders.eventComment', key: 'eventComment' },
 ])
 </script>
 <style scoped></style>

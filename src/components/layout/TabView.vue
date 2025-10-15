@@ -16,7 +16,7 @@
           @click.middle.prevent="closeTab(tab)"
           class="tab-item"
         >
-          {{ $t('menuNames.' + tab.title, tab.title) }}
+          {{ t(tab.meta.titleKey, tab.meta.titleKey) }}
           <v-icon
             v-if="tab.path !== '/'"
             size="small"
@@ -59,6 +59,10 @@
 import { ref } from 'vue'
 import { useTabsStore } from '@/stores/tabs'
 import router from '@/router'
+// ✨ [추가] useI18n을 import 합니다.
+import { useI18n } from 'vue-i18n'
+// ✨ [추가] 반응성을 가진 t 함수를 가져옵니다.
+const { t } = useI18n()
 
 const tabsStore = useTabsStore()
 
