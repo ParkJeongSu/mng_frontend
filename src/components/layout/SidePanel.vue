@@ -16,6 +16,8 @@
             :is="componentMap[field.component]"
             :label="field.label"
             :items="field.items"
+            :item-title="field['item-title']"
+            :item-value="field['item-value']"
             v-model="panelStore.formData[field.key]"
             density="compact"
             variant="outlined"
@@ -29,6 +31,8 @@
             :is="componentMap[field.component]"
             :label="field.label"
             :items="field.items"
+            :item-title="field['item-title']"
+            :item-value="field['item-value']"
             :model-value="panelStore.selectedItem[field.key]"
             density="compact"
             variant="outlined"
@@ -62,7 +66,7 @@ const panelStore = usePanelStore()
 const translatedFormSchema = computed(function () {
   // 언어 변경에 반응시키기 위한 접근
   const _ = locale.value
-
+  _
   return panelStore.formSchema.map(function (schema) {
     // 안전한 키/라벨 폴백
     const key = schema.labelKey != null ? schema.labelKey : schema.label != null ? schema.label : ''
@@ -85,7 +89,7 @@ function onCancel() {
 /* 저장 로직이 스토어에 없다면 여기서 emit 하도록 바꿔도 됨 */
 function onSave() {
   // 예: panelStore.saveForm() 이 있다면 호출
-  // panelStore.saveForm()
+  panelStore.saveForm()
 }
 </script>
 

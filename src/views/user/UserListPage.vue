@@ -1,13 +1,14 @@
 <template>
   <v-container fluid class="page-container">
     <ServerSideDataTable
+      v-if="ready"
       :search-schema="searchSchema"
       :headers="headers"
       api-endpoint="/api/users"
       :actions="['add', 'edit', 'delete', 'excelExport', 'excelImport']"
       isHover
       showCheckbox
-      :user-form-schema="formSchema"
+      :form-schema="formSchema"
     >
       <template v-slot:item.status="slotProps">
         <v-chip
@@ -24,7 +25,27 @@
 
 <script setup>
 import ServerSideDataTable from '@/components/common/ServerSideDataTable.vue' // 만든 컴포넌트 임포트
-import { ref } from 'vue'
+import { ref, computed, onMounted } from 'vue'
+import { fetchListData } from '@/api/dataTable' // 공통 API 함수 import
+
+const authorityList = ref([])
+const ready = ref(false)
+
+onMounted(async function () {
+  try {
+    // 2. 공통 API 함수를 호출하고 결과를 받습니다.
+    const responseData = await fetchListData('/api/auth', {})
+
+    authorityList.value = responseData.items
+  } catch (error) {
+    // fetchListData 내부에서 에러를 처리하지만,
+    // 컴포넌트 레벨에서 추가적인 에러 처리가 필요하다면 여기에 작성합니다.
+    console.error('An error occurred in the component while loading data:', error)
+  } finally {
+    // 4. API 호출 성공/실패와 관계없이 로딩 상태를 해제합니다.
+    ready.value = true
+  }
+})
 
 // 검색 및 폼 스키마 정의
 const searchSchema = ref([
@@ -36,15 +57,43 @@ const searchSchema = ref([
 ])
 
 // 폼 스키마 정의 (추가/수정에 사용)
-const formSchema = ref([
-  { key: 'userId', labelKey: 'columns.userId', component: 'v-text-field' },
-  { key: 'authorityId', labelKey: 'columns.authorityId', component: 'v-select', items: [] },
-  { key: 'userName', labelKey: 'columns.userName', component: 'v-text-field' },
-  { key: 'password', labelKey: 'columns.password', component: 'v-text-field' },
-  { key: 'email', labelKey: 'columns.email', component: 'v-text-field' },
-  { key: 'phone1', labelKey: 'columns.phone1', component: 'v-text-field' },
-  { key: 'phone2', labelKey: 'columns.phone2', component: 'v-text-field' },
-])
+// const formSchema = ref([
+//   { key: 'userId', labelKey: 'columns.userId', component: 'v-text-field' },
+//   {
+//     key: 'authorityId',
+//     labelKey: 'columns.authorityId',
+//     component: 'v-select',
+//     items: authorityList,
+//     title: 'authorityName',
+//     value: 'authorityId',
+//   },
+//   { key: 'userName', labelKey: 'columns.userName', component: 'v-text-field' },
+//   { key: 'password', labelKey: 'columns.password', component: 'v-text-field' },
+//   { key: 'email', labelKey: 'columns.email', component: 'v-text-field' },
+//   { key: 'phone1', labelKey: 'columns.phone1', component: 'v-text-field' },
+//   { key: 'phone2', labelKey: 'columns.phone2', component: 'v-text-field' },
+// ])
+// ✅ authorityList를 의존하는 computed로 formSchema를 만든다
+//    이렇게 하면 authorityList가 늦게 와도 자동으로 최신 값으로 구성됨
+const formSchema = computed(function () {
+  return [
+    { key: 'userId', labelKey: 'columns.userId', component: 'v-text-field' },
+    {
+      key: 'authorityId',
+      labelKey: 'columns.authorityId',
+      component: 'v-select',
+      // ⬇⬇ Vuetify v-select 관례에 맞게 전달할 프로퍼티 이름을 명확히
+      items: authorityList.value, // [{ authorityName, authorityId }]
+      'item-title': 'authorityName', // v-select의 item-title에 매핑할 키
+      'item-value': 'id', // v-select의 item-value에 매핑할 키
+    },
+    { key: 'userName', labelKey: 'columns.userName', component: 'v-text-field' },
+    { key: 'password', labelKey: 'columns.password', component: 'v-text-field' },
+    { key: 'email', labelKey: 'columns.email', component: 'v-text-field' },
+    { key: 'phone1', labelKey: 'columns.phone1', component: 'v-text-field' },
+    { key: 'phone2', labelKey: 'columns.phone2', component: 'v-text-field' },
+  ]
+})
 
 /**
  *   {

@@ -7,7 +7,7 @@
       :actions="['add', 'edit', 'delete', 'excelExport', 'excelImport']"
       isHover
       showCheckbox
-      :user-form-schema="productFormSchema"
+      :form-schema="productFormSchema"
     >
       <template v-slot:item.status="slotProps">
         <v-chip

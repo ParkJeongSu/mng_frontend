@@ -94,7 +94,7 @@
 import { ref, reactive, computed } from 'vue'
 import { componentMap } from '@/constants/componentMap' // componentMap import
 import { usePanelStore } from '@/stores/panel'
-import { fetchListData, deleteItems } from '@/api/dataTable' // 공통 API 함수 import
+import { fetchListData, deleteItems, updateItemData, createItemData } from '@/api/dataTable' // 공통 API 함수 import
 import ConfirmDialog from '@/components/common/ConfirmDialog.vue' // ConfirmDialog import
 import { useI18n } from 'vue-i18n' // 1. useI18n을 import 합니다.
 const { t, locale } = useI18n() // 2. useI18n을 호출해서 't' 함수를 가져옵니다.
@@ -112,7 +112,7 @@ const props = defineProps({
   apiEndpoint: { type: String, required: true },
   showCheckbox: { type: Boolean, default: false },
   isHover: { type: Boolean, default: false }, // 부모로부터 어떤 행이 선택되었는지 받음
-  userFormSchema: { type: Array, required: true }, // 부모로부터 폼 스키마 받음
+  formSchema: { type: Array, required: true }, // 부모로부터 폼 스키마 받음
   actions: {
     type: Array,
     default: function () {
@@ -136,6 +136,7 @@ const translatedHeaders = computed(() => {
 const translatedsearchSchema = computed(function () {
   // 언어 변경에 반응시키기 위한 접근
   const _ = locale.value
+  _
 
   return props.searchSchema.map(function (schema) {
     // 안전한 키/라벨 폴백
@@ -227,7 +228,7 @@ function search() {
 
 function handleRowClick(event, { item }) {
   selectedItemLocal.value = item
-  panelStore.openReadOnlyPanel(props.userFormSchema, item) // 스키마 전달
+  panelStore.openReadOnlyPanel(props.formSchema, item) // 스키마 전달
 }
 
 async function handleDeleteClick() {
@@ -254,16 +255,38 @@ async function handleDeleteClick() {
 
 function handleAddClick() {
   if (selectedItemLocal.value) {
-    panelStore.openFormPanel(props.userFormSchema, selectedItemLocal.value, 'create')
+    panelStore.openFormPanel(
+      props.formSchema,
+      selectedItemLocal.value,
+      'create',
+      props.apiEndpoint,
+      createItemData,
+      loadItems,
+    )
   } else {
-    const newItem = { name: '', email: '', role: '사용자', status: '활성' }
-    panelStore.openFormPanel(props.userFormSchema, newItem, 'create')
+    // todo: 아래의 newItem format 맞추기
+    const newItem = {}
+    panelStore.openFormPanel(
+      props.formSchema,
+      newItem,
+      'create',
+      props.apiEndpoint,
+      createItemData,
+      loadItems,
+    )
   }
 }
 
 function handleEditClick() {
   if (selectedItemLocal.value) {
-    panelStore.openFormPanel(props.userFormSchema, selectedItemLocal.value, 'edit')
+    panelStore.openFormPanel(
+      props.formSchema,
+      selectedItemLocal.value,
+      'edit',
+      props.apiEndpoint,
+      updateItemData,
+      loadItems,
+    )
   }
 }
 </script>
@@ -292,11 +315,6 @@ function handleEditClick() {
   display: flex;
   /* wrapper가 남은 높이를 먹도록 */
   flex-direction: column;
-}
-
-/* (선택) 푸터 고정 시 */
-.table-wrapper :deep(.v-data-table__bottom) {
-  /* flex-shrink: 0; */
 }
 
 /* ServerSideDataTable 업그레이드 */

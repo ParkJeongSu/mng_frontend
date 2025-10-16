@@ -83,8 +83,43 @@ export async function deleteItems(endpoint, idList) {
 }
 
 // 필요하다면 범용 상세 조회, 삭제 등의 함수도 만들 수 있습니다.
-export function fetchItemData(endpoint, id) {
-  return apiClient.get(`${endpoint}/${id}`)
+export async function updateItemData(endpoint, body) {
+  try {
+    // 3. Axios를 사용하여 PUT 요청을 보냅니다.
+    const response = await apiClient.patch(`${endpoint}/${body.id}`, body)
+
+    // 4. Spring Page 객체 응답을 컴포넌트가 사용하기 쉬운 형태로 변환하여 반환합니다.
+    // 백엔드 응답: { data: [...]}
+    return {
+      items: response.data || [],
+    }
+  } catch (error) {
+    console.error(`[API Error] Failed to fetch list data from ${endpoint}:`, error)
+    // 에러 발생 시 컴포넌트가 안전하게 처리할 수 있도록 빈 데이터를 반환합니다.
+    return {
+      items: [],
+    }
+  }
+}
+
+// 필요하다면 범용 상세 조회, 삭제 등의 함수도 만들 수 있습니다.
+export async function createItemData(endpoint, body) {
+  try {
+    // 3. Axios를 사용하여 PUT 요청을 보냅니다.
+    const response = await apiClient.post(endpoint, body)
+
+    // 4. Spring Page 객체 응답을 컴포넌트가 사용하기 쉬운 형태로 변환하여 반환합니다.
+    // 백엔드 응답: { data: [...]}
+    return {
+      items: response.data || [],
+    }
+  } catch (error) {
+    console.error(`[API Error] Failed to fetch list data from ${endpoint}:`, error)
+    // 에러 발생 시 컴포넌트가 안전하게 처리할 수 있도록 빈 데이터를 반환합니다.
+    return {
+      items: [],
+    }
+  }
 }
 
 /**
