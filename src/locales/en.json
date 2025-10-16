@@ -3,13 +3,18 @@
     "search": "Search",
     "add": "Add",
     "edit": "Edit",
-    "delete": "Delete"
+    "delete": "Delete",
+    "result": "Result",
+    "import": "Import",
+    "export": "Export"
   },
   "auth": {
     "logout": "logout"
   },
   "title": {
-    "deleteConfirm": "deleteConfirm"
+    "deleteConfirm": "deleteConfirm",
+    "userList": "User List",
+    "authList": "Authority List"
   },
   "messages": {
     "deleteConfirm": "Are you sure you want to delete {count} items?",
@@ -23,12 +28,15 @@
     "settings": "Settings",
     "profile": "Profile",
     "userList1": "User List 1",
-    "home": "home"
+    "home": "home",
+    "auth": "auth"
   },
   "columns": {
     "id": "id",
     "userId": "userId",
     "authorityId": "authorityId",
+    "authorityName": "authorityName",
+    "description": "description",
     "userName": "userName",
     "password": "password",
     "email": "email",

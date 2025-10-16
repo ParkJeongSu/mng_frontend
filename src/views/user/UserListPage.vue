@@ -9,6 +9,7 @@
       isHover
       showCheckbox
       :form-schema="formSchema"
+      data-tabletitle-key="title.userList"
     >
       <template v-slot:item.status="slotProps">
         <v-chip
@@ -75,6 +76,7 @@ const searchSchema = ref([
 // ])
 // ✅ authorityList를 의존하는 computed로 formSchema를 만든다
 //    이렇게 하면 authorityList가 늦게 와도 자동으로 최신 값으로 구성됨
+
 const formSchema = computed(function () {
   return [
     { key: 'userId', labelKey: 'columns.userId', component: 'v-text-field' },

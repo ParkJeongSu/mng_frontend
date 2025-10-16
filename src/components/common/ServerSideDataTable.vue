@@ -1,7 +1,9 @@
 <template>
   <v-card class="datatable-card d-flex flex-column" flat color="surface">
     <!-- 제목과 검색 바는 높이가 고정되어야 하므로, 공간이 줄어들 때 수축하지 않도록 합니다. -->
-    <v-card-title class="datatable-title text-h6">서버 사이드 데이터 테이블</v-card-title>
+    <v-card-title class="datatable-title text-h6">
+      {{ $t(dataTabletitleKey, dataTabletitleKey) }}
+    </v-card-title>
     <v-card class="search-panel" color="surface" flat>
       <v-row class="search-row" dense>
         <v-col v-for="item in translatedsearchSchema" :key="item.key" cols="12" md="2">
@@ -24,23 +26,32 @@
 
     <!-- 툴바 역시 높이가 고정됩니다. -->
     <v-toolbar class="results-toolbar" density="comfortable" flat color="surface">
-      <v-toolbar-title class="text-subtitle-1">조회 결과</v-toolbar-title>
+      <v-toolbar-title class="text-subtitle-1">{{ $t('dataTable.result') }}</v-toolbar-title>
       <v-spacer></v-spacer>
       <slot name="actions.prepend"></slot>
-      <v-btn v-if="props.actions.includes('add')" class="ml-2" @click="handleAddClick">{{
-        $t('dataTable.add')
-      }}</v-btn>
-      <v-btn v-if="props.actions.includes('edit')" class="ml-2" @click="handleEditClick">{{
-        $t('dataTable.edit')
-      }}</v-btn>
+      <v-btn v-if="props.actions.includes('add')" class="ml-2 no-uppercase" @click="handleAddClick">
+        {{ $t('dataTable.add') }}
+      </v-btn>
+      <v-btn
+        v-if="props.actions.includes('edit')"
+        class="ml-2 no-uppercase"
+        @click="handleEditClick"
+      >
+        {{ $t('dataTable.edit') }}
+      </v-btn>
       <v-btn
         v-if="props.actions.includes('delete')"
-        class="ml-2"
+        class="ml-2 no-uppercase"
         @click="openDeleteConfirmDialog"
-        >{{ $t('dataTable.delete') }}</v-btn
       >
-      <v-btn v-if="props.actions.includes('excelExport')" class="ml-2">Excel Export</v-btn>
-      <v-btn v-if="props.actions.includes('excelImport')" class="ml-2">Excel Import</v-btn>
+        {{ $t('dataTable.delete') }}
+      </v-btn>
+      <v-btn v-if="props.actions.includes('excelExport')" class="ml-2 no-uppercase">
+        {{ $t('dataTable.export') }}
+      </v-btn>
+      <v-btn v-if="props.actions.includes('excelImport')" class="ml-2 no-uppercase">
+        {{ $t('dataTable.import') }}
+      </v-btn>
     </v-toolbar>
 
     <!--
@@ -107,6 +118,7 @@ const selectedItemLocal = ref(null)
 const selectedItems = ref([])
 
 const props = defineProps({
+  dataTabletitleKey: { type: String, required: true },
   searchSchema: { type: Array, required: true },
   headers: { type: Array, required: true },
   apiEndpoint: { type: String, required: true },
@@ -499,5 +511,9 @@ function handleEditClick() {
 }
 :deep(.v-theme--dark .server-table td) {
   border-bottom-color: rgba(255, 255, 255, 0.06);
+}
+
+.no-uppercase {
+  text-transform: none !important;
 }
 </style>
