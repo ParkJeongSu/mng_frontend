@@ -2,14 +2,14 @@
 
 #시스템 
 
-##사용자
-### 권한
-### 사용자
+## UserSetting
+### Auth
+### User
 
-##메뉴
-### 시스템 정의
-### 메뉴
-### 권한별 메뉴 설정
+##MenuSetting
+### SystemDef
+### Menu
+### AuthMenu
 
 ##알람
 ### 알람 정의
