@@ -5,12 +5,8 @@ import { useTabsStore } from '@/stores/tabs' // tabs 스토어 import
 
 import DefaultLayout from '@/layouts/DefaultLayout.vue'
 import HomeView from '../views/HomeView.vue'
-import DashboardView from '../views/DashboardView.vue'
-import UserManagementView from '../views/UserManagementView.vue'
 import LoginView from '../layouts/LoginView.vue'
 import ProfileView from '../views/ProfileView.vue'
-import UserListView from '../views/management/UserListView.vue'
-import ProductListPage from '@/views/management/ProductListPage.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -32,95 +28,64 @@ const router = createRouter({
           meta: { titleKey: 'menuNames.home' },
         },
         {
-          path: '/menu/menu',
-          name: 'MenuListPage',
-          component: () => import('../views/menu/MenuListPage.vue'),
-          meta: { titleKey: 'menuNames.menu' },
-        },
-        {
-          path: '/menu/system_def',
-          name: 'SystemDefListPage',
-          component: () => import('../views/menu/SystemDefListPage.vue'),
-          meta: { titleKey: 'menuNames.systemDef' },
-        },
-        {
-          path: 'menu/auth_menu',
-          name: 'auth_menuListPage',
-          component: () => import('../views/menu/AuthMenuListPage.vue'),
-          meta: { titleKey: 'menuNames.authorityMenu' },
-        },
-        {
-          path: 'system/auth',
-          name: 'authListPage',
-          component: () => import('../views/user/AuthListPage.vue'),
-          meta: { titleKey: 'menuNames.auth' },
-        },
-        {
-          path: 'system/user',
-          name: 'userListPage',
-          component: () => import('../views/user/UserListPage.vue'),
-          meta: { titleKey: 'menuNames.users' },
-        },
-        {
-          path: 'product-list',
-          name: 'product-list',
-          component: ProductListPage,
-          meta: { titleKey: '프로덕트 목록' },
-        },
-        {
           path: 'profile',
           name: 'profile',
           component: ProfileView,
           meta: { titleKey: '프로필' },
         },
         {
-          path: 'management/users/list',
-          name: 'user-list',
-          component: UserListView, // 여기를 수정
+          path: 'modeler/system/menu_setting/menu',
+          name: 'Menu',
+          component: () => import('../views/modeler/system/menu_setting/Menu.vue'),
+          meta: { titleKey: 'menuNames.menu' },
+        },
+        {
+          path: 'modeler/system/menu_setting/system_def',
+          name: 'SystemDef',
+          component: () => import('../views/modeler/system/menu_setting/SystemDef.vue'),
+          meta: { titleKey: 'menuNames.systemDef' },
+        },
+        {
+          path: 'modeler/system/menu_setting/auth_menu',
+          name: 'AuthMenu',
+          component: () => import('../views/modeler/system/menu_setting/AuthMenu.vue'),
+          meta: { titleKey: 'menuNames.authorityMenu' },
+        },
+        {
+          path: 'modeler/system/user_setting/auth',
+          name: 'Auth',
+          component: () => import('../views/modeler/system/user_setting/Auth.vue'),
+          meta: { titleKey: 'menuNames.auth' },
+        },
+        {
+          path: 'modeler/system/user_setting/user',
+          name: 'User',
+          component: () => import('../views/modeler/system/user_setting/User.vue'),
+          meta: { titleKey: 'menuNames.users' },
+        },
+        {
+          path: 'modeler/sample/subsample1/user_list_view',
+          name: 'UserListView',
+          component: () => import('../views/modeler/sample/sub_sample1/UserListView.vue'),
           meta: { titleKey: '사용자 목록' },
         },
         {
-          path: 'management/users/list2',
-          name: 'user-list2',
-          component: () => import('../views/management/UserListView2.vue'),
-          meta: { titleKey: '사용자 목록' },
+          path: 'modeler/sample/subsample1/user_list_view2',
+          name: 'UserListView2',
+          component: () => import('../views/modeler/sample/sub_sample1/UserListView2.vue'),
+          meta: { titleKey: '사용자 목록 2' },
         },
         {
-          path: 'dashboard/status1',
-          name: 'dashboard-status1',
-          component: DashboardView,
-          meta: { titleKey: '현황 1' },
+          path: 'modeler/sample/subsample2/dash_board_view',
+          name: 'DashboardView',
+          component: () => import('../views/modeler/sample/sub_sample2/DashboardView.vue'),
+          meta: { titleKey: '대시보드 view' },
         },
         {
-          path: 'dashboard/status2',
-          name: 'dashboard-status2',
-          component: DashboardView,
-          meta: { titleKey: '현황 2' },
-        },
-        {
-          path: 'management/users/create',
-          name: 'user-create',
-          component: UserManagementView,
-          meta: { titleKey: '사용자 등록' },
-        },
-        {
-          path: 'management/groups/list',
-          name: 'group-list',
-          component: UserManagementView,
-          meta: { titleKey: '그룹 목록' },
-        },
-        // 통계 메뉴 경로 추가 (예시)
-        {
-          path: 'stats/daily',
-          name: 'stats-daily',
-          component: DashboardView,
-          meta: { titleKey: '일별 통계' },
-        },
-        {
-          path: 'stats/monthly',
-          name: 'stats-monthly',
-          component: DashboardView,
-          meta: { titleKey: '월별 통계' },
+          path: 'modeler/sample/subsample2/user_mangement_view',
+          name: 'UserManagementView',
+          component: () => import('../views/modeler/sample/sub_sample2/UserManagementView.vue'),
+          meta: { titleKey: '유저 관리 view' },
         },
       ],
     },
