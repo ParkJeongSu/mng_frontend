@@ -107,7 +107,7 @@ const formSchema = computed(function () {
 })
 
 const headers = ref([
-  //{ title : 'columns.id', key: 'id'},
+  { title: 'columns.id', key: 'id' },
   { title: 'columns.systemDefId', key: 'systemDefId' },
   { title: 'columns.menuName', key: 'menuName' },
   { title: 'columns.parentMenuId', key: 'parentMenuId' },

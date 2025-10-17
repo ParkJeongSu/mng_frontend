@@ -84,6 +84,21 @@ export const usePanelStore = defineStore('panel', () => {
     }
   }
 
+  // ✅ [추가] formData의 특정 필드를 업데이트하는 액션
+  function updateFormDataField(key, value) {
+    if (formData.value) {
+      formData.value[key] = value
+      console.log(`[Store] formData.${key} updated to:`, value)
+    }
+  }
+  // ✅ [추가] formData의 특정 필드를 업데이트하는 액션
+  function updateSelectedItemField(key, value) {
+    if (selectedItem.value) {
+      selectedItem.value[key] = value
+      console.log(`[Store] selectedItem.${key} updated to:`, value)
+    }
+  }
+
   return {
     isPanelOpen,
     selectedItem,
@@ -98,5 +113,7 @@ export const usePanelStore = defineStore('panel', () => {
     openFormPanel,
     togglePanel,
     saveForm,
+    updateFormDataField,
+    updateSelectedItemField,
   }
 })

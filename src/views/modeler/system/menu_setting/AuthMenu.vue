@@ -164,6 +164,11 @@ const formSchema = computed(function () {
       items: menuList.value, // [{ authorityName, authorityId }]
       'item-title': 'menuName', // v-select의 item-title에 매핑할 키
       'item-value': 'id', // v-select의 item-value에 매핑할 키
+      // 2. 이 필드가 'systemId' 필드의 값에 의존한다고 명시합니다.
+      dependsOn: 'systemId',
+      // 3. 의존하는 필드의 값이 변경될 때 호출할 API 엔드포인트를 정의합니다.
+      //    {value} 부분은 나중에 실제 systemId 값으로 교체될 placeholder 입니다.
+      apiEndpoint: '/api/menus?systemDefId={value}',
     },
   ]
 })
