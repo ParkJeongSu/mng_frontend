@@ -31,7 +31,10 @@
     "Modeler": "모델러",
     "SystemDef": "시스템설정",
     "home": "홈",
-    "auth": "권한"
+    "auth": "권한",
+    "authorityMenu": "권한별 메뉴",
+    "systemDef": "시스템 정의",
+    "menu": "메뉴"
   },
   "columns": {
     "id": "id",
@@ -44,6 +47,16 @@
     "email": "email",
     "phone1": "phone1",
     "phone2": "phone2",
+    "systemDefId": "시스템 정의 id",
+    "systemDefName": "시스템 정의 이름",
+    "menuName": "메뉴이름",
+    "parentmenuName": "상위 메뉴 이름",
+    "parentMenuId": "부모 메뉴 id",
+    "menuId": "메뉴 id",
+    "viewURL": "viewURL",
+    "menuSEQ": "메뉴 순서",
+    "iconName": "아이콘명",
+    "menuType": "메뉴타입",
     "checkOutState": "checkOutState",
     "checkOutTime": "checkOutTime",
     "checkOutUser": "checkOutUser",

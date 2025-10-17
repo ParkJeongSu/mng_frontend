@@ -1,4 +1,4 @@
-import apiClient from './index.js';
+import apiClient from './index.js'
 
 /**
  * 로그인 API 호출
@@ -8,7 +8,7 @@ import apiClient from './index.js';
  * @returns {Promise} Axios 응답 Promise (TokenDto 객체 포함)
  */
 export function login(credentials) {
-  return apiClient.post('/api/members/login', credentials);
+  return apiClient.post('/api/auth/login', credentials)
 }
 
 /**
@@ -19,7 +19,7 @@ export function login(credentials) {
  * @returns {Promise} Axios 응답 Promise (생성된 회원 ID 포함)
  */
 export function signup(memberInfo) {
-  return apiClient.post('/api/members/join', memberInfo);
+  return apiClient.post('/api/auth/join', memberInfo)
 }
 
 /**
@@ -30,5 +30,5 @@ export function signup(memberInfo) {
  * @returns {Promise} Axios 응답 Promise (새로운 TokenDto 객체 포함)
  */
 export function reissue(tokens) {
-  return apiClient.post('/api/members/reissue', tokens);
+  return apiClient.post('/api/auth/reissue', tokens)
 }

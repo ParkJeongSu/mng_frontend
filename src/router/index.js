@@ -32,6 +32,24 @@ const router = createRouter({
           meta: { titleKey: 'menuNames.home' },
         },
         {
+          path: '/menu/menu',
+          name: 'MenuListPage',
+          component: () => import('../views/menu/MenuListPage.vue'),
+          meta: { titleKey: 'menuNames.menu' },
+        },
+        {
+          path: '/menu/system_def',
+          name: 'SystemDefListPage',
+          component: () => import('../views/menu/SystemDefListPage.vue'),
+          meta: { titleKey: 'menuNames.systemDef' },
+        },
+        {
+          path: 'menu/auth_menu',
+          name: 'auth_menuListPage',
+          component: () => import('../views/menu/AuthMenuListPage.vue'),
+          meta: { titleKey: 'menuNames.authorityMenu' },
+        },
+        {
           path: 'system/auth',
           name: 'authListPage',
           component: () => import('../views/user/AuthListPage.vue'),

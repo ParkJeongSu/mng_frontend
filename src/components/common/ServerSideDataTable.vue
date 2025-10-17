@@ -12,6 +12,8 @@
             v-model="searchParams[item.key]"
             :label="item.label"
             :items="item.items"
+            :item-title="item['item-title']"
+            :item-value="item['item-value']"
             density="compact"
             variant="outlined"
             hide-details
@@ -102,7 +104,7 @@
 </template>
 
 <script setup>
-import { ref, reactive, computed } from 'vue'
+import { ref, reactive, computed, watch } from 'vue'
 import { componentMap } from '@/constants/componentMap' // componentMap import
 import { usePanelStore } from '@/stores/panel'
 import { fetchListData, deleteItems, updateItemData, createItemData } from '@/api/dataTable' // 공통 API 함수 import
@@ -170,6 +172,7 @@ const searchParams = reactive({})
 props.searchSchema.forEach(function (item) {
   searchParams[item.key] = null
 })
+console.log('초기 props.searchSchema:', props.searchSchema)
 
 const serverItems = ref([])
 const loading = ref(true)

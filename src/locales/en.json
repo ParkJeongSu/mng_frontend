@@ -29,7 +29,10 @@
     "profile": "Profile",
     "userList1": "User List 1",
     "home": "home",
-    "auth": "auth"
+    "auth": "auth",
+    "authorityMenu": "authorityMenu",
+    "systemDef": "systemDef",
+    "menu": "menu"
   },
   "columns": {
     "id": "id",
@@ -42,6 +45,16 @@
     "email": "email",
     "phone1": "phone1",
     "phone2": "phone2",
+    "systemDefId": "systemDefId",
+    "systemDefName": "systemDefName",
+    "menuName": "menuName",
+    "parentmenuName": "parentmenuName",
+    "parentMenuId": "parentMenuId",
+    "menuId": "menuId",
+    "viewURL": "viewURL",
+    "menuSEQ": "menuSEQ",
+    "iconName": "iconName",
+    "menuType": "menuType",
     "checkOutState": "checkOutState",
     "checkOutTime": "checkOutTime",
     "checkOutUser": "checkOutUser",
