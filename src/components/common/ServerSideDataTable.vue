@@ -2,9 +2,10 @@
   <v-card class="datatable-card d-flex flex-column" flat color="surface">
     <!-- 제목과 검색 바는 높이가 고정되어야 하므로, 공간이 줄어들 때 수축하지 않도록 합니다. -->
     <v-card-title class="datatable-title text-h6">
+      <v-icon icon="$accountGroup" size="24" /> &nbsp;
       {{ $t(dataTabletitleKey, dataTabletitleKey) }}
     </v-card-title>
-    <v-card class="search-panel" color="surface" flat>
+    <v-card class="search-panel" color="surface" flat elevation="0">
       <v-row class="search-row" dense>
         <v-col v-for="item in translatedsearchSchema" :key="item.key" cols="12" md="2">
           <component
