@@ -117,36 +117,79 @@ watch(
     const changedKeys = Object.keys(newFormData).filter(function (key) {
       return newFormData[key] !== oldFormData[key]
     })
+
+    if (changedKeys.length === 0) return
+
     console.log('변경된 필드:', changedKeys)
     for (const changedKey of changedKeys) {
-      // 현재 변경된 필드(예: systemId)에 의존하는 다른 필드들을 찾습니다.
+      // 'changedKey'에 의존하는 필드들을 찾습니다.
       const dependentFields = localFormSchema.value.filter(function (field) {
-        return field.dependsOn === changedKey
+        if (!field.dependsOn) {
+          return false
+        }
+        // 1-A. 기존 문자열 방식 호환
+        if (typeof field.dependsOn === 'string') {
+          return field.dependsOn === changedKey
+        }
+        // 1-B. 새로운 배열 방식
+        if (Array.isArray(field.dependsOn)) {
+          return field.dependsOn.includes(changedKey)
+        }
+        return false
       })
 
       for (const fieldToUpdate of dependentFields) {
         console.log(`'${fieldToUpdate.key}' 필드는 '${changedKey}'의 변경을 감지했습니다.`)
 
-        // 부모 필드의 새 값을 가져옵니다.
-        const parentValue = newFormData[changedKey]
+        // 2-A. 의존성 목록을 항상 배열로 확보합니다.
+        let dependencies = []
+        if (typeof fieldToUpdate.dependsOn === 'string') {
+          dependencies = [fieldToUpdate.dependsOn]
+        } else if (Array.isArray(fieldToUpdate.dependsOn)) {
+          dependencies = fieldToUpdate.dependsOn
+        }
 
-        // 부모 값이 있을 때만 API를 호출합니다.
-        if (parentValue && fieldToUpdate.apiEndpoint) {
-          // {value} placeholder를 실제 값으로 교체합니다.
-          const endpoint = fieldToUpdate.apiEndpoint.replace('{value}', parentValue)
+        // 2-B. 모든 의존성 필드(부모)가 값을 가지고 있는지 확인합니다.
+        let allDependenciesMet = true
+        for (const depKey of dependencies) {
+          if (!newFormData[depKey]) {
+            // 값이 (null, undefined, '', 0 등) 없으면
+            allDependenciesMet = false
+            break
+          }
+        }
 
-          console.log(`API 호출: ${endpoint}`)
+        // 2-C. API 엔드포인트 처리
+        if (allDependenciesMet && fieldToUpdate.apiEndpoint) {
+          // [성공] 모든 부모 값이 채워져 있음 -> API 호출
 
-          // API를 호출하여 새 데이터를 가져옵니다.
+          let endpoint = fieldToUpdate.apiEndpoint
+
+          // 2-D. 모든 플레이스홀더를 실제 값으로 교체합니다.
+          for (const depKey of dependencies) {
+            // new RegExp(..., 'g') : 플레이스홀더가 여러 번 나와도 모두 교체
+            const placeholder = new RegExp('{' + depKey + '}', 'g')
+            endpoint = endpoint.replace(placeholder, newFormData[depKey])
+          }
+
+          console.log(`API 호출 (다중 의존성): ${endpoint}`)
+
           const response = await fetchListData(endpoint, {})
 
-          // 해당 필드의 items를 업데이트합니다.
-          fieldToUpdate.items = response.items
+          let itemValue = fieldToUpdate['item-value']
+          let itemTitle = fieldToUpdate['item-title']
+
+          const responseMapData = response.items.map(function (item) {
+            return { [itemValue]: item[itemValue], [itemTitle]: item[itemTitle] }
+          })
+
+          fieldToUpdate.items = responseMapData
 
           // 부모 값이 변경되었으므로, 자식 필드의 값은 초기화합니다.
           panelStore.formData[fieldToUpdate.key] = null
         } else {
-          // 부모 값이 없으면 자식 필드의 옵션도 비웁니다.
+          // [실패] 부모 값 중 하나라도 비어있음 -> 자식 필드 초기화
+          console.log('부모 값 중 하나가 비어있으므로 자식 필드를 초기화합니다.')
           fieldToUpdate.items = []
           panelStore.formData[fieldToUpdate.key] = null
         }

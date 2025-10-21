@@ -58,10 +58,25 @@ async function loadInitData() {
       fetchListData('/api/system_def', {}),
       fetchListData('/api/menus', {}),
     ])
+    // 각각의 API 응답 데이터를 가공하여 필요한 형태로 변환합니다.
+    const authorityListMapData = apiAuthorityList.items.map(function (item) {
+      return { id: item.id, authorityName: item.authorityName }
+    })
 
-    authorityList.value = apiAuthorityList.items
-    systemDefList.value = apiSystemDefList.items
-    menuList.value = apiMenuList.items
+    const systemDefListMapData = apiSystemDefList.items.map(function (item) {
+      return { id: item.id, systemDefName: item.systemDefName }
+    })
+
+    const menuListMapData = apiMenuList.items.map(function (item) {
+      return { id: item.id, menuName: item.menuName }
+    })
+
+    systemDefList.value = systemDefListMapData
+    menuList.value = menuListMapData
+
+    authorityList.value = authorityListMapData
+    systemDefList.value = systemDefListMapData
+    menuList.value = menuListMapData
   } catch (error) {
     console.error('데이터를 로드하는 중 에러가 발생했습니다:', error)
   } finally {
@@ -126,7 +141,7 @@ const searchSchema = computed(function () {
     },
     {
       key: 'menuId',
-      labelKey: 'columns.parentmenuName',
+      labelKey: 'columns.menuName',
       component: 'v-select',
       // ⬇⬇ Vuetify v-select 관례에 맞게 전달할 프로퍼티 이름을 명확히
       items: menuList.value, // [{ authorityName, authorityId }]
@@ -149,7 +164,7 @@ const formSchema = computed(function () {
     },
     {
       key: 'systemId',
-      labelKey: 'columns.systemId',
+      labelKey: 'columns.systemDefName',
       component: 'v-select',
       // ⬇⬇ Vuetify v-select 관례에 맞게 전달할 프로퍼티 이름을 명확히
       items: systemDefList.value, // [{ authorityName, authorityId }]
@@ -158,17 +173,17 @@ const formSchema = computed(function () {
     },
     {
       key: 'menuId',
-      labelKey: 'columns.parentmenuName',
+      labelKey: 'columns.menuName',
       component: 'v-select',
       // ⬇⬇ Vuetify v-select 관례에 맞게 전달할 프로퍼티 이름을 명확히
       items: menuList.value, // [{ authorityName, authorityId }]
       'item-title': 'menuName', // v-select의 item-title에 매핑할 키
       'item-value': 'id', // v-select의 item-value에 매핑할 키
       // 2. 이 필드가 'systemId' 필드의 값에 의존한다고 명시합니다.
-      dependsOn: 'systemId',
+      dependsOn: ['systemId'],
       // 3. 의존하는 필드의 값이 변경될 때 호출할 API 엔드포인트를 정의합니다.
       //    {value} 부분은 나중에 실제 systemId 값으로 교체될 placeholder 입니다.
-      apiEndpoint: '/api/menus?systemDefId={value}',
+      apiEndpoint: '/api/menus?systemDefId={systemId}',
     },
   ]
 })

@@ -9,7 +9,7 @@
       isHover
       showCheckbox
       :form-schema="formSchema"
-      data-tabletitle-key="title.authList"
+      data-tabletitle-key="menuNames.menu"
     >
       <template v-slot:item.status="slotProps">
         <v-chip
@@ -30,6 +30,7 @@ import { ref, onMounted, onActivated, watch, computed } from 'vue'
 import { fetchListData } from '@/api/dataTable' // 공통 API 함수 import
 import { useTabsStore } from '@/stores/tabs'
 import { useRoute } from 'vue-router'
+import { aliases } from '@/plugins/vuetify-mdi-icons'
 
 const tabsStore = useTabsStore()
 const route = useRoute()
@@ -39,6 +40,14 @@ const ready = ref(false)
 const systemDefList = ref([])
 
 const menuList = ref([])
+
+// 1. aliases 객체에서 key 목록만 배열로 추출합니다.
+const aliasKeys = Object.keys(aliases)
+
+// 2. map 함수를 사용해 각 key 앞에 '$'를 붙여 새 배열을 만듭니다.
+const iconList = aliasKeys.map(function (key) {
+  return '$' + key
+})
 
 // 데이터를 로드하는 함수를 별도로 분리합니다.
 async function loadInitData() {
@@ -56,8 +65,17 @@ async function loadInitData() {
       fetchListData('/api/menus', {}),
     ])
 
-    systemDefList.value = apiSystemDefList.items
-    menuList.value = apiMenuList.items
+    // 각각의 API 응답 데이터를 가공하여 필요한 형태로 변환합니다.
+    const systemDefListMapData = apiSystemDefList.items.map(function (item) {
+      return { id: item.id, systemDefName: item.systemDefName }
+    })
+
+    const menuListMapData = apiMenuList.items.map(function (item) {
+      return { id: item.id, menuName: item.menuName }
+    })
+
+    systemDefList.value = systemDefListMapData
+    menuList.value = menuListMapData
   } catch (error) {
     console.error('데이터를 로드하는 중 에러가 발생했습니다:', error)
   } finally {
@@ -98,17 +116,62 @@ watch(
 
 // 검색 및 폼 스키마 정의
 const searchSchema = computed(function () {
-  return [{ key: 'systemDefName', labelKey: 'columns.systemDefName', component: 'v-text-field' }]
+  return [
+    {
+      key: 'systemId',
+      labelKey: 'columns.systemDefName',
+      component: 'v-select',
+      // ⬇⬇ Vuetify v-select 관례에 맞게 전달할 프로퍼티 이름을 명확히
+      items: systemDefList.value, // [{ authorityName, authorityId }]
+      'item-title': 'systemDefName', // v-select의 item-title에 매핑할 키
+      'item-value': 'id', // v-select의 item-value에 매핑할 키
+    },
+    {
+      key: 'menuId',
+      labelKey: 'columns.menuName',
+      component: 'v-select',
+      // ⬇⬇ Vuetify v-select 관례에 맞게 전달할 프로퍼티 이름을 명확히
+      items: menuList.value, // [{ authorityName, authorityId }]
+      'item-title': 'menuName', // v-select의 item-title에 매핑할 키
+      'item-value': 'id', // v-select의 item-value에 매핑할 키
+    },
+  ]
 })
 
 //폼 스키마 정의 (추가/수정에 사용)
 const formSchema = computed(function () {
-  return [{ key: 'systemDefName', labelKey: 'columns.systemDefName', component: 'v-text-field' }]
+  return [
+    {
+      key: 'systemDefId',
+      labelKey: 'columns.systemDefId',
+      component: 'v-select',
+      // ⬇⬇ Vuetify v-select 관례에 맞게 전달할 프로퍼티 이름을 명확히
+      items: systemDefList.value, // [{ authorityName, authorityId }]
+      'item-title': 'systemDefName', // v-select의 item-title에 매핑할 키
+      'item-value': 'id', // v-select의 item-value에 매핑할 키
+    },
+    { key: 'menuName', labelKey: 'columns.menuName', component: 'v-text-field' },
+    {
+      key: 'parentMenuId',
+      labelKey: 'columns.parentmenuName',
+      component: 'v-select',
+      // ⬇⬇ Vuetify v-select 관례에 맞게 전달할 프로퍼티 이름을 명확히
+      items: menuList.value, // [{ authorityName, authorityId }]
+      'item-title': 'menuName', // v-select의 item-title에 매핑할 키
+      'item-value': 'id', // v-select의 item-value에 매핑할 키
+    },
+    { key: 'menuSEQ', labelKey: 'columns.menuSEQ', component: 'v-text-field' }, // 숫자만 입력 가능하게 가능한가?
+    { key: 'description', labelKey: 'columns.description', component: 'v-text-field' },
+    { key: 'iconName', labelKey: 'columns.iconName', component: 'v-select', items: iconList },
+    { key: 'viewURL', labelKey: 'columns.viewURL', component: 'v-text-field' },
+    { key: 'menuType', labelKey: 'columns.menuType', component: 'v-text-field' },
+  ]
 })
 
 const headers = ref([
   { title: 'columns.id', key: 'id' },
   { title: 'columns.systemDefId', key: 'systemDefId' },
+  { title: 'columns.systemDefName', key: 'systemDefName' },
   { title: 'columns.menuName', key: 'menuName' },
   { title: 'columns.parentMenuId', key: 'parentMenuId' },
   { title: 'columns.viewURL', key: 'viewURL' },

@@ -36,31 +36,31 @@ const router = createRouter({
         {
           path: 'modeler/system/menu_setting/menu',
           name: 'Menu',
-          component: () => import('../views/modeler/system/menu_setting/Menu.vue'),
+          component: () => import('../views/modeler/system/menu_setting/MenuView.vue'),
           meta: { titleKey: 'menuNames.menu' },
         },
         {
           path: 'modeler/system/menu_setting/system_def',
           name: 'SystemDef',
-          component: () => import('../views/modeler/system/menu_setting/SystemDef.vue'),
+          component: () => import('../views/modeler/system/menu_setting/SystemDefView.vue'),
           meta: { titleKey: 'menuNames.systemDef' },
         },
         {
           path: 'modeler/system/menu_setting/auth_menu',
           name: 'AuthMenu',
-          component: () => import('../views/modeler/system/menu_setting/AuthMenu.vue'),
+          component: () => import('../views/modeler/system/menu_setting/AuthMenuView.vue'),
           meta: { titleKey: 'menuNames.authorityMenu' },
         },
         {
           path: 'modeler/system/user_setting/auth',
           name: 'Auth',
-          component: () => import('../views/modeler/system/user_setting/Auth.vue'),
+          component: () => import('../views/modeler/system/user_setting/AuthView.vue'),
           meta: { titleKey: 'menuNames.auth' },
         },
         {
           path: 'modeler/system/user_setting/user',
           name: 'User',
-          component: () => import('../views/modeler/system/user_setting/User.vue'),
+          component: () => import('../views/modeler/system/user_setting/UserView.vue'),
           meta: { titleKey: 'menuNames.users' },
         },
         {
