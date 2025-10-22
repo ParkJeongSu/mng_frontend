@@ -12,6 +12,7 @@
         <div class="content-wrapper">
           <v-app-bar color="surface" flat>
             <v-app-bar-nav-icon @click="menuStore.toggleSidebar" />
+            <MenuQuickFinder></MenuQuickFinder>
           </v-app-bar>
           <TabView />
         </div>
@@ -45,6 +46,7 @@ import AlarmBar from '@/components/layout/AlarmBar.vue'
 import { usePanelStore } from '@/stores/panel' // panel 스토어 import
 import { computed, onMounted } from 'vue'
 import SidePanel from '@/components/layout/SidePanel.vue' // SidePanel import
+import MenuQuickFinder from '@/components/layout/MenuQuickFinder.vue'
 
 const menuStore = useMenuStore()
 const panelStore = usePanelStore() // panel 스토어 인스턴스 생성

@@ -1,7 +1,8 @@
 <template>
   <v-app-bar density="compact" app>
-    <v-img class="company-logo" :src="logoUrl" max-width="130"></v-img>
-
+    <div class="app-bar-left">
+      <v-img class="company-logo" :src="logoUrl" max-width="130"></v-img>
+    </div>
     <!-- <v-app-bar-title class="company-title">MNG</v-app-bar-title> -->
 
     <v-spacer></v-spacer>
@@ -18,48 +19,51 @@
     </v-btn>
 
     <v-spacer></v-spacer>
-    <v-btn
-      @click="toggleTheme"
-      icon
-      class="theme-toggle-btn"
-      aria-label="Toggle theme"
-      :title="isDark ? 'Light mode' : 'Dark mode'"
-    >
-      <v-icon :icon="themeIcon" />
-    </v-btn>
-    <v-menu offset-y>
-      <template v-slot:activator="{ props }">
-        <div v-bind="props" class="d-flex align-center cursor-pointer">
-          <v-btn icon="$translate"></v-btn>
-        </div>
-      </template>
 
-      <v-list density="compact">
-        <v-list-item>
-          <v-btn color="surface" @click="localeStore.setLocale('ko')">한국어</v-btn>
-        </v-list-item>
-        <v-list-item>
-          <v-btn color="surface" @click="localeStore.setLocale('en')">English</v-btn>
-        </v-list-item>
-      </v-list>
-    </v-menu>
-    <v-menu offset-y>
-      <template v-slot:activator="{ props }">
-        <div v-bind="props" class="d-flex align-center cursor-pointer">
-          <span class="user-id">{{ userId }} {{ $t('messages.welcome') }}</span>
-          <v-icon class="user-icon">$accountCircle</v-icon>
-        </div>
-      </template>
+    <div class="app-bar-right">
+      <v-btn
+        @click="toggleTheme"
+        icon
+        class="theme-toggle-btn"
+        aria-label="Toggle theme"
+        :title="isDark ? 'Light mode' : 'Dark mode'"
+      >
+        <v-icon :icon="themeIcon" />
+      </v-btn>
+      <v-menu offset-y>
+        <template v-slot:activator="{ props }">
+          <div v-bind="props" class="d-flex align-center cursor-pointer">
+            <v-btn icon="$translate"></v-btn>
+          </div>
+        </template>
 
-      <v-list density="compact">
-        <v-list-item to="/profile" prepend-icon="$account">
-          <v-list-item-title>프로필</v-list-item-title>
-        </v-list-item>
-        <v-list-item @click="openLogoutDialog" prepend-icon="$logout">
-          <v-list-item-title>{{ $t('auth.logout') }}</v-list-item-title>
-        </v-list-item>
-      </v-list>
-    </v-menu>
+        <v-list density="compact">
+          <v-list-item>
+            <v-btn color="surface" @click="localeStore.setLocale('ko')">한국어</v-btn>
+          </v-list-item>
+          <v-list-item>
+            <v-btn color="surface" @click="localeStore.setLocale('en')">English</v-btn>
+          </v-list-item>
+        </v-list>
+      </v-menu>
+      <v-menu offset-y>
+        <template v-slot:activator="{ props }">
+          <div v-bind="props" class="d-flex align-center cursor-pointer">
+            <span class="user-id">{{ userId }} {{ $t('messages.welcome') }}</span>
+            <v-icon class="user-icon">$accountCircle</v-icon>
+          </div>
+        </template>
+
+        <v-list density="compact">
+          <v-list-item to="/profile" prepend-icon="$account">
+            <v-list-item-title>프로필</v-list-item-title>
+          </v-list-item>
+          <v-list-item @click="openLogoutDialog" prepend-icon="$logout">
+            <v-list-item-title>{{ $t('auth.logout') }}</v-list-item-title>
+          </v-list-item>
+        </v-list>
+      </v-menu>
+    </div>
 
     <template v-slot:extension>
       <slot name="extension"></slot>
@@ -181,5 +185,24 @@ function handleLogout() {
 
 .no-uppercase {
   text-transform: none !important;
+}
+
+.app-bar-left,
+.app-bar-right {
+  display: flex;
+  align-items: center;
+  /* 오른쪽 영역의 실제 너비를 확인하고 (예: 개발자 도구)
+    그 값(혹은 그보다 약간 큰 값)을 min-width로 설정합니다.
+    여기서는 200px로 가정합니다.
+  */
+  min-width: 300px;
+}
+
+.app-bar-left {
+  justify-content: flex-start;
+}
+
+.app-bar-right {
+  justify-content: flex-end;
 }
 </style>
