@@ -168,10 +168,12 @@ function toggleFullscreen() {
   /* 내부 컨텐츠를 채우기 위한 설정 */
   display: flex;
   flex-direction: column;
-  padding: 24px;
+
   overflow-y: auto;
   /* border-left: 1px solid #dcdfe6; */
-  padding-bottom: 0;
+
+  padding: 12px;
+  padding-bottom: 10px;
   padding-top: 10px;
 }
 

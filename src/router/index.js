@@ -260,49 +260,52 @@ const router = createRouter({
         {
           path: 'report/production/input/from_transport_completed',
           name: 'FromTransportCompleted',
-          component: () => import('../views/modeler/system/user_setting/UserView.vue'),
+          component: () => import('../views/report/production/input/inputTimePerArrive.vue'),
           meta: { titleKey: 'menuNames.users' },
         },
         {
           path: 'report/production/out/from_start_to_end',
           name: 'FromStartToEnd',
-          component: () => import('../views/modeler/system/user_setting/UserView.vue'),
+          component: () => import('../views/report/production/output/FromStartToEnd.vue'),
           meta: { titleKey: 'menuNames.users' },
         },
         {
           path: 'report/production/out/job_end_by_operation',
           name: 'JobEndByOperation',
-          component: () => import('../views/modeler/system/user_setting/UserView.vue'),
+          component: () => import('../views/report/production/output/JobEndByOperation.vue'),
           meta: { titleKey: 'menuNames.users' },
         },
         {
           path: 'report/transport/arrived/arrived_by_start',
           name: 'ArrivedByStart',
-          component: () => import('../views/modeler/system/user_setting/UserView.vue'),
+          component: () => import('../views/report/transport/arrived/ArrivedBySrart.vue'),
           meta: { titleKey: 'menuNames.users' },
         },
         {
           path: 'report/transport/arrived/average_by_start',
           name: 'AverageByStart',
-          component: () => import('../views/modeler/system/user_setting/UserView.vue'),
+          component: () => import('../views/report/transport/arrived/ArrivedAverageByStart.vue'),
           meta: { titleKey: 'menuNames.users' },
         },
         {
           path: 'report/equipment/status/equipment_by_time',
           name: 'EquipmentByTime',
-          component: () => import('../views/modeler/system/user_setting/UserView.vue'),
+          component: () =>
+            import('../views/report/equipment_report/equipment_status/EquipmentStatusByTime.vue'),
           meta: { titleKey: 'menuNames.users' },
         },
         {
           path: 'report/equipment/status/equipment_by_day',
           name: 'EquipmentByDay',
-          component: () => import('../views/modeler/system/user_setting/UserView.vue'),
+          component: () =>
+            import('../views/report/equipment_report/equipment_status/EquipmentStatusByDay.vue'),
           meta: { titleKey: 'menuNames.users' },
         },
         {
           path: 'report/equipment/status/equipment_per_average',
-          name: 'EquipmentByDay',
-          component: () => import('../views/modeler/system/user_setting/UserView.vue'),
+          name: 'EquipmentPerAverage',
+          component: () =>
+            import('../views/report/equipment_report/equipment_status/EquipmentStatusAverage.vue'),
           meta: { titleKey: 'menuNames.users' },
         },
         {
