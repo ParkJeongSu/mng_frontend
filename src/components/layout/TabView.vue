@@ -61,10 +61,12 @@ import { useTabsStore } from '@/stores/tabs'
 import router from '@/router'
 // ✨ [추가] useI18n을 import 합니다.
 import { useI18n } from 'vue-i18n'
+import { useMenuStore } from '@/stores/menu' // ✅ [추가] 1. menu 스토어 import
 // ✨ [추가] 반응성을 가진 t 함수를 가져옵니다.
 const { t } = useI18n()
 
 const tabsStore = useTabsStore()
+const menuStore = useMenuStore() // ✅ [추가] 2. menu 스토어 인스턴스
 
 const contextMenu = ref({
   show: false,
@@ -75,6 +77,8 @@ const contextMenu = ref({
 
 function onTabChange(newPath) {
   router.push(newPath)
+  // ✅ [추가] 2. menu 스토어 액션을 호출하여 Breadcrumbs 갱신
+  menuStore.setActiveMenuByPath(newPath)
 }
 
 function closeTab(tab) {

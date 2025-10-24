@@ -14,6 +14,7 @@
             :to="child.to"
             :value="child.title + '-' + i + '-' + j"
             active-class="selected-tree-item"
+            @click="onMenuClick(child)"
           ></v-list-item>
         </v-list-group>
 
@@ -25,6 +26,7 @@
           :to="item.to"
           :value="item.title + '-' + i"
           active-class="selected-tree-item"
+          @click="onMenuClick(child)"
         ></v-list-item>
         <!-- :value="child.title"  :value="item.title" -->
       </template>
@@ -69,6 +71,12 @@ watch(
     deep: true, // 배열 내부의 객체 변경까지 감지합니다.
   },
 )
+
+// ✅ [추가] 3. 메뉴 클릭 시 스토어 액션을 호출하는 함수
+function onMenuClick(menuItem) {
+  // menuItem 객체(child 또는 item)의 'id'를 전달
+  menuStore.setActiveMenuById(menuItem.id)
+}
 </script>
 
 <style scoped>

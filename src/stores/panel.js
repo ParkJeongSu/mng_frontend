@@ -20,6 +20,9 @@ export const usePanelStore = defineStore('panel', () => {
   // 3. 현재 폼의 모드 ('create' 또는 'edit')
   const formMode = ref(null) // 'create', 'edit'
 
+  // ✅ [추가] 1. 패널 제목 키를 저장할 상태
+  const panelTitleKey = ref('')
+
   function closePanel() {
     isPanelOpen.value = false
     selectedItem.value = null
@@ -30,14 +33,18 @@ export const usePanelStore = defineStore('panel', () => {
 
   /**
    * (수정) Row 클릭 시 읽기용 패널을 여는 함수
+   * @param {string} titleKey - [추가됨] '메뉴', '사용자' 등의 제목 키
+   * @param {object} schema - 행 데이터
    * @param {object} item - 행 데이터
    */
-  function openReadOnlyPanel(schema, item) {
+  // ✅ [수정] 3. openReadOnlyPanel에 titleKey 파라미터 추가
+  function openReadOnlyPanel(titleKey, schema, item) {
     selectedItem.value = item
     formMode.value = null
     isPanelOpen.value = true
     formSchema.value = schema
     formData.value = { ...item } // 원본 수정을 방지하기 위해 복사해서 사용
+    panelTitleKey.value = titleKey // ✅ [추가] 4. 제목 키 저장
   }
 
   function togglePanel() {
@@ -46,11 +53,16 @@ export const usePanelStore = defineStore('panel', () => {
 
   /**
    * (신규) '생성' 또는 '수정'을 위한 폼 패널을 여는 함수
+   * @param {string} titleKey - [추가됨] '메뉴', '사용자' 등의 제목 키
    * @param {Array} schema - View에서 정의한 폼 설계도
-   * @param {object} initialData - 초기 데이터 (생성 시에는 빈 객체, 수정 시에는 원본 데이터)
+   * @param {object} initialData - 초기 데이터
    * @param {string} mode - 'create' 또는 'edit'
+   * @param {string} url - API 엔드포인트
+   * @param {Function} onSave - 저장 콜백
+   * @param {Function} onSuccess - 성공 콜백
    */
-  function openFormPanel(schema, initialData, mode, url, onSave, onSuccess) {
+  // ✅ [수정] 5. openFormPanel에 titleKey 파라미터 추가
+  function openFormPanel(titleKey, schema, initialData, mode, url, onSave, onSuccess) {
     selectedItem.value = null // 읽기용 데이터는 비워둠
     formSchema.value = schema
     formData.value = { ...initialData } // 원본 수정을 방지하기 위해 복사해서 사용
@@ -59,6 +71,7 @@ export const usePanelStore = defineStore('panel', () => {
     apiUrl.value = url // API URL 저장
     onSaveAction.value = onSave
     onSuccessAction.value = onSuccess // 성공 콜백 저장
+    panelTitleKey.value = titleKey // ✅ [추가] 6. 제목 키 저장
   }
 
   /**
@@ -108,6 +121,7 @@ export const usePanelStore = defineStore('panel', () => {
     apiUrl,
     onSaveAction,
     onSuccessAction,
+    panelTitleKey, // ✅ [추가] 7. 외부에서 사용할 수 있도록 반환
     closePanel,
     openReadOnlyPanel,
     openFormPanel,

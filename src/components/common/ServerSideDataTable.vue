@@ -1,60 +1,104 @@
 <template>
   <v-card class="datatable-card d-flex flex-column" flat color="surface">
     <!-- 제목과 검색 바는 높이가 고정되어야 하므로, 공간이 줄어들 때 수축하지 않도록 합니다. -->
-    <v-card-title class="datatable-title text-h6">
-      <v-icon icon="$accountGroup" size="24" /> &nbsp;
+    <v-card-title class="datatable-title text-h5">
+      &nbsp; <v-icon icon="$accountGroup" size="24" /> &nbsp;
       {{ $t(dataTabletitleKey, dataTabletitleKey) }}
     </v-card-title>
     <v-card class="search-panel" color="surface" flat elevation="0">
-      <v-row class="search-row" dense>
-        <v-col v-for="item in translatedsearchSchema" :key="item.key" cols="12" md="2">
+      <v-row class="search-row" dense no-gutters>
+        <v-col v-for="item in translatedsearchSchema" :key="item.key" cols="12" md="auto">
           <component
             :is="componentMap[item.component]"
             v-model="searchParams[item.key]"
-            :label="item.label"
+            :placeholder="item.label"
             :items="item.items"
             :item-title="item['item-title']"
             :item-value="item['item-value']"
             density="compact"
-            variant="outlined"
+            variant="solo"
+            flat
             hide-details
+            class="search-input"
           ></component>
+          <!-- :label="item.label" -->
         </v-col>
-        <v-col class="search-actions d-flex justify-end align-center">
+        <v-spacer></v-spacer>
+        <v-col class="search-actions d-flex justify-end align-center" cols="12" md="auto">
           <slot name="search-bar.append"></slot>
-          <v-btn @click="search">{{ $t('dataTable.search') }}</v-btn>
+          <v-btn @click="search" color="primary" variant="elevated" prepend-icon="$magnify">
+            {{ $t('dataTable.search') }}
+          </v-btn>
         </v-col>
       </v-row>
     </v-card>
 
     <!-- 툴바 역시 높이가 고정됩니다. -->
     <v-toolbar class="results-toolbar" density="comfortable" flat color="surface">
-      <v-toolbar-title class="text-subtitle-1">{{ $t('dataTable.result') }}</v-toolbar-title>
       <v-spacer></v-spacer>
       <slot name="actions.prepend"></slot>
-      <v-btn v-if="props.actions.includes('add')" class="ml-2 no-uppercase" @click="handleAddClick">
-        {{ $t('dataTable.add') }}
-      </v-btn>
-      <v-btn
-        v-if="props.actions.includes('edit')"
-        class="ml-2 no-uppercase"
-        @click="handleEditClick"
-      >
-        {{ $t('dataTable.edit') }}
-      </v-btn>
-      <v-btn
-        v-if="props.actions.includes('delete')"
-        class="ml-2 no-uppercase"
-        @click="openDeleteConfirmDialog"
-      >
-        {{ $t('dataTable.delete') }}
-      </v-btn>
-      <v-btn v-if="props.actions.includes('excelExport')" class="ml-2 no-uppercase">
-        {{ $t('dataTable.export') }}
-      </v-btn>
-      <v-btn v-if="props.actions.includes('excelImport')" class="ml-2 no-uppercase">
-        {{ $t('dataTable.import') }}
-      </v-btn>
+      <v-tooltip location="bottom" :text="$t('dataTable.add')">
+        <template v-slot:activator="{ props: tooltipProps }">
+          <v-btn
+            v-if="props.actions.includes('add')"
+            v-bind="tooltipProps"
+            class="ml-2"
+            icon="$plus"
+            density="comfortable"
+            @click="handleAddClick"
+          ></v-btn>
+        </template>
+      </v-tooltip>
+
+      <v-tooltip location="bottom" :text="$t('dataTable.edit')">
+        <template v-slot:activator="{ props: tooltipProps }">
+          <v-btn
+            v-if="props.actions.includes('edit')"
+            v-bind="tooltipProps"
+            class="ml-2"
+            icon="$pencil"
+            density="comfortable"
+            @click="handleEditClick"
+          ></v-btn>
+        </template>
+      </v-tooltip>
+
+      <v-tooltip location="bottom" :text="$t('dataTable.delete')">
+        <template v-slot:activator="{ props: tooltipProps }">
+          <v-btn
+            v-if="props.actions.includes('delete')"
+            v-bind="tooltipProps"
+            class="ml-2"
+            icon="$delete"
+            density="comfortable"
+            @click="openDeleteConfirmDialog"
+          ></v-btn>
+        </template>
+      </v-tooltip>
+
+      <v-tooltip location="bottom" :text="$t('dataTable.export')">
+        <template v-slot:activator="{ props: tooltipProps }">
+          <v-btn
+            v-if="props.actions.includes('excelExport')"
+            v-bind="tooltipProps"
+            class="ml-2"
+            icon="$fileExport"
+            density="comfortable"
+          ></v-btn>
+        </template>
+      </v-tooltip>
+
+      <v-tooltip location="bottom" :text="$t('dataTable.import')">
+        <template v-slot:activator="{ props: tooltipProps }">
+          <v-btn
+            v-if="props.actions.includes('excelImport')"
+            v-bind="tooltipProps"
+            class="ml-2"
+            icon="$fileImport"
+            density="comfortable"
+          ></v-btn>
+        </template>
+      </v-tooltip>
     </v-toolbar>
 
     <!--
@@ -244,7 +288,8 @@ function search() {
 
 function handleRowClick(event, { item }) {
   selectedItemLocal.value = item
-  panelStore.openReadOnlyPanel(props.formSchema, item) // 스키마 전달
+  // ✅ [수정] props.dataTabletitleKey를 첫 번째 인자로 전달
+  panelStore.openReadOnlyPanel(props.dataTabletitleKey, props.formSchema, item)
 }
 
 async function handleDeleteClick() {
@@ -272,6 +317,7 @@ async function handleDeleteClick() {
 function handleAddClick() {
   if (selectedItemLocal.value) {
     panelStore.openFormPanel(
+      props.dataTabletitleKey, // ✅ [추가]
       props.formSchema,
       selectedItemLocal.value,
       'create',
@@ -283,6 +329,7 @@ function handleAddClick() {
     // todo: 아래의 newItem format 맞추기
     const newItem = {}
     panelStore.openFormPanel(
+      props.dataTabletitleKey, // ✅ [추가]
       props.formSchema,
       newItem,
       'create',
@@ -296,6 +343,7 @@ function handleAddClick() {
 function handleEditClick() {
   if (selectedItemLocal.value) {
     panelStore.openFormPanel(
+      props.dataTabletitleKey, // ✅ [추가]
       props.formSchema,
       selectedItemLocal.value,
       'edit',
@@ -342,6 +390,11 @@ function handleEditClick() {
   border: none;
   box-shadow: none;
   background: rgb(var(--v-theme-surface));
+  /* [추가]
+    이것이 메인 컨텐츠 영역 전체의 안쪽 여백입니다.
+    24px 정도의 넉넉한 여백이 세련된 느낌을 줍니다.
+  */
+  padding: 24px;
 }
 
 /* 타이틀: 높이/여백 절제 */
@@ -349,11 +402,22 @@ function handleEditClick() {
   min-height: 44px;
   padding-block: 6px;
   color: rgba(var(--v-theme-on-surface), 0.9);
+
+  /* [추가] 제목을 더 중요하게 보이도록 */
+  font-weight: 600; /* 500(기본)보다 살짝 더 굵게 */
+  margin-bottom: 8px; /* 제목과 검색 패널 사이의 간격 확보 */
 }
 
 /* 검색 패널: 얕은 경계선 + 조밀한 그리드 */
 .search-panel {
-  margin: 4px 0 8px 0;
+  /* [변경]
+    margin: [top] [right] [bottom] [left];
+    아래쪽 여백(bottom)을 8px에서 16px로 늘려
+    검색 영역과 결과 툴바(Add, Edit 버튼 등) 사이의
+    공간을 더 확보합니다.
+  */
+  margin: 4px 0 16px 0;
+  /* [기존] margin: 4px 0 8px 0; */
   padding: 10px 12px;
   border: 1px solid rgba(var(--v-theme-on-surface), 0.06);
   background: rgb(var(--v-theme-surface));
@@ -400,7 +464,7 @@ function handleEditClick() {
   position: sticky;
   top: 0;
   z-index: 2;
-  background: rgb(var(--v-theme-surface));
+  background: rgb(var(--v-theme-surface), 0.04);
   border-bottom: 1px solid rgba(var(--v-theme-on-surface), 0.12);
 }
 :deep(.server-table th) {
@@ -409,7 +473,8 @@ function handleEditClick() {
   font-size: 0.9rem;
   color: rgba(var(--v-theme-on-surface), 0.78);
   height: 38px;
-  padding: 0 12px;
+  /* [변경] 좌우 패딩을 12px -> 16px로 늘려 여유 공간 확보 */
+  padding: 0 16px;
 }
 
 /* 바디 셀: 라인 최소화 + 가독성 */
@@ -418,13 +483,14 @@ function handleEditClick() {
   font-size: 0.92rem;
   color: rgba(var(--v-theme-on-surface), 0.87);
   height: 38px;
-  padding: 0 12px;
+  /* [변경] 좌우 패딩을 12px -> 16px로 늘려 여유 공간 확보 */
+  padding: 0 16px;
   border-bottom: 1px solid rgba(var(--v-theme-on-surface), 0.06);
 }
 
 /* Zebra (은은하게) */
 :deep(.server-table .v-data-table__tbody tr:nth-child(even)) {
-  background-color: rgba(var(--v-theme-on-surface), 0.02);
+  background-color: rgba(var(--v-theme-on-surface), 0.03);
 }
 
 /* Hover: primary 아주 약하게 */
@@ -511,7 +577,7 @@ function handleEditClick() {
 
 /* 다크 모드 미세 조정 */
 :deep(.v-theme--dark .server-table .v-data-table__tbody tr:nth-child(even)) {
-  background-color: rgba(255, 255, 255, 0.02);
+  background-color: rgba(255, 255, 255, 0.03);
 }
 :deep(.v-theme--dark .server-table td) {
   border-bottom-color: rgba(255, 255, 255, 0.06);
@@ -519,5 +585,29 @@ function handleEditClick() {
 
 .no-uppercase {
   text-transform: none !important;
+}
+
+/* [추가]
+  'md="auto"' 컬럼이 참조할 수 있는 기본 너비를 지정합니다.
+  이렇게 하면 입력창들이 일정한 크기를 가지면서 자연스럽게 배치됩니다.
+*/
+.search-input {
+  width: 200px; /* 180px ~ 220px 사이에서 조절해 보세요. */
+}
+
+/* [추가] 모바일 화면(md 미만) 대응
+  cols="12"가 적용될 때를 대비합니다.
+*/
+@media (max-width: 959px) {
+  .search-input {
+    width: 100%; /* 모바일에선 꽉 채움 */
+  }
+
+  /* 모바일에선 버튼 영역도 꽉 채우고 버튼을 우측 정렬 */
+  .search-actions {
+    width: 100%;
+    padding-top: 8px; /* 입력창과 간격 */
+    justify-content: flex-end; /* d-flex가 있으므로 justify-end 사용 */
+  }
 }
 </style>

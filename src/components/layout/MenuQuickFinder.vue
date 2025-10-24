@@ -7,7 +7,7 @@
     density="compact"
     hide-details
     variant="solo"
-    placeholder="메뉴 빠른 검색..."
+    :placeholder="$t('buttonLabels.quickFinder')"
     class="menu-quick-finder"
     @update:modelValue="handleSelection"
     @keydown.enter.prevent="handleEnter"
@@ -97,6 +97,7 @@ function handleSelection(path) {
   if (path) {
     router.push(path)
     searchQuery.value = null // 선택 완료 후 입력창 초기화
+    menuStore.setActiveMenuByPath(path)
   }
 }
 
@@ -116,6 +117,7 @@ function handleEnter(event) {
   if (firstMatch) {
     // [수정] firstMatch.path에 'to' 값이 저장되어 있습니다.
     router.push(firstMatch.path)
+    menuStore.setActiveMenuByPath(firstMatch.path)
     searchQuery.value = null // 이동 완료 후 입력창 초기화
 
     // (중요) Enter 키 입력 후 v-autocomplete가 목록을 다시 여는 것을 방지

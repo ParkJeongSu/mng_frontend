@@ -12,7 +12,19 @@
         <div class="content-wrapper">
           <v-app-bar color="surface" flat>
             <v-app-bar-nav-icon @click="menuStore.toggleSidebar" />
-            <MenuQuickFinder></MenuQuickFinder>
+            <div class="d-flex align-center">
+              <template v-for="(pathItem, index) in menuStore.activeMenuPath" :key="pathItem.id">
+                <v-icon v-if="index > 0" size="small" class="mx-1">$next</v-icon>
+
+                <v-chip size="small" variant="text" class="breadcrumb-chip">
+                  {{ $t(pathItem.name, pathItem.name) }}
+                </v-chip>
+              </template>
+            </div>
+            <v-spacer></v-spacer>
+            <div class="app-bar-right">
+              <MenuQuickFinder></MenuQuickFinder>
+            </div>
           </v-app-bar>
           <TabView />
         </div>
@@ -47,7 +59,6 @@ import { usePanelStore } from '@/stores/panel' // panel 스토어 import
 import { computed, onMounted } from 'vue'
 import SidePanel from '@/components/layout/SidePanel.vue' // SidePanel import
 import MenuQuickFinder from '@/components/layout/MenuQuickFinder.vue'
-
 const menuStore = useMenuStore()
 const panelStore = usePanelStore() // panel 스토어 인스턴스 생성
 const panelToggleIcon = computed(function () {
@@ -114,5 +125,43 @@ onMounted(() => {
   border-right: none;
   box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
   z-index: 10;
+}
+
+.app-bar-left,
+.app-bar-right {
+  display: flex;
+  align-items: center;
+  /* 오른쪽 영역의 실제 너비를 확인하고 (예: 개발자 도구)
+    그 값(혹은 그보다 약간 큰 값)을 min-width로 설정합니다.
+    여기서는 200px로 가정합니다.
+  */
+  /* min-width: 300px; */
+}
+
+.app-bar-left {
+  justify-content: flex-start;
+}
+
+.app-bar-right {
+  justify-content: flex-end;
+  /* ← 수축 금지 + 원하는 너비 확보 */
+  flex: 0 0 auto;
+  width: clamp(280px, 32vw, 520px); /* 최소~가변~최대 */
+}
+/* MenuQuickFinder 내부 v-text-field를 꽉 채우기 */
+:deep(.app-bar-right .v-field) {
+  width: 100%;
+}
+
+/* [추가] Breadcrumb 칩 스타일 (선택 사항) */
+.breadcrumb-chip {
+  /* 텍스트 variant는 기본 패딩이 크므로 조절 */
+  padding: 0 8px;
+  /* 칩에 마우스 올렸을 때 배경색이 생기지 않도록 */
+  background-color: transparent !important;
+}
+/* 클릭 가능한 칩처럼 보이지 않도록 호버 효과 제거 */
+.breadcrumb-chip:hover::before {
+  opacity: 0 !important;
 }
 </style>

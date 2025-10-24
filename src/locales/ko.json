@@ -14,7 +14,19 @@
   "title": {
     "deleteConfirm": "삭제 확인",
     "userList": "사용자 리스트",
-    "authList": "권한 리스트"
+    "authList": "권한 리스트",
+    "create": "생성",
+    "edit": "수정",
+    "details": "상세 정보"
+  },
+  "buttonLabels": {
+    "confirm": "확인",
+    "cancel": "취소",
+    "close": "닫기",
+    "yes": "Yes",
+    "no": "No",
+    "save": "저장",
+    "quickFinder": "빠른 찾기"
   },
   "messages": {
     "deleteConfirm": "{count}개의 항목을 삭제하시겠습니까?",

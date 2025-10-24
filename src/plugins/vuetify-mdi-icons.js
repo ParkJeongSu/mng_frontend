@@ -46,6 +46,8 @@ import {
   mdiWeatherSunny,
   mdiAccountKey,
   mdiMinusBox,
+  mdiFileExportOutline,
+  mdiFileImportOutline,
 } from '@mdi/js'
 
 // 아이콘 별칭(alias)을 만듭니다.
@@ -98,6 +100,8 @@ const aliases = {
   weatherSunny: mdiWeatherSunny, // 라이트 모드 아이콘
   accountKey: mdiAccountKey, // 비밀번호 아이콘
   checkboxIndeterminate: mdiMinusBox, // v-checkbox의 중간 상태
+  fileExport: mdiFileExportOutline, // 파일 내보내기 아이콘
+  fileImport: mdiFileImportOutline, // 파일 가져오기 아이콘
 }
 
 // 설정들을 export 합니다.

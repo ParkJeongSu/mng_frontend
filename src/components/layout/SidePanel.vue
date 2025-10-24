@@ -2,9 +2,13 @@
   <div class="side-panel">
     <v-card class="fill-height" flat>
       <v-card-title>
-        <span v-if="panelStore.formMode === 'create'">사용자 생성</span>
-        <span v-else-if="panelStore.formMode === 'edit'">사용자 수정</span>
-        <span v-else>상세 정보</span>
+        <span v-if="panelStore.formMode === 'create'"
+          >{{ $t(panelStore.panelTitleKey) }} {{ $t('title.create') }}</span
+        >
+        <span v-else-if="panelStore.formMode === 'edit'">
+          {{ $t(panelStore.panelTitleKey) }} {{ $t('title.edit') }}
+        </span>
+        <span v-else>{{ $t(panelStore.panelTitleKey) }} {{ $t('title.details') }}</span>
       </v-card-title>
       <v-divider></v-divider>
 
@@ -14,6 +18,7 @@
             v-for="field in translatedFormSchema"
             :key="field.key"
             :is="componentMap[field.component]"
+            :placeholder="field.label"
             :label="field.label"
             :items="field.items"
             :item-title="field['item-title']"
@@ -21,7 +26,8 @@
             :model-value="panelStore.formData[field.key]"
             @update:model-value="updateItemData(field.key, $event)"
             density="compact"
-            variant="outlined"
+            variant="solo"
+            flat
             class="mb-2"
           ></component>
         </div>
@@ -31,22 +37,25 @@
             :key="field.key"
             :is="componentMap[field.component]"
             :label="field.label"
+            :placeholder="field.label"
             :items="field.items"
             :item-title="field['item-title']"
             :item-value="field['item-value']"
             :model-value="panelStore.selectedItem[field.key]"
             @update:model-value="updateSelectedItemData(field.key, $event)"
             density="compact"
-            variant="outlined"
+            variant="solo"
+            flat
             class="mb-2"
           ></component>
         </div>
+        <!-- :label="field.label" -->
       </v-card-text>
 
       <v-card-actions v-if="panelStore.formMode">
         <v-spacer></v-spacer>
-        <v-btn @click="onCancel">취소</v-btn>
-        <v-btn @click="onSave">저장</v-btn>
+        <v-btn @click="onCancel">{{ $t('buttonLabels.cancel') }}</v-btn>
+        <v-btn @click="onSave">{{ $t('buttonLabels.save') }}</v-btn>
       </v-card-actions>
     </v-card>
   </div>
@@ -224,7 +233,7 @@ watch(
 .side-panel {
   width: 400px;
   height: 100%;
-  transition: all 0.3s ease;
+  transition: all 0.6s ease;
   display: flex;
   flex-direction: column;
 }

@@ -14,7 +14,19 @@
   "title": {
     "deleteConfirm": "deleteConfirm",
     "userList": "User List",
-    "authList": "Authority List"
+    "authList": "Authority List",
+    "create": "create",
+    "edit": "edit",
+    "details": "details"
+  },
+  "buttonLabels": {
+    "confirm": "Confirm",
+    "cancel": "Cancel",
+    "close": "Close",
+    "yes": "Yes",
+    "no": "No",
+    "save": "Save",
+    "quickFinder": "Quick Finder"
   },
   "messages": {
     "deleteConfirm": "Are you sure you want to delete {count} items?",
