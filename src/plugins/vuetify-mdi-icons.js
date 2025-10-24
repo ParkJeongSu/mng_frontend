@@ -48,6 +48,8 @@ import {
   mdiMinusBox,
   mdiFileExportOutline,
   mdiFileImportOutline,
+  mdiFullscreen,
+  mdiFullscreenExit,
 } from '@mdi/js'
 
 // 아이콘 별칭(alias)을 만듭니다.
@@ -102,6 +104,8 @@ const aliases = {
   checkboxIndeterminate: mdiMinusBox, // v-checkbox의 중간 상태
   fileExport: mdiFileExportOutline, // 파일 내보내기 아이콘
   fileImport: mdiFileImportOutline, // 파일 가져오기 아이콘
+  fullscreen: mdiFullscreen, // 전체화면 아이콘
+  fullscreenExit: mdiFullscreenExit, // 전체화면 종료 아이콘
 }
 
 // 설정들을 export 합니다.

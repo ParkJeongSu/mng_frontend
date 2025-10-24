@@ -26,9 +26,22 @@
             $close
           </v-icon>
         </v-tab>
+        <!-- ✅ [추가] 1. 탭 바 끝에 '전체 화면' 토글 버튼 추가 -->
+        <v-spacer></v-spacer>
+        <v-tooltip location="bottom" text="내용 전체 화면">
+          <template v-slot:activator="{ props: tooltipProps }">
+            <v-btn
+              v-bind="tooltipProps"
+              icon="$fullscreen"
+              variant="text"
+              density="comfortable"
+              @click="toggleFullscreen"
+            ></v-btn>
+          </template>
+        </v-tooltip>
       </v-tabs>
-
-      <div class="tab-content">
+      <!-- ✅ [수정] 2. 전체 화면으로 만들 대상에 ref 추가 -->
+      <div class="tab-content bg-background" ref="tabContentRef">
         <router-view v-slot="{ Component }">
           <keep-alive>
             <component :is="Component" />
@@ -68,6 +81,9 @@ const { t } = useI18n()
 const tabsStore = useTabsStore()
 const menuStore = useMenuStore() // ✅ [추가] 2. menu 스토어 인스턴스
 
+// ✅ [추가] 3. tab-content DOM 요소를 가리킬 ref 생성
+const tabContentRef = ref(null)
+
 const contextMenu = ref({
   show: false,
   x: 0,
@@ -102,6 +118,23 @@ function closeAllTabs() {
 function closeOtherTabs() {
   tabsStore.closeOtherTabs()
   contextMenu.value.show = false
+}
+
+// ✅ [추가] 4. Fullscreen API를 호출하는 토글 함수
+function toggleFullscreen() {
+  // 1. 현재 전체 화면인 요소가 있는지 확인
+  if (!document.fullscreenElement) {
+    // 2. 없다면, 우리가 지정한 'tab-content' 요소를 전체 화면으로 만듦
+    if (tabContentRef.value) {
+      tabContentRef.value.requestFullscreen().catch(function (err) {
+        // (에러 처리, 예: 사용자가 권한을 거부함)
+        console.error('전체 화면 모드 시작에 실패했습니다:', err.message)
+      })
+    }
+  } else {
+    // 3. 이미 전체 화면이라면, 전체 화면 모드에서 나감
+    document.exitFullscreen()
+  }
 }
 </script>
 
