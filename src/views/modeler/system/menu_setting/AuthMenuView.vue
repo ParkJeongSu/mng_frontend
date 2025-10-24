@@ -13,12 +13,17 @@
     >
       <template v-slot:item.status="slotProps">
         <v-chip
-          :color="slotProps.value === 'Active' ? 'green' : 'red'"
+          v-if="statusColorMap[slotProps.value]"
+          :color="statusColorMap[slotProps.value]"
           small
           :title="`상태: ${slotProps.value}`"
         >
           {{ slotProps.value }}
         </v-chip>
+
+        <span v-else>
+          {{ slotProps.value }}
+        </span>
       </template>
     </ServerSideDataTableTemplate>
   </v-container>
@@ -27,6 +32,7 @@
 <script setup>
 import ServerSideDataTableTemplate from '@/components/common/ServerSideDataTableTemplate.vue' // 만든 컴포넌트 임포트
 import { ref, onMounted, computed, onActivated, watch } from 'vue'
+import { statusColorMap } from '@/constants/columnColorMaps' // 상태 색상 맵 임포트
 import { fetchListData } from '@/api/dataTable' // 공통 API 함수 import
 import { useTabsStore } from '@/stores/tabs'
 import { useRoute } from 'vue-router'

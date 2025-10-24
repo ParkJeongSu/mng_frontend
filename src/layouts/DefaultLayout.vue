@@ -164,4 +164,49 @@ onMounted(() => {
 .breadcrumb-chip:hover::before {
   opacity: 0 !important;
 }
+
+/* v-main은 DefaultLayout.vue의 자식 컴포넌트가 아니므로
+  :deep()을 사용하거나 scoped를 제거해야 할 수 있습니다.
+  하지만 Vuetify 3에서는 v-main이 일반 태그처럼 작동하므로
+  :deep()이 더 안전할 수 있습니다.
+*/
+
+/* ✅ 가장 가능성이 높은 해결책입니다.
+  v-main 태그의 padding이 변하는 속도를 0.6초로 설정합니다.
+*/
+:deep(main.v-main) {
+  /* Vuetify의 기본 transition을 덮어씁니다. */
+  transition-property: padding !important;
+  transition-duration: 0.6s !important;
+  /* 원하는 ease 함수가 있다면 추가 */
+  /* transition-timing-function: ease-in-out !important; */
+}
+
+/* 만약 위 코드가 작동하지 않는다면,
+  TheSidebar.vue 내부의 v-navigation-drawer를 직접 타겟팅합니다.
+*/
+:deep(.v-navigation-drawer) {
+  transition-property: transform, width !important;
+  transition-duration: 0.6s !important;
+}
+
+/*
+  v-main 태그를 :deep()으로 선택하여
+  그 내부에 있는 모든 Vuetify 레이아웃 컴포넌트들이
+  참조하는 transition 속도 변수를 0.6초로 덮어씁니다.
+*/
+:deep(main.v-main) {
+  --v-layout-transition-duration: 0.6s;
+}
+
+/*
+  만약 위의 변수 설정으로도 v-app-bar가 여전히 빠르다면,
+  (다른 트랜지션이 겹쳤을 수 있으므로)
+  아래 코드로 v-app-bar의 속도를 직접 강제합니다.
+*/
+.content-wrapper > .v-app-bar {
+  transition-duration: 0.6s !important;
+  /* 모든 속성 변경(width, left, right 등)에 대해 0.6초 적용 */
+  transition-property: all !important;
+}
 </style>
