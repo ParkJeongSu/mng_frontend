@@ -149,7 +149,7 @@
 </template>
 
 <script setup>
-import { ref, reactive, computed, watch } from 'vue'
+import { ref, reactive, computed } from 'vue'
 import { componentMap } from '@/constants/componentMap' // componentMap import
 import { usePanelStore } from '@/stores/panel'
 import { fetchListData, deleteItems, updateItemData, createItemData } from '@/api/dataTable' // 공통 API 함수 import

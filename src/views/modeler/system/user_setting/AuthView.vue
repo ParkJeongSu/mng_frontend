@@ -1,6 +1,6 @@
 <template>
   <v-container fluid class="page-container">
-    <ServerSideDataTable
+    <ServerSideDataTableTemplate
       v-if="ready"
       :search-schema="searchSchema"
       :headers="headers"
@@ -20,12 +20,12 @@
           {{ slotProps.value }}
         </v-chip>
       </template>
-    </ServerSideDataTable>
+    </ServerSideDataTableTemplate>
   </v-container>
 </template>
 
 <script setup>
-import ServerSideDataTable from '@/components/common/ServerSideDataTable.vue' // 만든 컴포넌트 임포트
+import ServerSideDataTableTemplate from '@/components/common/ServerSideDataTableTemplate.vue' // 만든 컴포넌트 임포트
 import { ref, onMounted, onActivated, watch, computed } from 'vue'
 import { useTabsStore } from '@/stores/tabs'
 import { useRoute } from 'vue-router'
