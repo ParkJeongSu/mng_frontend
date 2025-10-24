@@ -81,7 +81,7 @@ export default createVuetify({
       light: {
         dark: false,
         colors: {
-          primary: '#1976D2',
+          primary: '#4F46E5', // (기존: #1976D2) - (Tailwind Indigo 600)
           secondary: '#424242',
           accent: '#82B1FF',
           surface: '#FFFFFF',
@@ -96,12 +96,17 @@ export default createVuetify({
       dark: {
         dark: true, // dark 테마임을 명시! (글자색 등이 자동으로 반전됨)
         colors: {
-          // 대비 확보를 위해 primary를 한 톤 더 진하게 권장
-          primary: '#1565C0', // or '#1976D2'
+          // ✅ [변경] 2. 다크 모드 'Primary'도 라이트와 톤을 맞춤 (더 밝게)
+          primary: '#6366F1', // (기존: #1565C0) - (Tailwind Indigo 500)
           secondary: '#B0BEC5',
           accent: '#FF4081',
-          surface: '#121212', // ★ 기존 '#FF4081'는 지양
-          background: '#000000',
+
+          // ✅ [변경] 3. 보내주신 이미지의 '카드/컴포넌트' 배경색
+          surface: '#272635', // (기존: #121212)
+
+          // ✅ [변경] 4. 보내주신 이미지의 '가장 어두운' 배경색
+          background: '#1F1D2B', // (기존: #000000)
+
           error: '#CF6679',
           success: '#66BB6A',
           info: '#2196F3',

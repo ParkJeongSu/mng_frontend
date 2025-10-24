@@ -28,14 +28,14 @@
           </v-app-bar>
           <TabView />
         </div>
-        <div class="side-panel-container">
+        <v-card class="side-panel-container" flat>
           <div class="panel-toggle-button" @click="panelStore.togglePanel">
             <v-icon>
               {{ panelToggleIcon }}
             </v-icon>
           </div>
-          <SidePanel v-if="panelStore.isPanelOpen" />
-        </div>
+          <SidePanel :is-open="panelStore.isPanelOpen" />
+        </v-card>
       </div>
     </v-main>
 
@@ -123,7 +123,7 @@ onMounted(() => {
   cursor: pointer;
   border: 1px solid #e0e0e0;
   border-right: none;
-  box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
+  box-shadow: -2px 0 5px rgba(0, 0, 0, 0.4);
   z-index: 10;
 }
 

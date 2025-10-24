@@ -1,5 +1,5 @@
 <template>
-  <div class="side-panel">
+  <div class="side-panel" :class="{ 'is-open': props.isOpen }">
     <v-card class="fill-height" flat>
       <v-card-title>
         <span v-if="panelStore.formMode === 'create'"
@@ -71,6 +71,14 @@ import { useI18n } from 'vue-i18n' // 1. useI18n을 import 합니다.
 const { t, locale } = useI18n() // 2. useI18n을 호출해서 't' 함수를 가져옵니다.
 
 const panelStore = usePanelStore()
+
+// ✅ [추가] 2. 부모(DefaultLayout)로부터 'isOpen' prop을 받습니다.
+const props = defineProps({
+  isOpen: {
+    type: Boolean,
+    default: false,
+  },
+})
 
 // 2. 스토어의 스키마를 복사하여 로컬에서 수정 가능한 상태로 만듭니다.
 const localFormSchema = ref([])
@@ -236,5 +244,29 @@ watch(
   transition: all 0.6s ease;
   display: flex;
   flex-direction: column;
+}
+
+/* ✅ [수정] 3. CSS를 수정합니다. */
+.side-panel {
+  /* "닫힘" 상태 (기본값) */
+  width: 0;
+  max-width: 0; /* width 대신 max-width를 사용하면 더 안정적입니다. */
+  height: 100%;
+
+  /* 애니메이션 속성 (기존과 동일) */
+  transition: all 0.6s ease;
+
+  display: flex;
+  flex-direction: column;
+
+  /* "닫힘" 상태에서 내용물이 삐져나오지 않도록 */
+  overflow: hidden;
+  white-space: nowrap; /* v-card-title 등이 줄바꿈되어 삐져나오는 것 방지 */
+}
+
+/* ✅ [추가] 4. "열림" 상태 CSS를 추가합니다. */
+.side-panel.is-open {
+  width: 400px;
+  max-width: 400px;
 }
 </style>
