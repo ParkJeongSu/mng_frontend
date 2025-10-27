@@ -38,10 +38,10 @@ export const usePanelStore = defineStore('panel', () => {
    * @param {object} item - 행 데이터
    */
   // ✅ [수정] 3. openReadOnlyPanel에 titleKey 파라미터 추가
-  function openReadOnlyPanel(titleKey, schema, item) {
+  function openReadOnlyPanel(titleKey, schema, item, openFormPanel = true) {
     selectedItem.value = item
     formMode.value = null
-    isPanelOpen.value = true
+    isPanelOpen.value = openFormPanel
     formSchema.value = schema
     formData.value = { ...item } // 원본 수정을 방지하기 위해 복사해서 사용
     panelTitleKey.value = titleKey // ✅ [추가] 4. 제목 키 저장

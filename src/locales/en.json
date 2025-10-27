@@ -44,7 +44,13 @@
     "auth": "auth",
     "authorityMenu": "authorityMenu",
     "systemDef": "systemDef",
-    "menu": "menu"
+    "menu": "menu",
+    "alarmDef": "alarmDef",
+    "alarm": "alarm",
+    "alarmUserGroup": "alarmUserGroup",
+    "alarmUserGroupUsers": "alarmUserGroupUsers",
+    "alarmAction": "alarmAction",
+    "alarmDetailAction": "alarmDetailAction"
   },
   "columns": {
     "id": "id",

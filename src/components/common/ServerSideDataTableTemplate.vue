@@ -149,7 +149,7 @@
 </template>
 
 <script setup>
-import { ref, reactive, computed } from 'vue'
+import { ref, reactive, computed, watch } from 'vue'
 import { componentMap } from '@/constants/componentMap' // componentMap import
 import { usePanelStore } from '@/stores/panel'
 import { fetchListData, deleteItems, updateItemData, createItemData } from '@/api/dataTable' // 공통 API 함수 import
@@ -164,6 +164,9 @@ const selectedItemLocal = ref(null)
 // v-data-table의 v-model과 연결될 내부 상태
 const selectedItems = ref([])
 
+// 1. defineEmits를 사용해 'row-selected' 이벤트를 정의합니다.
+const emit = defineEmits(['row-selected'])
+
 const props = defineProps({
   dataTabletitleKey: { type: String, required: true },
   searchSchema: { type: Array, required: true },
@@ -172,10 +175,18 @@ const props = defineProps({
   showCheckbox: { type: Boolean, default: false },
   isHover: { type: Boolean, default: false }, // 부모로부터 어떤 행이 선택되었는지 받음
   formSchema: { type: Array, required: true }, // 부모로부터 폼 스키마 받음
+  isOpenPanel: { type: Boolean, default: true },
   actions: {
     type: Array,
     default: function () {
       return []
+    },
+  },
+  // 2. [추가] 부모로부터 외부 필터 조건을 받을 prop을 정의합니다.
+  filterParams: {
+    type: Object,
+    default: function () {
+      return {}
     },
   },
 })
@@ -251,6 +262,7 @@ async function loadItems(newOptions) {
   // 1. API로 보낼 쿼리 파라미터를 준비합니다.
   const query = {
     ...searchParams, // 검색 조건
+    ...props.filterParams, // [수정] 부모에게서 받은 필터 조건 (예: alarmActionId)
     page: options.value.page, // 현재 페이지
     limit: options.value.itemsPerPage, // 페이지 당 항목 수
     // 정렬 조건 처리 (배열의 첫 번째 항목 사용)
@@ -277,6 +289,22 @@ async function loadItems(newOptions) {
   }
 }
 
+// 3. [추가] 부모로부터 받은 filterParams가 변경되면, 데이터를 새로고침합니다.
+watch(
+  // 감시할 대상: props.filterParams
+  function () {
+    return props.filterParams
+  },
+  // 변경 감지 시 실행할 함수
+  function (newFilters, oldFilters) {
+    // 필터가 변경되면, 페이지를 1로 리셋하고 데이터를 다시 로드합니다.
+    options.value.page = 1
+    loadItems()
+  },
+  // deep: true는 객체 내부의 값이 바뀌었을 때도 감지하도록 합니다.
+  { deep: true },
+)
+
 // 조회 버튼 클릭 시 1페이지로 리셋 후 조회
 function search() {
   options.value.page = 1
@@ -289,7 +317,11 @@ function search() {
 function handleRowClick(event, { item }) {
   selectedItemLocal.value = item
   // ✅ [수정] props.dataTabletitleKey를 첫 번째 인자로 전달
-  panelStore.openReadOnlyPanel(props.dataTabletitleKey, props.formSchema, item)
+  panelStore.openReadOnlyPanel(props.dataTabletitleKey, props.formSchema, item, props.isOpenPanel)
+
+  // 2. [추가] 부모 컴포넌트로 'row-selected' 이벤트를 발생시키고
+  //         선택된 행(item) 데이터를 함께 보냅니다.
+  emit('row-selected', item)
 }
 
 async function handleDeleteClick() {

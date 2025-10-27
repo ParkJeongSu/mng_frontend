@@ -65,34 +65,35 @@ const router = createRouter({
         },
 
         {
-          path: 'modeler/system/user_setting/alarm_def',
+          path: 'modeler/system/alarm_setting/alarm_def',
           name: 'AlarmDef',
-          component: () => import('../views/modeler/system/user_setting/UserView.vue'),
-          meta: { titleKey: 'menuNames.users' },
+          component: () => import('../views/modeler/system/alarm_setting/AlarmDefView.vue'),
+          meta: { titleKey: 'menuNames.alarmDef' },
         },
         {
-          path: 'modeler/system/user_setting/alarm',
+          path: 'modeler/system/alarm_setting/alarm',
           name: 'Alarm',
-          component: () => import('../views/modeler/system/user_setting/UserView.vue'),
-          meta: { titleKey: 'menuNames.users' },
+          component: () => import('../views/modeler/system/alarm_setting/AlarmView.vue'),
+          meta: { titleKey: 'menuNames.alarm' },
         },
         {
-          path: 'modeler/system/user_setting/alarm_user_group',
+          path: 'modeler/system/alarm_setting/alarm_user_group',
           name: 'AlarmUserGroup',
-          component: () => import('../views/modeler/system/user_setting/UserView.vue'),
-          meta: { titleKey: 'menuNames.users' },
+          component: () => import('../views/modeler/system/alarm_setting/AlarmUserGroupView.vue'),
+          meta: { titleKey: 'menuNames.alarmUserGroup' },
         },
         {
-          path: 'modeler/system/user_setting/alarm_user_group_users',
+          path: 'modeler/system/alarm_setting/alarm_user_group_users',
           name: 'AlarmUserGroupUsers',
-          component: () => import('../views/modeler/system/user_setting/UserView.vue'),
-          meta: { titleKey: 'menuNames.users' },
+          component: () =>
+            import('../views/modeler/system/alarm_setting/AlarmUserGroupUsersView.vue'),
+          meta: { titleKey: 'menuNames.alarmUserGroupUsers' },
         },
         {
-          path: 'modeler/system/user_setting/alarm_action',
+          path: 'modeler/system/alarm_setting/alarm_action',
           name: 'AlarmAction',
-          component: () => import('../views/modeler/system/user_setting/UserView.vue'),
-          meta: { titleKey: 'menuNames.users' },
+          component: () => import('../views/modeler/system/alarm_setting/AlarmActionView.vue'),
+          meta: { titleKey: 'menuNames.alarmAction' },
         },
         // 시작
         {

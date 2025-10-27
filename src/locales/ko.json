@@ -46,7 +46,13 @@
     "auth": "권한",
     "authorityMenu": "권한별 메뉴",
     "systemDef": "시스템 정의",
-    "menu": "메뉴"
+    "menu": "메뉴",
+    "alarmDef": "알람 정의",
+    "alarm": "알람",
+    "alarmUserGroup": "알람 사용자 그룹",
+    "alarmUserGroupUsers": "알람 그룹 사용자",
+    "alarmAction": "알람 액션",
+    "alarmDetailAction": "알람 상세 액션"
   },
   "columns": {
     "id": "id",
