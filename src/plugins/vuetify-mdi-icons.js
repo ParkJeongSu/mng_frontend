@@ -50,6 +50,11 @@ import {
   mdiFileImportOutline,
   mdiFullscreen,
   mdiFullscreenExit,
+  mdiChartSankey,
+  mdiChartScatterPlot,
+  mdiRadar,
+  mdiChartTimeline,
+  mdiChartDonut,
 } from '@mdi/js'
 
 // 아이콘 별칭(alias)을 만듭니다.
@@ -106,6 +111,12 @@ const aliases = {
   fileImport: mdiFileImportOutline, // 파일 가져오기 아이콘
   fullscreen: mdiFullscreen, // 전체화면 아이콘
   fullscreenExit: mdiFullscreenExit, // 전체화면 종료 아이콘
+  // [추가] 요청된 차트 아이콘
+  chartSankey: mdiChartSankey,
+  chartScatter: mdiChartScatterPlot,
+  radar: mdiRadar,
+  chartTimeline: mdiChartTimeline,
+  chartDonut: mdiChartDonut,
 }
 
 // 설정들을 export 합니다.
