@@ -33,6 +33,8 @@
       :actions="['excelExport']"
       isHover
       :data-tabletitle-key="dynamicTitleKey"
+      :form-schema="formSchema"
+      :is-open-panel="false"
     >
     </ServerSideDataTableTemplate>
   </v-container>
@@ -70,6 +72,8 @@ const commonSearchSchema = [
     cols: 6,
   },
 ]
+
+const formSchema = []
 
 // (가정) /api/history-meta/resources API 호출 함수
 // fetchListData 함수를 재사용해도 됨
