@@ -43,7 +43,7 @@
       <!-- ✅ [수정] 2. 전체 화면으로 만들 대상에 ref 추가 -->
       <div class="tab-content bg-background" ref="tabContentRef">
         <router-view v-slot="{ Component }">
-          <keep-alive>
+          <keep-alive :include="keepAliveNames">
             <component :is="Component" />
           </keep-alive>
         </router-view>
@@ -69,7 +69,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { useTabsStore } from '@/stores/tabs'
 import router from '@/router'
 // ✨ [추가] useI18n을 import 합니다.
@@ -89,6 +89,16 @@ const contextMenu = ref({
   x: 0,
   y: 0,
   targetTab: null,
+})
+
+// 2. [추가]
+// tabsStore.openTabs에 있는 'name' 값들만 추출하여
+// <keep-alive>에 전달할 배열을 만듭니다.
+const keepAliveNames = computed(function () {
+  return tabsStore.openTabs.map(function (tab) {
+    // tabs.js에서 저장한 'name' 속성을 사용
+    return tab.name
+  })
 })
 
 function onTabChange(newPath) {

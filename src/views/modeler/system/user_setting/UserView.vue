@@ -53,10 +53,12 @@ async function loadInitData() {
   }
 
   try {
+    console.log('UserView api 호출 - 권한 목록 로드 시작')
     // 2. 공통 API 함수를 호출하고 결과를 받습니다.
     const responseData = await fetchListData('/api/auth', {})
 
     authorityList.value = responseData.items
+    console.log('UserView api 호출 - 권한 목록 로드 종료')
   } catch (error) {
     // fetchListData 내부에서 에러를 처리하지만,
     // 컴포넌트 레벨에서 추가적인 에러 처리가 필요하다면 여기에 작성합니다.
@@ -67,37 +69,11 @@ async function loadInitData() {
   }
 }
 
-onMounted(function () {
-  loadInitData()
-})
-
 // onActivated: keep-alive로 캐싱된 컴포넌트가 다시 활성화될 때 호출됩니다.
 onActivated(function () {
+  console.log('UserView onActivated - loading initial data')
   loadInitData()
 })
-
-// 3. openTabs 배열을 감시하는 watch 로직을 추가합니다.
-watch(
-  // 감시할 대상을 함수로 지정합니다.
-  function () {
-    return tabsStore.openTabs
-  },
-  // 변경이 감지되면 실행될 콜백 함수입니다.
-  function (newTabs) {
-    // some 함수를 사용해 현재 라우트의 경로가 새 탭 목록에 여전히 존재하는지 확인합니다.
-    const isTabStillOpen = newTabs.some(function (tab) {
-      return tab.path === route.path
-    })
-
-    // 만약 탭 목록에 더 이상 존재하지 않는다면, 이 컴포넌트의 탭이 닫힌 것입니다.
-    if (!isTabStillOpen) {
-      console.log('탭이 닫혔음을 감지하여 데이터를 초기화합니다. (watch)')
-      authorityList.value = []
-    }
-  },
-  // 배열 내부의 객체까지 감지하기 위해 deep 옵션을 추가합니다.
-  { deep: true },
-)
 
 // 검색 및 폼 스키마 정의
 const searchSchema = computed(function () {
