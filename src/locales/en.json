@@ -8,6 +8,16 @@
     "import": "Import",
     "export": "Export"
   },
+  "history": {
+    "selectTitle": "selectTitle",
+    "resources": {
+      "alarm": "알람 이력",
+      "alarm_def": "알람 정의 이력",
+      "alarm_action": "알람 액션 이력",
+      "lot": "Lot 이력",
+      "machine": "설비 상태 이력"
+    }
+  },
   "auth": {
     "logout": "logout"
   },

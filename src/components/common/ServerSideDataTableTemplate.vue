@@ -19,6 +19,7 @@
             variant="solo"
             flat
             hide-details
+            :type="item.type"
             class="search-input"
           ></component>
           <!-- :label="item.label" -->
