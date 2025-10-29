@@ -1,55 +1,51 @@
 {
-  "dataTable": {
-    "search": "Search",
-    "add": "Add",
-    "edit": "Edit",
-    "delete": "Delete",
-    "result": "Result",
-    "import": "Import",
-    "export": "Export"
-  },
-  "history": {
-    "selectTitle": "selectTitle",
-    "resources": {
-      "alarm": "알람 이력",
-      "alarm_def": "알람 정의 이력",
-      "alarm_action": "알람 액션 이력",
-      "lot": "Lot 이력",
-      "machine": "설비 상태 이력"
-    }
-  },
-  "auth": {
-    "logout": "logout"
-  },
-  "title": {
-    "deleteConfirm": "deleteConfirm",
-    "userList": "User List",
-    "authList": "Authority List",
-    "create": "create",
+  "common": {
+    "search": "search",
+    "add": "add",
     "edit": "edit",
+    "delete": "delete",
+    "save": "save",
+    "import": "import",
+    "export": "export",
+    "result": "result",
+    "confirm": "confirm",
+    "cancel": "cancel",
+    "close": "close",
+    "yes": "yes",
+    "no": "no",
+    "quickFinder": "quickFinder",
+    "logout": "logout",
+    "create": "create",
+    "editPage": "editPage",
     "details": "details"
   },
-  "buttonLabels": {
-    "confirm": "Confirm",
-    "cancel": "Cancel",
-    "close": "Close",
-    "yes": "Yes",
-    "no": "No",
-    "save": "Save",
-    "quickFinder": "Quick Finder"
+  "pages": {
+    "deleteConfirmTitle": "deleteConfirmTitle",
+    "userList": {
+      "title": "title"
+    },
+    "authList": {
+      "title": "title"
+    },
+    "history": {
+      "selectTitle": "selectTitle",
+      "resources": {
+        "alarm": "alarmHistory",
+        "alarm_def": "alarmDefHistory",
+        "alarm_action": "alarmActionHistory",
+        "lot": "lotHistory",
+        "machine": "machineHistory"
+      }
+    }
   },
-  "messages": {
-    "deleteConfirm": "Are you sure you want to delete {count} items?",
-    "logoutConfirm": "do you really want to log out?",
-    "welcome": "welcome. "
-  },
-  "menuNames": {
-    "dashboard": "Dashboard",
-    "System": "Systems",
-    "users": "Users",
-    "settings": "Settings",
-    "profile": "Profile",
-    "userList1": "User List 1",
+  "menu": {
+    "dashboard": "dashboard",
+    "system": "system",
+    "users": "users",
+    "settings": "settings",
+    "profile": "profile",
+    "userList1": "userList1",
+    "modeler": "modeler",
     "home": "home",
     "auth": "auth",
     "authorityMenu": "authorityMenu",
@@ -62,35 +58,52 @@
     "alarmAction": "alarmAction",
     "alarmDetailAction": "alarmDetailAction"
   },
-  "columns": {
-    "id": "id",
-    "userId": "userId",
-    "authorityId": "authorityId",
-    "authorityName": "authorityName",
-    "description": "description",
-    "userName": "userName",
-    "password": "password",
-    "email": "email",
-    "phone1": "phone1",
-    "phone2": "phone2",
-    "systemDefId": "systemDefId",
-    "systemDefName": "systemDefName",
-    "menuName": "menuName",
-    "parentmenuName": "parentmenuName",
-    "parentMenuId": "parentMenuId",
-    "menuId": "menuId",
-    "viewURL": "viewURL",
-    "menuSEQ": "menuSEQ",
-    "iconName": "iconName",
-    "menuType": "menuType",
-    "checkOutState": "checkOutState",
-    "checkOutTime": "checkOutTime",
-    "checkOutUser": "checkOutUser",
-    "dataState": "dataState",
-    "eventName": "eventName",
-    "timeKey": "timeKey",
-    "eventTime": "eventTime",
-    "eventUser": "eventUser",
-    "eventComment": "eventComment"
+  "messages": {
+    "deleteConfirm": "deleteConfirm",
+    "logoutConfirm": "logoutConfirm",
+    "welcome": "welcome"
+  },
+  "model": {
+    "common": {
+      "id": "id",
+      "description": "description",
+      "dataState": "dataState",
+      "checkOutState": "checkOutState",
+      "checkOutTime": "checkOutTime",
+      "checkOutUser": "checkOutUser"
+    },
+    "user": {
+      "userId": "userId",
+      "userName": "userName",
+      "password": "password",
+      "email": "email",
+      "phone1": "phone1",
+      "phone2": "phone2"
+    },
+    "authority": {
+      "authorityId": "authorityId",
+      "authorityName": "authorityName"
+    },
+    "systemDef": {
+      "systemDefId": "systemDefId",
+      "systemDefName": "systemDefName"
+    },
+    "menu": {
+      "menuName": "menuName",
+      "parentmenuName": "parentmenuName",
+      "parentMenuId": "parentMenuId",
+      "menuId": "menuId",
+      "viewURL": "viewURL",
+      "menuSEQ": "menuSEQ",
+      "iconName": "iconName",
+      "menuType": "menuType"
+    },
+    "event": {
+      "eventName": "eventName",
+      "timeKey": "timeKey",
+      "eventTime": "eventTime",
+      "eventUser": "eventUser",
+      "eventComment": "eventComment"
+    }
   }
 }

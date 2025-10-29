@@ -1,6 +1,7 @@
 // src/stores/panel.js
 import { ref } from 'vue'
 import { defineStore } from 'pinia'
+import { useSnackbarStore } from '@/stores/snackbar' // 👈 [1. 추가] 스낵바 스토어 import
 
 export const usePanelStore = defineStore('panel', () => {
   // State: 패널이 열려있는지 여부
@@ -78,6 +79,7 @@ export const usePanelStore = defineStore('panel', () => {
    * 서버로 폼 데이터를 저장하는 함수 (예: API 호출)
    */
   async function saveForm() {
+    const snackbarStore = useSnackbarStore() // 👈 [2. 추가] 스토어 인스턴스 생성
     console.log('폼 데이터:', formData.value)
     console.log('폼 데이터 모드:', formMode.value)
     if (typeof onSaveAction.value !== 'function') return
@@ -91,9 +93,15 @@ export const usePanelStore = defineStore('panel', () => {
       }
 
       closePanel()
+      // ✅ [3. 추가] 성공 스낵바 호출
+      snackbarStore.showSnackbar('성공적으로 저장되었습니다.', 'success')
     } catch (error) {
       console.error('저장 실패:', error)
       // 실패 시에는 onSuccessAction을 실행하지 않음
+      // ✅ [4. 추가] 실패 스낵바 호출
+      // (백엔드에서 error.response.data.message에 오류 메시지를 보낸다고 가정)
+      const errorMsg = error.response?.data?.message || '알 수 없는 오류가 발생했습니다.'
+      snackbarStore.showSnackbar('저장 실패: ' + errorMsg, 'error')
     }
   }
 

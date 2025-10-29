@@ -79,6 +79,7 @@ async function loadInitData() {
     const menuListMapData = apiMenuList.items.map(function (item) {
       return { id: item.id, menuName: item.menuName }
     })
+    menuListMapData.unshift({ id: '', menuName: '' })
 
     systemDefList.value = systemDefListMapData
     menuList.value = menuListMapData

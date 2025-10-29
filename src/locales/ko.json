@@ -1,57 +1,51 @@
 {
-  "dataTable": {
+  "common": {
     "search": "조회",
     "add": "추가",
     "edit": "변경",
     "delete": "삭제",
-    "result": "조회 결과",
+    "save": "저장",
     "import": "가져오기",
-    "export": "내보내기"
-  },
-  "history": {
-    "selectTitle": "히스토리 선택",
-    "resources": {
-      "alarm": "알람 이력",
-      "alarm_def": "알람 정의 이력",
-      "alarm_action": "알람 액션 이력",
-      "lot": "Lot 이력",
-      "machine": "설비 상태 이력"
-    }
-  },
-  "auth": {
-    "logout": "로그아웃"
-  },
-  "title": {
-    "deleteConfirm": "삭제 확인",
-    "userList": "사용자 리스트",
-    "authList": "권한 리스트",
-    "create": "생성",
-    "edit": "수정",
-    "details": "상세 정보"
-  },
-  "buttonLabels": {
+    "export": "내보내기",
+    "result": "조회 결과",
     "confirm": "확인",
     "cancel": "취소",
     "close": "닫기",
     "yes": "Yes",
     "no": "No",
-    "save": "저장",
-    "quickFinder": "빠른 찾기"
+    "quickFinder": "빠른 찾기",
+    "logout": "로그아웃",
+    "create": "생성",
+    "editPage": "수정",
+    "details": "상세 정보"
   },
-  "messages": {
-    "deleteConfirm": "{count}개의 항목을 삭제하시겠습니까?",
-    "logoutConfirm": "정말 로그아웃 하시겠습니까?",
-    "welcome": "님 환영합니다."
+  "pages": {
+    "deleteConfirmTitle": "삭제 확인",
+    "userList": {
+      "title": "사용자 리스트"
+    },
+    "authList": {
+      "title": "권한 리스트"
+    },
+    "history": {
+      "selectTitle": "히스토리 선택",
+      "resources": {
+        "alarm": "알람 이력",
+        "alarm_def": "알람 정의 이력",
+        "alarm_action": "알람 액션 이력",
+        "lot": "Lot 이력",
+        "machine": "설비 상태 이력"
+      }
+    }
   },
-  "menuNames": {
+  "menu": {
     "dashboard": "대시보드",
-    "System": "시스템",
+    "system": "시스템",
     "users": "유저",
     "settings": "설정",
     "profile": "Profile",
     "userList1": "유저 리스트 1",
-    "Modeler": "모델러",
-    "SystemDef": "시스템설정",
+    "modeler": "모델러",
     "home": "홈",
     "auth": "권한",
     "authorityMenu": "권한별 메뉴",
@@ -64,35 +58,52 @@
     "alarmAction": "알람 액션",
     "alarmDetailAction": "알람 상세 액션"
   },
-  "columns": {
-    "id": "id",
-    "userId": "계정명",
-    "authorityId": "권한Id",
-    "authorityName": "권한명",
-    "description": "설명",
-    "userName": "사용자명",
-    "password": "비밀번호",
-    "email": "email",
-    "phone1": "phone1",
-    "phone2": "phone2",
-    "systemDefId": "시스템 정의 id",
-    "systemDefName": "시스템 정의 이름",
-    "menuName": "메뉴이름",
-    "parentmenuName": "상위 메뉴 이름",
-    "parentMenuId": "부모 메뉴 id",
-    "menuId": "메뉴 id",
-    "viewURL": "viewURL",
-    "menuSEQ": "메뉴 순서",
-    "iconName": "아이콘명",
-    "menuType": "메뉴타입",
-    "checkOutState": "checkOutState",
-    "checkOutTime": "checkOutTime",
-    "checkOutUser": "checkOutUser",
-    "dataState": "dataState",
-    "eventName": "eventName",
-    "timeKey": "timeKey",
-    "eventTime": "eventTime",
-    "eventUser": "eventUser",
-    "eventComment": "eventComment"
+  "messages": {
+    "deleteConfirm": "{count}개의 항목을 삭제하시겠습니까?",
+    "logoutConfirm": "정말 로그아웃 하시겠습니까?",
+    "welcome": "님 환영합니다."
+  },
+  "model": {
+    "common": {
+      "id": "id",
+      "description": "설명",
+      "dataState": "dataState",
+      "checkOutState": "checkOutState",
+      "checkOutTime": "checkOutTime",
+      "checkOutUser": "checkOutUser"
+    },
+    "user": {
+      "userId": "계정명",
+      "userName": "사용자명",
+      "password": "비밀번호",
+      "email": "email",
+      "phone1": "phone1",
+      "phone2": "phone2"
+    },
+    "authority": {
+      "authorityId": "권한Id",
+      "authorityName": "권한명"
+    },
+    "systemDef": {
+      "systemDefId": "시스템 정의 id",
+      "systemDefName": "시스템 정의 이름"
+    },
+    "menu": {
+      "menuName": "메뉴이름",
+      "parentmenuName": "상위 메뉴 이름",
+      "parentMenuId": "부모 메뉴 id",
+      "menuId": "메뉴 id",
+      "viewURL": "viewURL",
+      "menuSEQ": "메뉴 순서",
+      "iconName": "아이콘명",
+      "menuType": "메뉴타입"
+    },
+    "event": {
+      "eventName": "eventName",
+      "timeKey": "timeKey",
+      "eventTime": "eventTime",
+      "eventUser": "eventUser",
+      "eventComment": "eventComment"
+    }
   }
 }

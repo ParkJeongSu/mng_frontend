@@ -38,7 +38,21 @@
         </v-card>
       </div>
     </v-main>
+    <v-snackbar
+      v-model="snackbarStore.show"
+      :color="snackbarStore.color"
+      :timeout="snackbarStore.timeout"
+      location="top right"
+      multi-line
+    >
+      {{ snackbarStore.message }}
 
+      <template v-slot:actions>
+        <v-btn variant="text" @click="snackbarStore.show = false">
+          {{ $t('dataTable.close') }}
+        </v-btn>
+      </template>
+    </v-snackbar>
     <v-footer app class="pa-0 footer">
       <div class="footer-container">
         <AlarmBar />
@@ -59,8 +73,13 @@ import { usePanelStore } from '@/stores/panel' // panel 스토어 import
 import { computed, onMounted } from 'vue'
 import SidePanel from '@/components/layout/SidePanel.vue' // SidePanel import
 import MenuQuickFinder from '@/components/layout/MenuQuickFinder.vue'
+// [추가] 스낵바 스토어를 import 합니다.
+import { useSnackbarStore } from '@/stores/snackbar'
 const menuStore = useMenuStore()
 const panelStore = usePanelStore() // panel 스토어 인스턴스 생성
+// [추가] 스토어 인스턴스를 생성합니다.
+const snackbarStore = useSnackbarStore()
+
 const panelToggleIcon = computed(function () {
   return panelStore.isPanelOpen ? '$next' : '$prev'
 })
