@@ -98,6 +98,9 @@
             class="ml-2"
             icon="$fileImport"
             density="comfortable"
+            @click="handleExcelImportClick"
+            :loading="isUploading"
+            :disabled="isUploading"
           ></v-btn>
         </template>
       </v-tooltip>
@@ -140,23 +143,62 @@
         </template>
       </v-data-table-server>
     </div>
-  </v-card>
 
-  <ConfirmDialog
-    v-model:show="showDeleteConfirm"
-    :title="$t('title.deleteConfirm')"
-    :message="$t('messages.deleteConfirm')"
-    @confirm="handleDeleteClick"
-  />
+    <input
+      type="file"
+      ref="fileInput"
+      @change="handleFileSelect"
+      accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+      style="display: none"
+    />
+
+    <v-dialog v-model="showImportError" max-width="600">
+      <v-card>
+        <v-card-title class="text-h5">
+          {{ $t('title.importError') }}
+        </v-card-title>
+        <v-card-text>
+          <p>{{ $t('messages.importError') }}</p>
+          <v-list density="compact" class="mt-4">
+            <v-list-item v-for="(error, index) in importErrorMessages" :key="index" class="pa-0">
+              <v-list-item-title>
+                <v-icon color="error" size="small" class="mr-1">$alertCircle</v-icon>
+                {{ error }}
+              </v-list-item-title>
+            </v-list-item>
+          </v-list>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="primary" @click="showImportError = false">
+            {{ $t('dataTable.close') }}
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+    <ConfirmDialog
+      v-model:show="showDeleteConfirm"
+      :title="$t('title.deleteConfirm')"
+      :message="$t('messages.deleteConfirm')"
+      @confirm="handleDeleteClick"
+    />
+  </v-card>
 </template>
 
 <script setup>
 import { ref, reactive, computed, watch } from 'vue'
 import { componentMap } from '@/constants/componentMap' // componentMap import
 import { usePanelStore } from '@/stores/panel'
-import { fetchListData, deleteItems, updateItemData, createItemData } from '@/api/dataTable' // 공통 API 함수 import
+import {
+  fetchListData,
+  deleteItems,
+  updateItemData,
+  createItemData,
+  uploadExcelFile,
+} from '@/api/dataTable' // 공통 API 함수 import
 import ConfirmDialog from '@/components/common/ConfirmDialog.vue' // ConfirmDialog import
 import { useI18n } from 'vue-i18n' // 1. useI18n을 import 합니다.
+
 const { t, locale } = useI18n() // 2. useI18n을 호출해서 't' 함수를 가져옵니다.
 
 const showDeleteConfirm = ref(false) // 다이얼로그 표시 상태
@@ -165,6 +207,11 @@ const panelStore = usePanelStore()
 const selectedItemLocal = ref(null)
 // v-data-table의 v-model과 연결될 내부 상태
 const selectedItems = ref([])
+// [추가] 엑셀 가져오기(Import) 관련 상태 변수
+const fileInput = ref(null) // <input type="file"> DOM 엘리먼트 참조
+const isUploading = ref(false) // 업로드 중 로딩 상태
+const showImportError = ref(false) // 오류 다이얼로그 표시
+const importErrorMessages = ref([]) // 백엔드에서 받은 오류 메시지 목록
 
 // 1. defineEmits를 사용해 'row-selected' 이벤트를 정의합니다.
 const emit = defineEmits(['row-selected'])
@@ -240,6 +287,73 @@ const options = ref({
   itemsPerPage: 10,
   sortBy: [],
 })
+
+// [신규] 엑셀 가져오기(Import) 버튼 클릭 핸들러
+function handleExcelImportClick() {
+  // input 값을 초기화하여 동일한 파일도 다시 선택 가능하게 함
+  if (fileInput.value) {
+    fileInput.value.value = null
+  }
+  // 숨겨진 <input type="file">을 클릭
+  fileInput.value.click()
+}
+
+// [신규] 파일이 실제로 선택되었을 때 실행되는 핸들러
+async function handleFileSelect(event) {
+  const file = event.target.files[0]
+  if (!file) {
+    return // 사용자가 '취소'를 누른 경우
+  }
+
+  // --- (1) 프론트엔드 1차 검증 ---
+  const MAX_FILE_SIZE = 10 * 1024 * 1024 // 10MB
+  const ALLOWED_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' // .xlsx
+
+  if (file.type !== ALLOWED_TYPE) {
+    alert('xlsx 파일 형식만 업로드할 수 있습니다.')
+    return
+  }
+
+  if (file.size > MAX_FILE_SIZE) {
+    alert('파일 크기는 10MB를 초과할 수 없습니다.')
+    return
+  }
+  // --- (1) 검증 끝 ---
+
+  // FormData에 파일 담기
+  const formData = new FormData()
+  formData.append('file', file)
+
+  isUploading.value = true
+  importErrorMessages.value = []
+
+  try {
+    // [수정] API 엔드포인트에 '/import' 추가
+    const importApiEndpoint = props.apiEndpoint + '/import'
+
+    // API 호출
+    await uploadExcelFile(importApiEndpoint, formData)
+
+    // 성공
+    alert('성공적으로 가져왔습니다.')
+    loadItems() // 데이터 테이블 새로고침
+  } catch (error) {
+    // 실패
+    console.error('An error occurred while importing excel:', error)
+
+    // [중요] 백엔드가 { "errors": ["3행: ...", "5행: ..."] } 형식으로
+    // 400 Bad Request 응답을 준다고 가정합니다. (axios 기준)
+    if (error.response && error.response.data && error.response.data.errors) {
+      importErrorMessages.value = error.response.data.errors
+      showImportError.value = true
+    } else {
+      // 그 외 일반적인 오류
+      alert('파일 업로드 중 오류가 발생했습니다.')
+    }
+  } finally {
+    isUploading.value = false
+  }
+}
 
 function openDeleteConfirmDialog() {
   // 1. 선택된 항목이 있는지 확인

@@ -28,7 +28,11 @@ apiClient.interceptors.request.use(
     // ✅ 2. POST 또는 PATCH 요청일 경우, body에 공통 속성을 추가합니다.
     if (config.method === 'post' || config.method === 'patch') {
       // config.data가 요청 body에 해당합니다.
-      config.data = addCommonProperties(config.data || {})
+      // [수정] config.data가 FormData의 인스턴스가 *아닌* 경우에만
+      // (즉, 일반적인 JSON 요청일 때만) 공통 속성을 추가합니다.
+      if (!(config.data instanceof FormData)) {
+        config.data = addCommonProperties(config.data || {})
+      }
     }
 
     return config

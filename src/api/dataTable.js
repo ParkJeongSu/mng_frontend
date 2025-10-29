@@ -132,3 +132,28 @@ export async function createItemData(endpoint, body) {
 export function test() {
   return apiClient.get('/api/members/test')
 }
+
+/**
+ * 엑셀 파일을 업로드(Import)합니다. (FormData)
+ * @param {string} apiEndpoint - '/import'가 포함된 전체 API 경로 (예: '/api/v1/users/import')
+ * @param {FormData} formData - 'file' 키로 파일이 담긴 FormData
+ * @returns {Promise<any>}
+ */
+export async function uploadExcelFile(apiEndpoint, formData) {
+  try {
+    const response = await apiClient.post(apiEndpoint, formData, {
+      headers: {
+        'Content-Type': undefined,
+      },
+      // ✅ [추가] 이 요청에만 5분의 타임아웃을 적용합니다.
+      // (단위: ms, 5분 = 5 * 60 * 1000 = 300000)
+      timeout: 300000,
+    })
+    return response.data
+  } catch (error) {
+    // 에러를 그대로 상위(컴포넌트)로 전달하여
+    // 컴포넌트가 400 에러 등을 처리할 수 있게 함
+    console.error('Error in uploadExcelFile:', error.response || error)
+    throw error
+  }
+}
