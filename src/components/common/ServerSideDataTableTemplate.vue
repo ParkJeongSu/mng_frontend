@@ -85,6 +85,7 @@
             class="ml-2"
             icon="$fileExport"
             density="comfortable"
+            @click="handleExcelExport"
           ></v-btn>
         </template>
       </v-tooltip>
@@ -385,6 +386,49 @@ function handleEditClick() {
       loadItems,
     )
   }
+}
+
+// [신규] 엑셀 내보내기 함수
+function handleExcelExport() {
+  // 1. 현재 API 엔드포인트에 '/export'를 추가
+  const exportApiEndpoint = props.apiEndpoint + '/export'
+
+  // 2. 현재 검색 파라미터(searchParams)를 쿼리 스트링으로 변환
+  // (참고: null이나 빈 문자열 값은 제외)
+  const queryParams = new URLSearchParams()
+  for (const key in searchParams) {
+    const value = searchParams[key]
+    if (value !== null && value !== undefined && value !== '') {
+      queryParams.append(key, value)
+    }
+  }
+
+  // (만약 부모의 filterParams도 포함해야 한다면)
+  for (const key in props.filterParams) {
+    const value = props.filterParams[key]
+    if (value !== null && value !== undefined && value !== '') {
+      queryParams.append(key, value)
+    }
+  }
+
+  const queryString = queryParams.toString()
+  const downloadUrl = `${exportApiEndpoint}?${queryString}`
+
+  console.log('엑셀 다운로드 URL:', downloadUrl)
+
+  // 3. 브라우저가 이 URL을 방문하여 파일 다운로드를 트리거
+  // (가장 간단한 방법)
+  window.location.href = downloadUrl
+
+  // (참고: 위 방식이 페이지 이동을 유발하면 <a> 태그 트릭 사용)
+  /*
+  const a = document.createElement('a');
+  a.href = downloadUrl;
+  // a.download = 'export.xlsx'; // 백엔드가 Content-Disposition 헤더를 주면 필요 없음
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  */
 }
 </script>
 <style scoped>
