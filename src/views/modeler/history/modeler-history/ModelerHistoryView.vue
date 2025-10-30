@@ -82,7 +82,7 @@ async function fetchHistoryResourceList(system) {
 
   // 임시 하드코딩 (테스트용)
   console.log(`${system} 시스템의 리소스 목록을 요청합니다.`)
-  return ['alarm', 'alarm_def', 'alarm_action']
+  return ['alarm', 'alarm-def', 'alarm-action']
 }
 
 onActivated(async function () {

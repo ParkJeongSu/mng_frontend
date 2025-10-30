@@ -4,7 +4,7 @@
       v-if="ready"
       :search-schema="searchSchema"
       :headers="headers"
-      api-endpoint="/api/system_def"
+      api-endpoint="/api/system-def"
       :actions="['add', 'edit', 'delete', 'excelExport', 'excelImport']"
       isHover
       showCheckbox

@@ -4,7 +4,7 @@
       v-if="ready"
       :search-schema="searchSchema"
       :headers="headers"
-      api-endpoint="/api/auth"
+      api-endpoint="/api/lots"
       :actions="['add', 'edit', 'delete', 'excelExport', 'excelImport']"
       isHover
       showCheckbox
@@ -63,13 +63,43 @@ const formSchema = computed(function () {
 })
 
 const headers = ref([
-  // { title: 'columns.id', key: 'id' },
-  { title: 'columns.authorityName', key: 'authorityName' },
-  { title: 'columns.description', key: 'description' },
-  { title: 'columns.checkOutState', key: 'checkOutState' },
-  { title: 'columns.checkOutTime', key: 'checkOutTime' },
-  { title: 'columns.checkOutUser', key: 'checkOutUser' },
-  { title: 'columns.dataState', key: 'dataState' },
+  { title: 'columns.id', key: 'id' },
+  { title: 'columns.lotName', key: 'lotName' },
+  { title: 'columns.productionType', key: 'productionType' },
+  { title: 'columns.lotState', key: 'lotState' },
+  { title: 'columns.processState', key: 'processState' },
+  { title: 'columns.productDefId', key: 'productDefId' },
+  { title: 'columns.processSpecId', key: 'processSpecId' },
+  { title: 'columns.processSpecVersion', key: 'processSpecVersion' },
+  { title: 'columns.processFlowId', key: 'processFlowId' },
+  { title: 'columns.processOperationId', key: 'processOperationId' },
+  { title: 'columns.workOrderId', key: 'workOrderId' },
+  { title: 'columns.equipmentName', key: 'equipmentName' },
+  { title: 'columns.portName', key: 'portName' },
+  { title: 'columns.recipeName', key: 'recipeName' },
+  { title: 'columns.carrierId', key: 'carrierId' },
+  { title: 'columns.priority', key: 'priority' },
+  { title: 'columns.lotGrade', key: 'lotGrade' },
+  { title: 'columns.productionDetailType', key: 'productionDetailType' },
+  { title: 'columns.planStartDate', key: 'planStartDate' },
+  { title: 'columns.planDueDate', key: 'planDueDate' },
+  { title: 'columns.createTime', key: 'createTime' },
+  { title: 'columns.releaseTime', key: 'releaseTime' },
+  { title: 'columns.shipTime', key: 'shipTime' },
+  { title: 'columns.trackInTime', key: 'trackInTime' },
+  { title: 'columns.trackOutTime', key: 'trackOutTime' },
+  { title: 'columns.operationMoveTime', key: 'operationMoveTime' },
+  { title: 'columns.quantity', key: 'quantity' },
+  { title: 'columns.oldQuantity', key: 'oldQuantity' },
+  { title: 'columns.holdState', key: 'holdState' },
+  { title: 'columns.reworkState', key: 'reworkState' },
+  { title: 'columns.reworkCount', key: 'reworkCount' },
+  { title: 'columns.originalProcessSpecId', key: 'originalProcessSpecId' },
+  { title: 'columns.originalProcessSpecVersion', key: 'originalProcessSpecVersion' },
+  { title: 'columns.returnProcessFlowId', key: 'returnProcessFlowId' },
+  { title: 'columns.returnProcessOperationId', key: 'returnProcessOperationId' },
+  { title: 'columns.reasonCode', key: 'reasonCode' },
+  { title: 'columns.ownerCode', key: 'ownerCode' },
   { title: 'columns.eventName', key: 'eventName' },
   { title: 'columns.timeKey', key: 'timeKey' },
   { title: 'columns.eventTime', key: 'eventTime' },

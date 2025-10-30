@@ -67,7 +67,7 @@ async function loadInitData() {
   try {
     ready.value = false
     const [apiSystemDefList, apiMenuList] = await Promise.all([
-      fetchListData('/api/system_def', {}),
+      fetchListData('/api/system-def', {}),
       fetchListData('/api/menus', {}),
     ])
 

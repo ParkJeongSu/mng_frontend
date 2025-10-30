@@ -4,7 +4,7 @@
       v-if="ready"
       :search-schema="searchSchema"
       :headers="headers"
-      api-endpoint="/api/auth"
+      api-endpoint="/api/work-order"
       :actions="['add', 'edit', 'delete', 'excelExport', 'excelImport']"
       isHover
       showCheckbox
@@ -63,13 +63,30 @@ const formSchema = computed(function () {
 })
 
 const headers = ref([
-  // { title: 'columns.id', key: 'id' },
-  { title: 'columns.authorityName', key: 'authorityName' },
+  { title: 'columns.id', key: 'id' },
+  { title: 'columns.workOrderName', key: 'workOrderName' },
   { title: 'columns.description', key: 'description' },
-  { title: 'columns.checkOutState', key: 'checkOutState' },
-  { title: 'columns.checkOutTime', key: 'checkOutTime' },
-  { title: 'columns.checkOutUser', key: 'checkOutUser' },
-  { title: 'columns.dataState', key: 'dataState' },
+  { title: 'columns.vendorName', key: 'vendorName' },
+  { title: 'columns.productDefId', key: 'productDefId' },
+  { title: 'columns.processFlowId', key: 'processFlowId' },
+  { title: 'columns.processOperationId', key: 'processOperationId' },
+  { title: 'columns.workOrderState', key: 'workOrderState' },
+  { title: 'columns.holdState', key: 'holdState' },
+  { title: 'columns.reasonCode', key: 'reasonCode' },
+  { title: 'columns.equipmentName', key: 'equipmentName' },
+  { title: 'columns.planQuantity', key: 'planQuantity' },
+  { title: 'columns.createdQuantity', key: 'createdQuantity' },
+  { title: 'columns.releasedQuantity', key: 'releasedQuantity' },
+  { title: 'columns.finishedQuantity', key: 'finishedQuantity' },
+  { title: 'columns.scrappedQuantity', key: 'scrappedQuantity' },
+  { title: 'columns.workOrderCount', key: 'workOrderCount' },
+  { title: 'columns.createTime', key: 'createTime' },
+  { title: 'columns.releaseTime', key: 'releaseTime' },
+  { title: 'columns.completeTime', key: 'completeTime' },
+  { title: 'columns.createUser', key: 'createUser' },
+  { title: 'columns.releaseUser', key: 'releaseUser' },
+  { title: 'columns.completeUser', key: 'completeUser' },
+  { title: 'columns.dueDate', key: 'dueDate' },
   { title: 'columns.eventName', key: 'eventName' },
   { title: 'columns.timeKey', key: 'timeKey' },
   { title: 'columns.eventTime', key: 'eventTime' },

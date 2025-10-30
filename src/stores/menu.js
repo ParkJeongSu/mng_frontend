@@ -145,7 +145,7 @@ export const useMenuStore = defineStore('menu', () => {
   async function fetchAllAuthorityMenus() {
     try {
       // 1. 백엔드 API를 호출합니다.
-      const response = await fetchListData('/api/menus/auth_menus', { userId: authStore.userId })
+      const response = await fetchListData('/api/menus/auth-menus', { userId: authStore.userId })
       // 2. 응답받은 데이터로 allMenus 상태를 업데이트합니다.
       allMenus.value = response.data
     } catch (error) {

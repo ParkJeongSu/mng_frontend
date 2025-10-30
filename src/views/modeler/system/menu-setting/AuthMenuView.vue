@@ -4,7 +4,7 @@
       v-if="ready"
       :search-schema="searchSchema"
       :headers="headers"
-      api-endpoint="/api/auth_menu"
+      api-endpoint="/api/auth-menu"
       :actions="['add', 'edit', 'delete', 'excelExport', 'excelImport']"
       isHover
       showCheckbox
@@ -61,7 +61,7 @@ async function loadInitData() {
     ready.value = false
     const [apiAuthorityList, apiSystemDefList, apiMenuList] = await Promise.all([
       fetchListData('/api/auth', {}),
-      fetchListData('/api/system_def', {}),
+      fetchListData('/api/system-def', {}),
       fetchListData('/api/menus', {}),
     ])
     // 각각의 API 응답 데이터를 가공하여 필요한 형태로 변환합니다.

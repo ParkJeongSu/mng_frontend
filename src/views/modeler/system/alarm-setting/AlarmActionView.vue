@@ -6,7 +6,7 @@
           v-if="ready"
           :search-schema="searchSchema"
           :headers="headers"
-          api-endpoint="/api/alarm_action"
+          api-endpoint="/api/alarm-action"
           :actions="['add', 'edit', 'delete', 'excelExport', 'excelImport']"
           isHover
           showCheckbox
@@ -52,7 +52,7 @@ const tabsStore = useTabsStore()
 const route = useRoute()
 
 const ready = ref(true)
-const detailURL = ref('/api/alarm_action_mail_detail')
+const detailURL = ref('/api/alarm-action-mail-detail')
 
 // 1. [추가] 선택된 마스터 행의 ID를 저장할 ref를 생성합니다.
 const selectedActionObject = ref(null)
