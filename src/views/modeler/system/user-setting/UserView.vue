@@ -9,7 +9,7 @@
       isHover
       showCheckbox
       :form-schema="formSchema"
-      data-tabletitle-key="title.userList"
+      data-tabletitle-key="menu.User"
     >
       <template v-slot:item.status="slotProps">
         <v-chip
@@ -78,30 +78,30 @@ onActivated(function () {
 // 검색 및 폼 스키마 정의
 const searchSchema = computed(function () {
   return [
-    { key: 'userId', labelKey: 'columns.userId', component: 'v-text-field' },
-    { key: 'authorityId', labelKey: 'columns.authorityId', component: 'v-text-field' },
-    { key: 'userName', labelKey: 'columns.userName', component: 'v-text-field' },
-    { key: 'email', labelKey: 'columns.email', component: 'v-text-field' },
-    { key: 'phone1', labelKey: 'columns.phone1', component: 'v-text-field' },
+    { key: 'userId', labelKey: 'model.user.userId', component: 'v-text-field' },
+    { key: 'authorityId', labelKey: 'model.authority.authorityId', component: 'v-text-field' },
+    { key: 'userName', labelKey: 'model.user.userName', component: 'v-text-field' },
+    { key: 'email', labelKey: 'model.user.email', component: 'v-text-field' },
+    { key: 'phone1', labelKey: 'model.user.phone1', component: 'v-text-field' },
   ]
 })
 const formSchema = computed(function () {
   return [
-    { key: 'userId', labelKey: 'columns.userId', component: 'v-text-field' },
+    { key: 'userId', labelKey: 'model.user.userId', component: 'v-text-field' },
     {
       key: 'authorityId',
-      labelKey: 'columns.authorityId',
+      labelKey: 'model.authority.authorityId',
       component: 'v-select',
       // ⬇⬇ Vuetify v-select 관례에 맞게 전달할 프로퍼티 이름을 명확히
       items: authorityList.value, // [{ authorityName, authorityId }]
       'item-title': 'authorityName', // v-select의 item-title에 매핑할 키
       'item-value': 'id', // v-select의 item-value에 매핑할 키
     },
-    { key: 'userName', labelKey: 'columns.userName', component: 'v-text-field' },
-    { key: 'password', labelKey: 'columns.password', component: 'v-text-field' },
-    { key: 'email', labelKey: 'columns.email', component: 'v-text-field' },
-    { key: 'phone1', labelKey: 'columns.phone1', component: 'v-text-field' },
-    { key: 'phone2', labelKey: 'columns.phone2', component: 'v-text-field' },
+    { key: 'userName', labelKey: 'model.user.userName', component: 'v-text-field' },
+    { key: 'password', labelKey: 'model.user.password', component: 'v-text-field' },
+    { key: 'email', labelKey: 'model.user.email', component: 'v-text-field' },
+    { key: 'phone1', labelKey: 'model.user.phone1', component: 'v-text-field' },
+    { key: 'phone2', labelKey: 'model.user.phone2', component: 'v-text-field' },
   ]
 })
 
@@ -116,23 +116,23 @@ const formSchema = computed(function () {
  */
 
 const headers = ref([
-  //{ title: 'columns.id', key: 'id' },
-  { title: 'columns.userId', key: 'userId' },
-  { title: 'columns.authorityId', key: 'authorityId' },
-  { title: 'columns.userName', key: 'userName' },
-  { title: 'columns.password', key: 'password' },
-  { title: 'columns.email', key: 'email' },
-  { title: 'columns.phone1', key: 'phone1' },
-  { title: 'columns.phone2', key: 'phone2' },
-  { title: 'columns.checkOutState', key: 'checkOutState' },
-  { title: 'columns.checkOutTime', key: 'checkOutTime' },
-  { title: 'columns.checkOutUser', key: 'checkOutUser' },
-  { title: 'columns.dataState', key: 'dataState' },
-  { title: 'columns.eventName', key: 'eventName' },
-  { title: 'columns.timeKey', key: 'timeKey' },
-  { title: 'columns.eventTime', key: 'eventTime' },
-  { title: 'columns.eventUser', key: 'eventUser' },
-  { title: 'columns.eventComment', key: 'eventComment' },
+  //{ title: 'model.common.id', key: 'id' },
+  { title: 'model.user.userId', key: 'userId' },
+  { title: 'model.authority.authorityId', key: 'authorityId' },
+  { title: 'model.user.userName', key: 'userName' },
+  { title: 'model.user.password', key: 'password' },
+  { title: 'model.user.email', key: 'email' },
+  { title: 'model.user.phone1', key: 'phone1' },
+  { title: 'model.user.phone2', key: 'phone2' },
+  { title: 'model.common.checkOutState', key: 'checkOutState' },
+  { title: 'model.common.checkOutTime', key: 'checkOutTime' },
+  { title: 'model.common.checkOutUser', key: 'checkOutUser' },
+  { title: 'model.common.dataState', key: 'dataState' },
+  { title: 'model.event.eventName', key: 'eventName' },
+  { title: 'model.event.timeKey', key: 'timeKey' },
+  { title: 'model.event.eventTime', key: 'eventTime' },
+  { title: 'model.event.eventUser', key: 'eventUser' },
+  { title: 'model.event.eventComment', key: 'eventComment' },
 ])
 </script>
 <style scoped></style>

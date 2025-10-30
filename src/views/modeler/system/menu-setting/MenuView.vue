@@ -9,7 +9,7 @@
       isHover
       showCheckbox
       :form-schema="formSchema"
-      data-tabletitle-key="menuNames.menu"
+      data-tabletitle-key="menu.Menu"
     >
       <template v-slot:item.status="slotProps">
         <v-chip
@@ -100,7 +100,7 @@ const searchSchema = computed(function () {
   return [
     {
       key: 'systemId',
-      labelKey: 'columns.systemDefName',
+      labelKey: 'model.systemDef.systemDefName',
       component: 'v-select',
       // ⬇⬇ Vuetify v-select 관례에 맞게 전달할 프로퍼티 이름을 명확히
       items: systemDefList.value, // [{ authorityName, authorityId }]
@@ -109,7 +109,7 @@ const searchSchema = computed(function () {
     },
     {
       key: 'menuId',
-      labelKey: 'columns.menuName',
+      labelKey: 'model.menu.menuName',
       component: 'v-select',
       // ⬇⬇ Vuetify v-select 관례에 맞게 전달할 프로퍼티 이름을 명확히
       items: menuList.value, // [{ authorityName, authorityId }]
@@ -124,51 +124,51 @@ const formSchema = computed(function () {
   return [
     {
       key: 'systemDefId',
-      labelKey: 'columns.systemDefId',
+      labelKey: 'model.systemDef.systemDefId',
       component: 'v-select',
       // ⬇⬇ Vuetify v-select 관례에 맞게 전달할 프로퍼티 이름을 명확히
       items: systemDefList.value, // [{ authorityName, authorityId }]
       'item-title': 'systemDefName', // v-select의 item-title에 매핑할 키
       'item-value': 'id', // v-select의 item-value에 매핑할 키
     },
-    { key: 'menuName', labelKey: 'columns.menuName', component: 'v-text-field' },
+    { key: 'menuName', labelKey: 'model.menu.menuName', component: 'v-text-field' },
     {
       key: 'parentMenuId',
-      labelKey: 'columns.parentmenuName',
+      labelKey: 'model.menu.parentmenuName',
       component: 'v-select',
       // ⬇⬇ Vuetify v-select 관례에 맞게 전달할 프로퍼티 이름을 명확히
       items: menuList.value, // [{ authorityName, authorityId }]
       'item-title': 'menuName', // v-select의 item-title에 매핑할 키
       'item-value': 'id', // v-select의 item-value에 매핑할 키
     },
-    { key: 'menuSEQ', labelKey: 'columns.menuSEQ', component: 'v-text-field' }, // 숫자만 입력 가능하게 가능한가?
-    { key: 'description', labelKey: 'columns.description', component: 'v-text-field' },
-    { key: 'iconName', labelKey: 'columns.iconName', component: 'v-select', items: iconList },
-    { key: 'viewURL', labelKey: 'columns.viewURL', component: 'v-text-field' },
-    { key: 'menuType', labelKey: 'columns.menuType', component: 'v-text-field' },
+    { key: 'menuSEQ', labelKey: 'model.menu.menuSEQ', component: 'v-text-field' }, // 숫자만 입력 가능하게 가능한가?
+    { key: 'description', labelKey: 'model.common.description', component: 'v-text-field' },
+    { key: 'iconName', labelKey: 'model.menu.iconName', component: 'v-select', items: iconList },
+    { key: 'viewURL', labelKey: 'model.menu.viewURL', component: 'v-text-field' },
+    { key: 'menuType', labelKey: 'model.menu.menuType', component: 'v-text-field' },
   ]
 })
 
 const headers = ref([
-  { title: 'columns.id', key: 'id' },
-  { title: 'columns.systemDefId', key: 'systemDefId' },
-  { title: 'columns.systemDefName', key: 'systemDefName' },
-  { title: 'columns.menuName', key: 'menuName' },
-  { title: 'columns.parentMenuId', key: 'parentMenuId' },
-  { title: 'columns.viewURL', key: 'viewURL' },
-  { title: 'columns.menuSEQ', key: 'menuSEQ' },
-  { title: 'columns.description', key: 'description' },
-  { title: 'columns.iconName', key: 'iconName' },
-  { title: 'columns.menuType', key: 'menuType' },
-  { title: 'columns.checkOutState', key: 'checkOutState' },
-  { title: 'columns.checkOutTime', key: 'checkOutTime' },
-  { title: 'columns.checkOutUser', key: 'checkOutUser' },
-  { title: 'columns.dataState', key: 'dataState' },
-  { title: 'columns.eventName', key: 'eventName' },
-  { title: 'columns.timeKey', key: 'timeKey' },
-  { title: 'columns.eventTime', key: 'eventTime' },
-  { title: 'columns.eventUser', key: 'eventUser' },
-  { title: 'columns.eventComment', key: 'eventComment' },
+  { title: 'model.common.id', key: 'id' },
+  { title: 'model.systemDef.systemDefId', key: 'systemDefId' },
+  { title: 'model.systemDef.systemDefName', key: 'systemDefName' },
+  { title: 'model.menu.menuName', key: 'menuName' },
+  { title: 'model.menu.parentMenuId', key: 'parentMenuId' },
+  { title: 'model.menu.viewURL', key: 'viewURL' },
+  { title: 'model.menu.menuSEQ', key: 'menuSEQ' },
+  { title: 'model.common.description', key: 'description' },
+  { title: 'model.menu.iconName', key: 'iconName' },
+  { title: 'model.menu.menuType', key: 'menuType' },
+  { title: 'model.common.checkOutState', key: 'checkOutState' },
+  { title: 'model.common.checkOutTime', key: 'checkOutTime' },
+  { title: 'model.common.checkOutUser', key: 'checkOutUser' },
+  { title: 'model.common.dataState', key: 'dataState' },
+  { title: 'model.event.eventName', key: 'eventName' },
+  { title: 'model.event.timeKey', key: 'timeKey' },
+  { title: 'model.event.eventTime', key: 'eventTime' },
+  { title: 'model.event.eventUser', key: 'eventUser' },
+  { title: 'model.event.eventComment', key: 'eventComment' },
 ])
 </script>
 <style scoped></style>

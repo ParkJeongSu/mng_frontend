@@ -28,7 +28,7 @@
         <v-col class="search-actions d-flex justify-end align-center" cols="12" md="auto">
           <slot name="search-bar.append"></slot>
           <v-btn @click="search" color="primary" variant="elevated" prepend-icon="$magnify">
-            {{ $t('dataTable.search') }}
+            {{ $t('common.search') }}
           </v-btn>
         </v-col>
       </v-row>

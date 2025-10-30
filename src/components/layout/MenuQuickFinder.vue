@@ -7,7 +7,7 @@
     density="compact"
     hide-details
     variant="solo"
-    :placeholder="$t('buttonLabels.quickFinder')"
+    :placeholder="$t('common.quickFinder')"
     class="menu-quick-finder"
     @update:modelValue="handleSelection"
     @keydown.enter.prevent="handleEnter"

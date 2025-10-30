@@ -9,7 +9,7 @@
       isHover
       showCheckbox
       :form-schema="formSchema"
-      data-tabletitle-key="menuNames.alarmUserGroup"
+      data-tabletitle-key="menu.AlarmUserGroup"
     >
       <template v-slot:item.status="slotProps">
         <v-chip
@@ -51,25 +51,27 @@ onActivated(function () {
 
 // 검색 및 폼 스키마 정의
 const searchSchema = computed(function () {
-  return [{ key: 'authorityName', labelKey: 'columns.authorityName', component: 'v-text-field' }]
+  return [
+    { key: 'authorityName', labelKey: 'model.authority.authorityName', component: 'v-text-field' },
+  ]
 })
 
 //폼 스키마 정의 (추가/수정에 사용)
 const formSchema = computed(function () {
   return [
-    { key: 'authorityName', labelKey: 'columns.authorityName', component: 'v-text-field' },
-    { key: 'description', labelKey: 'columns.description', component: 'v-text-field' },
+    { key: 'authorityName', labelKey: 'model.authority.authorityName', component: 'v-text-field' },
+    { key: 'description', labelKey: 'model.common.description', component: 'v-text-field' },
   ]
 })
 
 const headers = ref([
-  { title: 'columns.id', key: 'id' },
-  { title: 'columns.userGroupName', key: 'userGroupName' },
-  { title: 'columns.eventName', key: 'eventName' },
-  { title: 'columns.timeKey', key: 'timeKey' },
-  { title: 'columns.eventTime', key: 'eventTime' },
-  { title: 'columns.eventUser', key: 'eventUser' },
-  { title: 'columns.eventComment', key: 'eventComment' },
+  { title: 'model.common.id', key: 'id' },
+  { title: 'model.alarm.userGroupName', key: 'userGroupName' },
+  { title: 'model.event.eventName', key: 'eventName' },
+  { title: 'model.event.timeKey', key: 'timeKey' },
+  { title: 'model.event.eventTime', key: 'eventTime' },
+  { title: 'model.event.eventUser', key: 'eventUser' },
+  { title: 'model.event.eventComment', key: 'eventComment' },
 ])
 </script>
 <style scoped></style>

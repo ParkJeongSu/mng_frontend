@@ -9,7 +9,7 @@
       isHover
       showCheckbox
       :form-schema="formSchema"
-      data-tabletitle-key="title.authList"
+      data-tabletitle-key="menu.SystemDef"
     >
       <template v-slot:item.status="slotProps">
         <v-chip
@@ -51,26 +51,30 @@ onActivated(function () {
 
 // 검색 및 폼 스키마 정의
 const searchSchema = computed(function () {
-  return [{ key: 'systemDefName', labelKey: 'columns.systemDefName', component: 'v-text-field' }]
+  return [
+    { key: 'systemDefName', labelKey: 'model.systemDef.systemDefName', component: 'v-text-field' },
+  ]
 })
 
 //폼 스키마 정의 (추가/수정에 사용)
 const formSchema = computed(function () {
-  return [{ key: 'systemDefName', labelKey: 'columns.systemDefName', component: 'v-text-field' }]
+  return [
+    { key: 'systemDefName', labelKey: 'model.systemDef.systemDefName', component: 'v-text-field' },
+  ]
 })
 
 const headers = ref([
-  //{ title : 'columns.id' ,key: 'id'},
-  { title: 'columns.systemDefName', key: 'systemDefName' },
-  { title: 'columns.checkOutState', key: 'checkOutState' },
-  { title: 'columns.checkOutTime', key: 'checkOutTime' },
-  { title: 'columns.checkOutUser', key: 'checkOutUser' },
-  { title: 'columns.dataState', key: 'dataState' },
-  { title: 'columns.eventName', key: 'eventName' },
-  { title: 'columns.timeKey', key: 'timeKey' },
-  { title: 'columns.eventTime', key: 'eventTime' },
-  { title: 'columns.eventUser', key: 'eventUser' },
-  { title: 'columns.eventComment', key: 'eventComment' },
+  //{ title : 'model.common.id' ,key: 'id'},
+  { title: 'model.systemDef.systemDefName', key: 'systemDefName' },
+  { title: 'model.common.checkOutState', key: 'checkOutState' },
+  { title: 'model.common.checkOutTime', key: 'checkOutTime' },
+  { title: 'model.common.checkOutUser', key: 'checkOutUser' },
+  { title: 'model.common.dataState', key: 'dataState' },
+  { title: 'model.event.eventName', key: 'eventName' },
+  { title: 'model.event.timeKey', key: 'timeKey' },
+  { title: 'model.event.eventTime', key: 'eventTime' },
+  { title: 'model.event.eventUser', key: 'eventUser' },
+  { title: 'model.event.eventComment', key: 'eventComment' },
 ])
 </script>
 <style scoped></style>

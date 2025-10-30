@@ -14,7 +14,7 @@
       @click="menuStore.selectSystem(id)"
       class="no-uppercase"
     >
-      {{ $t('menuNames.' + system.name, system.name) }}
+      {{ $t('menu.' + system.name, system.name) }}
       <!-- {{ system.name }}-->
     </v-btn>
 
@@ -59,7 +59,7 @@
             <v-list-item-title>프로필</v-list-item-title>
           </v-list-item>
           <v-list-item @click="openLogoutDialog" prepend-icon="$logout">
-            <v-list-item-title>{{ $t('auth.logout') }}</v-list-item-title>
+            <v-list-item-title>{{ $t('common.logout') }}</v-list-item-title>
           </v-list-item>
         </v-list>
       </v-menu>

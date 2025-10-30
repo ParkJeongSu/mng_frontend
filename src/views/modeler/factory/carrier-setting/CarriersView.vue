@@ -9,7 +9,7 @@
       isHover
       showCheckbox
       :form-schema="formSchema"
-      data-tabletitle-key="menuNames.carriers"
+      data-tabletitle-key="menu.Carriers"
     >
       <template v-slot:item.status="slotProps">
         <v-chip
@@ -51,47 +51,49 @@ onActivated(function () {
 
 // 검색 및 폼 스키마 정의
 const searchSchema = computed(function () {
-  return [{ key: 'authorityName', labelKey: 'columns.authorityName', component: 'v-text-field' }]
+  return [
+    { key: 'authorityName', labelKey: 'model.authority.authorityName', component: 'v-text-field' },
+  ]
 })
 
 //폼 스키마 정의 (추가/수정에 사용)
 const formSchema = computed(function () {
   return [
-    { key: 'authorityName', labelKey: 'columns.authorityName', component: 'v-text-field' },
-    { key: 'description', labelKey: 'columns.description', component: 'v-text-field' },
+    { key: 'authorityName', labelKey: 'model.authority.authorityName', component: 'v-text-field' },
+    { key: 'description', labelKey: 'model.common.description', component: 'v-text-field' },
   ]
 })
 
 const headers = ref([
-  { title: 'columns.id', key: 'id' },
-  { title: 'columns.carrierName', key: 'carrierName' },
-  { title: 'columns.carrierDefId', key: 'carrierDefId' },
-  { title: 'columns.carrierDefName', key: 'carrierDefName' },
-  { title: 'columns.carrierState', key: 'carrierState' },
-  { title: 'columns.equipmentName', key: 'equipmentName' },
-  { title: 'columns.portName', key: 'portName' },
-  { title: 'columns.zoneName', key: 'zoneName' },
-  { title: 'columns.shelfName', key: 'shelfName' },
-  { title: 'columns.capacity', key: 'capacity' },
-  { title: 'columns.cleanState', key: 'cleanState' },
-  { title: 'columns.transportState', key: 'transportState' },
-  { title: 'columns.reservedObjectId', key: 'reservedObjectId' },
-  { title: 'columns.holdState', key: 'holdState' },
-  { title: 'columns.reasonCode', key: 'reasonCode' },
-  { title: 'columns.useState', key: 'useState' },
-  { title: 'columns.useCount', key: 'useCount' },
-  { title: 'columns.useCountPerClean', key: 'useCountPerClean' },
-  { title: 'columns.cleanCount', key: 'cleanCount' },
-  { title: 'columns.lotQuantity', key: 'lotQuantity' },
-  { title: 'columns.capaState', key: 'capaState' },
-  { title: 'columns.lastCleanTime', key: 'lastCleanTime' },
-  { title: 'columns.createTime', key: 'createTime' },
-  { title: 'columns.eventName', key: 'eventName' },
-  { title: 'columns.timeKey', key: 'timeKey' },
-  { title: 'columns.eventTime', key: 'eventTime' },
-  { title: 'columns.eventUser', key: 'eventUser' },
-  { title: 'columns.eventComment', key: 'eventComment' },
-  { title: 'columns.containerType', key: 'containerType' },
+  { title: 'model.common.id', key: 'id' },
+  { title: 'model.carrier.carrierName', key: 'carrierName' },
+  { title: 'model.carrier.carrierDefId', key: 'carrierDefId' },
+  { title: 'model.carrier.carrierDefName', key: 'carrierDefName' },
+  { title: 'model.carrier.carrierState', key: 'carrierState' },
+  { title: 'model.equipment.equipmentName', key: 'equipmentName' },
+  { title: 'model.port.portName', key: 'portName' },
+  { title: 'model.carrier.zoneName', key: 'zoneName' },
+  { title: 'model.carrier.shelfName', key: 'shelfName' },
+  { title: 'model.carrier.capacity', key: 'capacity' },
+  { title: 'model.carrier.cleanState', key: 'cleanState' },
+  { title: 'model.carrier.transportState', key: 'transportState' },
+  { title: 'model.carrier.reservedObjectId', key: 'reservedObjectId' },
+  { title: 'model.carrier.holdState', key: 'holdState' },
+  { title: 'model.carrier.reasonCode', key: 'reasonCode' },
+  { title: 'model.carrier.useState', key: 'useState' },
+  { title: 'model.carrier.useCount', key: 'useCount' },
+  { title: 'model.carrier.useCountPerClean', key: 'useCountPerClean' },
+  { title: 'model.carrier.cleanCount', key: 'cleanCount' },
+  { title: 'model.carrier.lotQuantity', key: 'lotQuantity' },
+  { title: 'model.carrier.capaState', key: 'capaState' },
+  { title: 'model.carrier.lastCleanTime', key: 'lastCleanTime' },
+  { title: 'model.carrier.createTime', key: 'createTime' },
+  { title: 'model.event.eventName', key: 'eventName' },
+  { title: 'model.event.timeKey', key: 'timeKey' },
+  { title: 'model.event.eventTime', key: 'eventTime' },
+  { title: 'model.event.eventUser', key: 'eventUser' },
+  { title: 'model.event.eventComment', key: 'eventComment' },
+  { title: 'model.carrier.containerType', key: 'containerType' },
 ])
 </script>
 <style scoped></style>

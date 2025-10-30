@@ -7,7 +7,7 @@ import router from '@/router'
 const HOME_TAB = {
   name: 'home',
   path: '/',
-  meta: { titleKey: 'menuNames.home' },
+  meta: { titleKey: 'menu.Home' },
 }
 
 export const useTabsStore = defineStore('tabs', function () {

@@ -9,7 +9,7 @@
       isHover
       showCheckbox
       :form-schema="formSchema"
-      data-tabletitle-key="title.authList"
+      data-tabletitle-key="menu.AuthMenu"
     >
       <template v-slot:item.status="slotProps">
         <v-chip
@@ -100,7 +100,7 @@ const searchSchema = computed(function () {
   return [
     {
       key: 'authorityId',
-      labelKey: 'columns.authorityName',
+      labelKey: 'model.authority.authorityName',
       component: 'v-select',
       // ⬇⬇ Vuetify v-select 관례에 맞게 전달할 프로퍼티 이름을 명확히
       items: authorityList.value, // [{ authorityName, authorityId }]
@@ -109,7 +109,7 @@ const searchSchema = computed(function () {
     },
     {
       key: 'systemId',
-      labelKey: 'columns.systemDefName',
+      labelKey: 'model.systemDef.systemDefName',
       component: 'v-select',
       // ⬇⬇ Vuetify v-select 관례에 맞게 전달할 프로퍼티 이름을 명확히
       items: systemDefList.value, // [{ authorityName, authorityId }]
@@ -118,7 +118,7 @@ const searchSchema = computed(function () {
     },
     {
       key: 'menuId',
-      labelKey: 'columns.menuName',
+      labelKey: 'model.menu.menuName',
       component: 'v-select',
       // ⬇⬇ Vuetify v-select 관례에 맞게 전달할 프로퍼티 이름을 명확히
       items: menuList.value, // [{ authorityName, authorityId }]
@@ -132,7 +132,7 @@ const formSchema = computed(function () {
   return [
     {
       key: 'authorityId',
-      labelKey: 'columns.authorityId',
+      labelKey: 'model.authority.authorityId',
       component: 'v-select',
       // ⬇⬇ Vuetify v-select 관례에 맞게 전달할 프로퍼티 이름을 명확히
       items: authorityList.value, // [{ authorityName, authorityId }]
@@ -141,7 +141,7 @@ const formSchema = computed(function () {
     },
     {
       key: 'systemId',
-      labelKey: 'columns.systemDefName',
+      labelKey: 'model.systemDef.systemDefName',
       component: 'v-select',
       // ⬇⬇ Vuetify v-select 관례에 맞게 전달할 프로퍼티 이름을 명확히
       items: systemDefList.value, // [{ authorityName, authorityId }]
@@ -150,7 +150,7 @@ const formSchema = computed(function () {
     },
     {
       key: 'menuId',
-      labelKey: 'columns.menuName',
+      labelKey: 'model.menu.menuName',
       component: 'v-select',
       // ⬇⬇ Vuetify v-select 관례에 맞게 전달할 프로퍼티 이름을 명확히
       items: menuList.value, // [{ authorityName, authorityId }]
@@ -166,22 +166,22 @@ const formSchema = computed(function () {
 })
 
 const headers = ref([
-  //{title:'columns.id', key : 'id'},
-  { title: 'columns.authorityId', key: 'authorityId' },
-  { title: 'columns.authorityName', key: 'authorityName' },
-  { title: 'columns.systemDefId', key: 'systemDefId' },
-  { title: 'columns.systemDefName', key: 'systemDefName' },
-  { title: 'columns.parentMenuId', key: 'menuId' },
-  { title: 'columns.parentmenuName', key: 'menuName' },
-  { title: 'columns.checkOutState', key: 'checkOutState' },
-  { title: 'columns.checkOutTime', key: 'checkOutTime' },
-  { title: 'columns.checkOutUser', key: 'checkOutUser' },
-  { title: 'columns.dataState', key: 'dataState' },
-  { title: 'columns.eventName', key: 'eventName' },
-  { title: 'columns.timeKey', key: 'timeKey' },
-  { title: 'columns.eventTime', key: 'eventTime' },
-  { title: 'columns.eventUser', key: 'eventUser' },
-  { title: 'columns.eventComment', key: 'eventComment' },
+  //{title:'model.common.id', key : 'id'},
+  { title: 'model.authority.authorityId', key: 'authorityId' },
+  { title: 'model.authority.authorityName', key: 'authorityName' },
+  { title: 'model.systemDef.systemDefId', key: 'systemDefId' },
+  { title: 'model.systemDef.systemDefName', key: 'systemDefName' },
+  { title: 'model.menu.parentMenuId', key: 'menuId' },
+  { title: 'model.menu.parentmenuName', key: 'menuName' },
+  { title: 'model.common.checkOutState', key: 'checkOutState' },
+  { title: 'model.common.checkOutTime', key: 'checkOutTime' },
+  { title: 'model.common.checkOutUser', key: 'checkOutUser' },
+  { title: 'model.common.dataState', key: 'dataState' },
+  { title: 'model.event.eventName', key: 'eventName' },
+  { title: 'model.event.timeKey', key: 'timeKey' },
+  { title: 'model.event.eventTime', key: 'eventTime' },
+  { title: 'model.event.eventUser', key: 'eventUser' },
+  { title: 'model.event.eventComment', key: 'eventComment' },
 ])
 </script>
 <style scoped></style>

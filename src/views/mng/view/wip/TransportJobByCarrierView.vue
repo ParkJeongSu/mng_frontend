@@ -11,7 +11,7 @@
           isHover
           showCheckbox
           :form-schema="formSchema"
-          data-tabletitle-key="menuNames.alarmAction"
+          data-tabletitle-key="menu.TransportJobByCarrier"
           @row-selected="handleMasterRowSelect"
           :is-open-panel="false"
         >
@@ -27,7 +27,7 @@
           isHover
           showCheckbox
           :form-schema="detailFormSchema"
-          data-tabletitle-key="menuNames.alarmDetailAction"
+          data-tabletitle-key="menu.TransportJobByCarrier"
           :filter-params="detailFilterParams"
           :is-open-panel="false"
         >
@@ -91,40 +91,42 @@ onActivated(function () {
 // AlarmAction search 및 폼 스키마 및 headers 정의
 // 검색 및 폼 스키마 정의
 const searchSchema = computed(function () {
-  return [{ key: 'authorityName', labelKey: 'columns.authorityName', component: 'v-text-field' }]
+  return [
+    { key: 'authorityName', labelKey: 'model.authority.authorityName', component: 'v-text-field' },
+  ]
 })
 
 //폼 스키마 정의 (추가/수정에 사용)
 const formSchema = computed(function () {
   return [
-    { key: 'authorityName', labelKey: 'columns.authorityName', component: 'v-text-field' },
-    { key: 'description', labelKey: 'columns.description', component: 'v-text-field' },
+    { key: 'authorityName', labelKey: 'model.authority.authorityName', component: 'v-text-field' },
+    { key: 'description', labelKey: 'model.common.description', component: 'v-text-field' },
   ]
 })
 
 const headers = ref([
-  { title: 'columns.id', key: 'id' },
-  { title: 'columns.transportJobName', key: 'transportJobName' },
-  { title: 'columns.transportJobState', key: 'transportJobState' },
-  { title: 'columns.sourceEquipmentName', key: 'sourceEquipmentName' },
-  { title: 'columns.sourcePortName', key: 'sourcePortName' },
-  { title: 'columns.sourceZoneName', key: 'sourceZoneName' },
-  { title: 'columns.sourceShelfName', key: 'sourceShelfName' },
-  { title: 'columns.destinationEquipmentName', key: 'destinationEquipmentName' },
-  { title: 'columns.destinationPortName', key: 'destinationPortName' },
-  { title: 'columns.destinationZoneName', key: 'destinationZoneName' },
-  { title: 'columns.destinationShelfName', key: 'destinationShelfName' },
-  { title: 'columns.priority', key: 'priority' },
-  { title: 'columns.errorCode', key: 'errorCode' },
-  { title: 'columns.errorText', key: 'errorText' },
-  { title: 'columns.requestType', key: 'requestType' },
-  { title: 'columns.createTime', key: 'createTime' },
-  { title: 'columns.reasonCode', key: 'reasonCode' },
-  { title: 'columns.eventName', key: 'eventName' },
-  { title: 'columns.timeKey', key: 'timeKey' },
-  { title: 'columns.eventTime', key: 'eventTime' },
-  { title: 'columns.eventUser', key: 'eventUser' },
-  { title: 'columns.eventComment', key: 'eventComment' },
+  { title: 'model.common.id', key: 'id' },
+  { title: 'model.transportJob.transportJobName', key: 'transportJobName' },
+  { title: 'model.transportJob.transportJobState', key: 'transportJobState' },
+  { title: 'model.transportJob.sourceEquipmentName', key: 'sourceEquipmentName' },
+  { title: 'model.transportJob.sourcePortName', key: 'sourcePortName' },
+  { title: 'model.transportJob.sourceZoneName', key: 'sourceZoneName' },
+  { title: 'model.transportJob.sourceShelfName', key: 'sourceShelfName' },
+  { title: 'model.transportJob.destinationEquipmentName', key: 'destinationEquipmentName' },
+  { title: 'model.transportJob.destinationPortName', key: 'destinationPortName' },
+  { title: 'model.transportJob.destinationZoneName', key: 'destinationZoneName' },
+  { title: 'model.transportJob.destinationShelfName', key: 'destinationShelfName' },
+  { title: 'model.transportJob.priority', key: 'priority' },
+  { title: 'model.transportJob.errorCode', key: 'errorCode' },
+  { title: 'model.transportJob.errorText', key: 'errorText' },
+  { title: 'model.transportJob.requestType', key: 'requestType' },
+  { title: 'model.carrier.createTime', key: 'createTime' },
+  { title: 'model.carrier.reasonCode', key: 'reasonCode' },
+  { title: 'model.event.eventName', key: 'eventName' },
+  { title: 'model.event.timeKey', key: 'timeKey' },
+  { title: 'model.event.eventTime', key: 'eventTime' },
+  { title: 'model.event.eventUser', key: 'eventUser' },
+  { title: 'model.event.eventComment', key: 'eventComment' },
 ])
 
 // Alarm Detail Action search 및 폼 스키마 및 headers 정의
@@ -136,36 +138,36 @@ const detailSearchSchema = computed(function () {
 //폼 스키마 정의 (추가/수정에 사용)
 const detailFormSchema = computed(function () {
   return [
-    { key: 'authorityName', labelKey: 'columns.authorityName', component: 'v-text-field' },
-    { key: 'description', labelKey: 'columns.description', component: 'v-text-field' },
+    { key: 'authorityName', labelKey: 'model.authority.authorityName', component: 'v-text-field' },
+    { key: 'description', labelKey: 'model.common.description', component: 'v-text-field' },
   ]
 })
 
 const detailHeaders = ref([
-  { title: 'columns.id', key: 'id' },
-  { title: 'columns.transportJobDetailName', key: 'transportJobDetailName' },
-  { title: 'columns.transportJobId', key: 'transportJobId' },
-  { title: 'columns.transportJobDetailState', key: 'transportJobDetailState' },
-  { title: 'columns.carrierId', key: 'carrierId' },
-  { title: 'columns.sourceEquipmentName', key: 'sourceEquipmentName' },
-  { title: 'columns.sourcePortName', key: 'sourcePortName' },
-  { title: 'columns.sourceZoneName', key: 'sourceZoneName' },
-  { title: 'columns.sourceShelfName', key: 'sourceShelfName' },
-  { title: 'columns.destinationEquipmentName', key: 'destinationEquipmentName' },
-  { title: 'columns.destinationPortName', key: 'destinationPortName' },
-  { title: 'columns.destinationZoneName', key: 'destinationZoneName' },
-  { title: 'columns.destinationShelfName', key: 'destinationShelfName' },
-  { title: 'columns.currentEquipmentName', key: 'currentEquipmentName' },
-  { title: 'columns.currentPortName', key: 'currentPortName' },
-  { title: 'columns.currentZoneName', key: 'currentZoneName' },
-  { title: 'columns.currentShelfName', key: 'currentShelfName' },
-  { title: 'columns.order', key: 'order' },
-  { title: 'columns.jobPhase', key: 'jobPhase' },
-  { title: 'columns.eventName', key: 'eventName' },
-  { title: 'columns.timeKey', key: 'timeKey' },
-  { title: 'columns.eventTime', key: 'eventTime' },
-  { title: 'columns.eventUser', key: 'eventUser' },
-  { title: 'columns.eventComment', key: 'eventComment' },
+  { title: 'model.common.id', key: 'id' },
+  { title: 'model.transportJob.transportJobDetailName', key: 'transportJobDetailName' },
+  { title: 'model.transportJob.transportJobId', key: 'transportJobId' },
+  { title: 'model.transportJob.transportJobDetailState', key: 'transportJobDetailState' },
+  { title: 'model.lot.carrierId', key: 'carrierId' },
+  { title: 'model.transportJob.sourceEquipmentName', key: 'sourceEquipmentName' },
+  { title: 'model.transportJob.sourcePortName', key: 'sourcePortName' },
+  { title: 'model.transportJob.sourceZoneName', key: 'sourceZoneName' },
+  { title: 'model.transportJob.sourceShelfName', key: 'sourceShelfName' },
+  { title: 'model.transportJob.destinationEquipmentName', key: 'destinationEquipmentName' },
+  { title: 'model.transportJob.destinationPortName', key: 'destinationPortName' },
+  { title: 'model.transportJob.destinationZoneName', key: 'destinationZoneName' },
+  { title: 'model.transportJob.destinationShelfName', key: 'destinationShelfName' },
+  { title: 'model.transportJob.currentEquipmentName', key: 'currentEquipmentName' },
+  { title: 'model.transportJob.currentPortName', key: 'currentPortName' },
+  { title: 'model.transportJob.currentZoneName', key: 'currentZoneName' },
+  { title: 'model.transportJob.currentShelfName', key: 'currentShelfName' },
+  { title: 'model.transportJob.stepOrder', key: 'stepOrder' },
+  { title: 'model.transportJob.stepPhase', key: 'stepPhase' },
+  { title: 'model.event.eventName', key: 'eventName' },
+  { title: 'model.event.timeKey', key: 'timeKey' },
+  { title: 'model.event.eventTime', key: 'eventTime' },
+  { title: 'model.event.eventUser', key: 'eventUser' },
+  { title: 'model.event.eventComment', key: 'eventComment' },
 ])
 </script>
 <style scoped>

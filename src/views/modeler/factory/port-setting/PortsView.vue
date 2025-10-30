@@ -9,7 +9,7 @@
       isHover
       showCheckbox
       :form-schema="formSchema"
-      data-tabletitle-key="menuNames.ports"
+      data-tabletitle-key="menu.Ports"
     >
       <template v-slot:item.status="slotProps">
         <v-chip
@@ -51,35 +51,37 @@ onActivated(function () {
 
 // 검색 및 폼 스키마 정의
 const searchSchema = computed(function () {
-  return [{ key: 'authorityName', labelKey: 'columns.authorityName', component: 'v-text-field' }]
+  return [
+    { key: 'authorityName', labelKey: 'model.authority.authorityName', component: 'v-text-field' },
+  ]
 })
 
 //폼 스키마 정의 (추가/수정에 사용)
 const formSchema = computed(function () {
   return [
-    { key: 'authorityName', labelKey: 'columns.authorityName', component: 'v-text-field' },
-    { key: 'description', labelKey: 'columns.description', component: 'v-text-field' },
+    { key: 'authorityName', labelKey: 'model.authority.authorityName', component: 'v-text-field' },
+    { key: 'description', labelKey: 'model.common.description', component: 'v-text-field' },
   ]
 })
 
 const headers = ref([
-  { title: 'columns.id', key: 'id' },
-  { title: 'columns.equipmentName', key: 'equipmentName' },
-  { title: 'columns.portName', key: 'portName' },
-  { title: 'columns.portDefId', key: 'portDefId' },
-  { title: 'columns.portDefName', key: 'portDefName' },
-  { title: 'columns.description', key: 'description' },
-  { title: 'columns.connectedStocker', key: 'connectedStocker' },
-  { title: 'columns.transportMode', key: 'transportMode' },
-  { title: 'columns.portState', key: 'portState' },
-  { title: 'columns.resourceState', key: 'resourceState' },
-  { title: 'columns.transportState', key: 'transportState' },
-  { title: 'columns.carrierName', key: 'carrierName' },
-  { title: 'columns.eventName', key: 'eventName' },
-  { title: 'columns.timeKey', key: 'timeKey' },
-  { title: 'columns.eventTime', key: 'eventTime' },
-  { title: 'columns.eventUser', key: 'eventUser' },
-  { title: 'columns.eventComment', key: 'eventComment' },
+  { title: 'model.common.id', key: 'id' },
+  { title: 'model.equipment.equipmentName', key: 'equipmentName' },
+  { title: 'model.port.portName', key: 'portName' },
+  { title: 'model.port.portDefId', key: 'portDefId' },
+  { title: 'model.port.portDefName', key: 'portDefName' },
+  { title: 'model.common.description', key: 'description' },
+  { title: 'model.port.connectedStocker', key: 'connectedStocker' },
+  { title: 'model.port.transportMode', key: 'transportMode' },
+  { title: 'model.port.portState', key: 'portState' },
+  { title: 'model.equipment.resourceState', key: 'resourceState' },
+  { title: 'model.carrier.transportState', key: 'transportState' },
+  { title: 'model.carrier.carrierName', key: 'carrierName' },
+  { title: 'model.event.eventName', key: 'eventName' },
+  { title: 'model.event.timeKey', key: 'timeKey' },
+  { title: 'model.event.eventTime', key: 'eventTime' },
+  { title: 'model.event.eventUser', key: 'eventUser' },
+  { title: 'model.event.eventComment', key: 'eventComment' },
 ])
 </script>
 <style scoped></style>

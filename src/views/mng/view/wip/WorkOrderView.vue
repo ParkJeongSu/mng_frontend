@@ -9,7 +9,7 @@
       isHover
       showCheckbox
       :form-schema="formSchema"
-      data-tabletitle-key="title.authList"
+      data-tabletitle-key="menu.WorkOrder"
     >
       <template v-slot:item.status="slotProps">
         <v-chip
@@ -51,47 +51,49 @@ onActivated(function () {
 
 // 검색 및 폼 스키마 정의
 const searchSchema = computed(function () {
-  return [{ key: 'authorityName', labelKey: 'columns.authorityName', component: 'v-text-field' }]
+  return [
+    { key: 'authorityName', labelKey: 'model.authority.authorityName', component: 'v-text-field' },
+  ]
 })
 
 //폼 스키마 정의 (추가/수정에 사용)
 const formSchema = computed(function () {
   return [
-    { key: 'authorityName', labelKey: 'columns.authorityName', component: 'v-text-field' },
-    { key: 'description', labelKey: 'columns.description', component: 'v-text-field' },
+    { key: 'authorityName', labelKey: 'model.authority.authorityName', component: 'v-text-field' },
+    { key: 'description', labelKey: 'model.common.description', component: 'v-text-field' },
   ]
 })
 
 const headers = ref([
-  { title: 'columns.id', key: 'id' },
-  { title: 'columns.workOrderName', key: 'workOrderName' },
-  { title: 'columns.description', key: 'description' },
-  { title: 'columns.vendorName', key: 'vendorName' },
-  { title: 'columns.productDefId', key: 'productDefId' },
-  { title: 'columns.processFlowId', key: 'processFlowId' },
-  { title: 'columns.processOperationId', key: 'processOperationId' },
-  { title: 'columns.workOrderState', key: 'workOrderState' },
-  { title: 'columns.holdState', key: 'holdState' },
-  { title: 'columns.reasonCode', key: 'reasonCode' },
-  { title: 'columns.equipmentName', key: 'equipmentName' },
-  { title: 'columns.planQuantity', key: 'planQuantity' },
-  { title: 'columns.createdQuantity', key: 'createdQuantity' },
-  { title: 'columns.releasedQuantity', key: 'releasedQuantity' },
-  { title: 'columns.finishedQuantity', key: 'finishedQuantity' },
-  { title: 'columns.scrappedQuantity', key: 'scrappedQuantity' },
-  { title: 'columns.workOrderCount', key: 'workOrderCount' },
-  { title: 'columns.createTime', key: 'createTime' },
-  { title: 'columns.releaseTime', key: 'releaseTime' },
-  { title: 'columns.completeTime', key: 'completeTime' },
-  { title: 'columns.createUser', key: 'createUser' },
-  { title: 'columns.releaseUser', key: 'releaseUser' },
-  { title: 'columns.completeUser', key: 'completeUser' },
-  { title: 'columns.dueDate', key: 'dueDate' },
-  { title: 'columns.eventName', key: 'eventName' },
-  { title: 'columns.timeKey', key: 'timeKey' },
-  { title: 'columns.eventTime', key: 'eventTime' },
-  { title: 'columns.eventUser', key: 'eventUser' },
-  { title: 'columns.eventComment', key: 'eventComment' },
+  { title: 'model.common.id', key: 'id' },
+  { title: 'model.workorder.workOrderName', key: 'workOrderName' },
+  { title: 'model.common.description', key: 'description' },
+  { title: 'model.workorder.vendorName', key: 'vendorName' },
+  { title: 'model.lot.productDefId', key: 'productDefId' },
+  { title: 'model.workorder.processFlowId', key: 'processFlowId' },
+  { title: 'model.lot.processOperationId', key: 'processOperationId' },
+  { title: 'model.workorder.workOrderState', key: 'workOrderState' },
+  { title: 'model.carrier.holdState', key: 'holdState' },
+  { title: 'model.carrier.reasonCode', key: 'reasonCode' },
+  { title: 'model.equipment.equipmentName', key: 'equipmentName' },
+  { title: 'model.workorder.planQuantity', key: 'planQuantity' },
+  { title: 'model.workorder.createdQuantity', key: 'createdQuantity' },
+  { title: 'model.workorder.releasedQuantity', key: 'releasedQuantity' },
+  { title: 'model.workorder.finishedQuantity', key: 'finishedQuantity' },
+  { title: 'model.workorder.scrappedQuantity', key: 'scrappedQuantity' },
+  { title: 'model.workorder.workOrderCount', key: 'workOrderCount' },
+  { title: 'model.carrier.createTime', key: 'createTime' },
+  { title: 'model.lot.releaseTime', key: 'releaseTime' },
+  { title: 'model.workorder.completeTime', key: 'completeTime' },
+  { title: 'model.workorder.createUser', key: 'createUser' },
+  { title: 'model.workorder.releaseUser', key: 'releaseUser' },
+  { title: 'model.workorder.completeUser', key: 'completeUser' },
+  { title: 'model.workorder.dueDate', key: 'dueDate' },
+  { title: 'model.event.eventName', key: 'eventName' },
+  { title: 'model.event.timeKey', key: 'timeKey' },
+  { title: 'model.event.eventTime', key: 'eventTime' },
+  { title: 'model.event.eventUser', key: 'eventUser' },
+  { title: 'model.event.eventComment', key: 'eventComment' },
 ])
 </script>
 <style scoped></style>

@@ -9,7 +9,7 @@
       isHover
       showCheckbox
       :form-schema="formSchema"
-      data-tabletitle-key="menuNames.equipments"
+      data-tabletitle-key="menu.Equipments"
     >
       <template v-slot:item.status="slotProps">
         <v-chip
@@ -51,41 +51,43 @@ onActivated(function () {
 
 // 검색 및 폼 스키마 정의
 const searchSchema = computed(function () {
-  return [{ key: 'authorityName', labelKey: 'columns.authorityName', component: 'v-text-field' }]
+  return [
+    { key: 'authorityName', labelKey: 'model.authority.authorityName', component: 'v-text-field' },
+  ]
 })
 
 //폼 스키마 정의 (추가/수정에 사용)
 const formSchema = computed(function () {
   return [
-    { key: 'authorityName', labelKey: 'columns.authorityName', component: 'v-text-field' },
-    { key: 'description', labelKey: 'columns.description', component: 'v-text-field' },
+    { key: 'authorityName', labelKey: 'model.authority.authorityName', component: 'v-text-field' },
+    { key: 'description', labelKey: 'model.common.description', component: 'v-text-field' },
   ]
 })
 
 const headers = ref([
-  { title: 'columns.id', key: 'id' },
-  { title: 'columns.equipmentName', key: 'equipmentName' },
-  { title: 'columns.equipmentDefId', key: 'equipmentDefId' },
-  { title: 'columns.equipmentDefName', key: 'equipmentDefName' },
-  { title: 'columns.parentEquipmentId', key: 'parentEquipmentId' },
-  { title: 'columns.parentEquipmentName', key: 'parentEquipmentName' },
-  { title: 'columns.equipmentLevel', key: 'equipmentLevel' },
-  { title: 'columns.equipmentState', key: 'equipmentState' },
-  { title: 'columns.communicationState', key: 'communicationState' },
-  { title: 'columns.processCount', key: 'processCount' },
-  { title: 'columns.recipeName', key: 'recipeName' },
-  { title: 'columns.defaultStockerId', key: 'defaultStockerId' },
-  { title: 'columns.defaultZoneId', key: 'defaultZoneId' },
-  { title: 'columns.holdState', key: 'holdState' },
-  { title: 'columns.reasonCode', key: 'reasonCode' },
-  { title: 'columns.resourceState', key: 'resourceState' },
-  { title: 'columns.operationMode', key: 'operationMode' },
-  { title: 'columns.messageServiceAddress', key: 'messageServiceAddress' },
-  { title: 'columns.eventName', key: 'eventName' },
-  { title: 'columns.timeKey', key: 'timeKey' },
-  { title: 'columns.eventTime', key: 'eventTime' },
-  { title: 'columns.eventUser', key: 'eventUser' },
-  { title: 'columns.eventComment', key: 'eventComment' },
+  { title: 'model.common.id', key: 'id' },
+  { title: 'model.equipment.equipmentName', key: 'equipmentName' },
+  { title: 'model.equipment.equipmentDefId', key: 'equipmentDefId' },
+  { title: 'model.equipment.equipmentDefName', key: 'equipmentDefName' },
+  { title: 'model.equipment.parentEquipmentId', key: 'parentEquipmentId' },
+  { title: 'model.equipment.parentEquipmentName', key: 'parentEquipmentName' },
+  { title: 'model.equipment.equipmentLevel', key: 'equipmentLevel' },
+  { title: 'model.equipment.equipmentState', key: 'equipmentState' },
+  { title: 'model.equipment.communicationState', key: 'communicationState' },
+  { title: 'model.equipment.processCount', key: 'processCount' },
+  { title: 'model.equipment.recipeName', key: 'recipeName' },
+  { title: 'model.equipment.defaultStockerId', key: 'defaultStockerId' },
+  { title: 'model.equipment.defaultZoneId', key: 'defaultZoneId' },
+  { title: 'model.carrier.holdState', key: 'holdState' },
+  { title: 'model.carrier.reasonCode', key: 'reasonCode' },
+  { title: 'model.equipment.resourceState', key: 'resourceState' },
+  { title: 'model.equipment.operationMode', key: 'operationMode' },
+  { title: 'model.equipment.messageServiceAddress', key: 'messageServiceAddress' },
+  { title: 'model.event.eventName', key: 'eventName' },
+  { title: 'model.event.timeKey', key: 'timeKey' },
+  { title: 'model.event.eventTime', key: 'eventTime' },
+  { title: 'model.event.eventUser', key: 'eventUser' },
+  { title: 'model.event.eventComment', key: 'eventComment' },
 ])
 </script>
 <style scoped></style>

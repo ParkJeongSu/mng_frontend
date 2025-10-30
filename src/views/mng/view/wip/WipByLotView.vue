@@ -9,7 +9,7 @@
       isHover
       showCheckbox
       :form-schema="formSchema"
-      data-tabletitle-key="title.authList"
+      data-tabletitle-key="menu.WipByLot"
     >
       <template v-slot:item.status="slotProps">
         <v-chip
@@ -51,60 +51,62 @@ onActivated(function () {
 
 // 검색 및 폼 스키마 정의
 const searchSchema = computed(function () {
-  return [{ key: 'authorityName', labelKey: 'columns.authorityName', component: 'v-text-field' }]
+  return [
+    { key: 'authorityName', labelKey: 'model.authority.authorityName', component: 'v-text-field' },
+  ]
 })
 
 //폼 스키마 정의 (추가/수정에 사용)
 const formSchema = computed(function () {
   return [
-    { key: 'authorityName', labelKey: 'columns.authorityName', component: 'v-text-field' },
-    { key: 'description', labelKey: 'columns.description', component: 'v-text-field' },
+    { key: 'authorityName', labelKey: 'model.authority.authorityName', component: 'v-text-field' },
+    { key: 'description', labelKey: 'model.common.description', component: 'v-text-field' },
   ]
 })
 
 const headers = ref([
-  { title: 'columns.id', key: 'id' },
-  { title: 'columns.lotName', key: 'lotName' },
-  { title: 'columns.productionType', key: 'productionType' },
-  { title: 'columns.lotState', key: 'lotState' },
-  { title: 'columns.processState', key: 'processState' },
-  { title: 'columns.productDefId', key: 'productDefId' },
-  { title: 'columns.processSpecId', key: 'processSpecId' },
-  { title: 'columns.processSpecVersion', key: 'processSpecVersion' },
-  { title: 'columns.processFlowId', key: 'processFlowId' },
-  { title: 'columns.processOperationId', key: 'processOperationId' },
-  { title: 'columns.workOrderId', key: 'workOrderId' },
-  { title: 'columns.equipmentName', key: 'equipmentName' },
-  { title: 'columns.portName', key: 'portName' },
-  { title: 'columns.recipeName', key: 'recipeName' },
-  { title: 'columns.carrierId', key: 'carrierId' },
-  { title: 'columns.priority', key: 'priority' },
-  { title: 'columns.lotGrade', key: 'lotGrade' },
-  { title: 'columns.productionDetailType', key: 'productionDetailType' },
-  { title: 'columns.planStartDate', key: 'planStartDate' },
-  { title: 'columns.planDueDate', key: 'planDueDate' },
-  { title: 'columns.createTime', key: 'createTime' },
-  { title: 'columns.releaseTime', key: 'releaseTime' },
-  { title: 'columns.shipTime', key: 'shipTime' },
-  { title: 'columns.trackInTime', key: 'trackInTime' },
-  { title: 'columns.trackOutTime', key: 'trackOutTime' },
-  { title: 'columns.operationMoveTime', key: 'operationMoveTime' },
-  { title: 'columns.quantity', key: 'quantity' },
-  { title: 'columns.oldQuantity', key: 'oldQuantity' },
-  { title: 'columns.holdState', key: 'holdState' },
-  { title: 'columns.reworkState', key: 'reworkState' },
-  { title: 'columns.reworkCount', key: 'reworkCount' },
-  { title: 'columns.originalProcessSpecId', key: 'originalProcessSpecId' },
-  { title: 'columns.originalProcessSpecVersion', key: 'originalProcessSpecVersion' },
-  { title: 'columns.returnProcessFlowId', key: 'returnProcessFlowId' },
-  { title: 'columns.returnProcessOperationId', key: 'returnProcessOperationId' },
-  { title: 'columns.reasonCode', key: 'reasonCode' },
-  { title: 'columns.ownerCode', key: 'ownerCode' },
-  { title: 'columns.eventName', key: 'eventName' },
-  { title: 'columns.timeKey', key: 'timeKey' },
-  { title: 'columns.eventTime', key: 'eventTime' },
-  { title: 'columns.eventUser', key: 'eventUser' },
-  { title: 'columns.eventComment', key: 'eventComment' },
+  { title: 'model.common.id', key: 'id' },
+  { title: 'model.lot.lotName', key: 'lotName' },
+  { title: 'model.lot.productionType', key: 'productionType' },
+  { title: 'model.lot.lotState', key: 'lotState' },
+  { title: 'model.lot.processState', key: 'processState' },
+  { title: 'model.lot.productDefId', key: 'productDefId' },
+  { title: 'model.lot.processSpecId', key: 'processSpecId' },
+  { title: 'model.lot.processSpecVersion', key: 'processSpecVersion' },
+  { title: 'model.lot.processFlowId', key: 'processFlowId' },
+  { title: 'model.lot.processOperationId', key: 'processOperationId' },
+  { title: 'model.lot.workOrderId', key: 'workOrderId' },
+  { title: 'model.equipment.equipmentName', key: 'equipmentName' },
+  { title: 'model.port.portName', key: 'portName' },
+  { title: 'model.equipment.recipeName', key: 'recipeName' },
+  { title: 'model.lot.carrierId', key: 'carrierId' },
+  { title: 'model.transportJob.priority', key: 'priority' },
+  { title: 'model.lot.lotGrade', key: 'lotGrade' },
+  { title: 'model.lot.productionDetailType', key: 'productionDetailType' },
+  { title: 'model.lot.planStartDate', key: 'planStartDate' },
+  { title: 'model.lot.planDueDate', key: 'planDueDate' },
+  { title: 'model.carrier.createTime', key: 'createTime' },
+  { title: 'model.lot.releaseTime', key: 'releaseTime' },
+  { title: 'model.lot.shipTime', key: 'shipTime' },
+  { title: 'model.lot.trackInTime', key: 'trackInTime' },
+  { title: 'model.lot.trackOutTime', key: 'trackOutTime' },
+  { title: 'model.lot.operationMoveTime', key: 'operationMoveTime' },
+  { title: 'model.lot.quantity', key: 'quantity' },
+  { title: 'model.lot.oldQuantity', key: 'oldQuantity' },
+  { title: 'model.carrier.holdState', key: 'holdState' },
+  { title: 'model.lot.reworkState', key: 'reworkState' },
+  { title: 'model.lot.reworkCount', key: 'reworkCount' },
+  { title: 'model.lot.originalProcessSpecId', key: 'originalProcessSpecId' },
+  { title: 'model.lot.originalProcessSpecVersion', key: 'originalProcessSpecVersion' },
+  { title: 'model.lot.returnProcessFlowId', key: 'returnProcessFlowId' },
+  { title: 'model.lot.returnProcessOperationId', key: 'returnProcessOperationId' },
+  { title: 'model.carrier.reasonCode', key: 'reasonCode' },
+  { title: 'model.lot.ownerCode', key: 'ownerCode' },
+  { title: 'model.event.eventName', key: 'eventName' },
+  { title: 'model.event.timeKey', key: 'timeKey' },
+  { title: 'model.event.eventTime', key: 'eventTime' },
+  { title: 'model.event.eventUser', key: 'eventUser' },
+  { title: 'model.event.eventComment', key: 'eventComment' },
 ])
 </script>
 <style scoped></style>

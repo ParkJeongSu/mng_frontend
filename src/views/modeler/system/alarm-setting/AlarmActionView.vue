@@ -11,7 +11,7 @@
           isHover
           showCheckbox
           :form-schema="formSchema"
-          data-tabletitle-key="menuNames.alarmAction"
+          data-tabletitle-key="menu.AlarmAction"
           @row-selected="handleMasterRowSelect"
           :is-open-panel="false"
         >
@@ -27,7 +27,7 @@
           isHover
           showCheckbox
           :form-schema="detailFormSchema"
-          data-tabletitle-key="menuNames.alarmDetailAction"
+          data-tabletitle-key="menu.AlarmAction"
           :filter-params="detailFilterParams"
           :is-open-panel="false"
         >
@@ -91,33 +91,35 @@ onActivated(function () {
 // AlarmAction search 및 폼 스키마 및 headers 정의
 // 검색 및 폼 스키마 정의
 const searchSchema = computed(function () {
-  return [{ key: 'authorityName', labelKey: 'columns.authorityName', component: 'v-text-field' }]
+  return [
+    { key: 'authorityName', labelKey: 'model.authority.authorityName', component: 'v-text-field' },
+  ]
 })
 
 //폼 스키마 정의 (추가/수정에 사용)
 const formSchema = computed(function () {
   return [
-    { key: 'authorityName', labelKey: 'columns.authorityName', component: 'v-text-field' },
-    { key: 'description', labelKey: 'columns.description', component: 'v-text-field' },
+    { key: 'authorityName', labelKey: 'model.authority.authorityName', component: 'v-text-field' },
+    { key: 'description', labelKey: 'model.common.description', component: 'v-text-field' },
   ]
 })
 
 const headers = ref([
-  { title: 'columns.id', key: 'id' },
-  { title: 'columns.alarmActionName', key: 'alarmActionName' },
-  { title: 'columns.actionType', key: 'actionType' },
-  { title: 'columns.alarmDefId', key: 'alarmDefId' },
-  { title: 'columns.alarmCodeName', key: 'alarmCodeName' },
-  { title: 'columns.description', key: 'description' },
-  { title: 'columns.dataState', key: 'dataState' },
-  { title: 'columns.checkOutState', key: 'checkOutState' },
-  { title: 'columns.checkOutTime', key: 'checkOutTime' },
-  { title: 'columns.checkOutUser', key: 'checkOutUser' },
-  { title: 'columns.eventName', key: 'eventName' },
-  { title: 'columns.timeKey', key: 'timeKey' },
-  { title: 'columns.eventTime', key: 'eventTime' },
-  { title: 'columns.eventUser', key: 'eventUser' },
-  { title: 'columns.eventComment', key: 'eventComment' },
+  { title: 'model.common.id', key: 'id' },
+  { title: 'model.alarm.alarmActionName', key: 'alarmActionName' },
+  { title: 'model.alarm.actionType', key: 'actionType' },
+  { title: 'model.alarm.alarmDefId', key: 'alarmDefId' },
+  { title: 'model.alarm.alarmCodeName', key: 'alarmCodeName' },
+  { title: 'model.common.description', key: 'description' },
+  { title: 'model.common.dataState', key: 'dataState' },
+  { title: 'model.common.checkOutState', key: 'checkOutState' },
+  { title: 'model.common.checkOutTime', key: 'checkOutTime' },
+  { title: 'model.common.checkOutUser', key: 'checkOutUser' },
+  { title: 'model.event.eventName', key: 'eventName' },
+  { title: 'model.event.timeKey', key: 'timeKey' },
+  { title: 'model.event.eventTime', key: 'eventTime' },
+  { title: 'model.event.eventUser', key: 'eventUser' },
+  { title: 'model.event.eventComment', key: 'eventComment' },
 ])
 
 // Alarm Detail Action search 및 폼 스키마 및 headers 정의
@@ -129,24 +131,24 @@ const detailSearchSchema = computed(function () {
 //폼 스키마 정의 (추가/수정에 사용)
 const detailFormSchema = computed(function () {
   return [
-    { key: 'authorityName', labelKey: 'columns.authorityName', component: 'v-text-field' },
-    { key: 'description', labelKey: 'columns.description', component: 'v-text-field' },
+    { key: 'authorityName', labelKey: 'model.authority.authorityName', component: 'v-text-field' },
+    { key: 'description', labelKey: 'model.common.description', component: 'v-text-field' },
   ]
 })
 
 const detailHeaders = ref([
-  { title: 'columns.id', key: 'id' },
-  { title: 'columns.alarmActionId', key: 'alarmActionId' },
-  { title: 'columns.alarmActionName', key: 'alarmActionName' },
-  { title: 'columns.alarmActionUserGroupId', key: 'alarmActionUserGroupId' },
-  { title: 'columns.userGroupName', key: 'userGroupName' },
-  { title: 'columns.subject', key: 'subject' },
-  { title: 'columns.contents', key: 'contents' },
-  { title: 'columns.eventName', key: 'eventName' },
-  { title: 'columns.timeKey', key: 'timeKey' },
-  { title: 'columns.eventTime', key: 'eventTime' },
-  { title: 'columns.eventUser', key: 'eventUser' },
-  { title: 'columns.eventComment', key: 'eventComment' },
+  { title: 'model.common.id', key: 'id' },
+  { title: 'model.alarm.alarmActionId', key: 'alarmActionId' },
+  { title: 'model.alarm.alarmActionName', key: 'alarmActionName' },
+  { title: 'model.alarm.alarmActionUserGroupId', key: 'alarmActionUserGroupId' },
+  { title: 'model.alarm.userGroupName', key: 'userGroupName' },
+  { title: 'model.alarm.subject', key: 'subject' },
+  { title: 'model.alarm.contents', key: 'contents' },
+  { title: 'model.event.eventName', key: 'eventName' },
+  { title: 'model.event.timeKey', key: 'timeKey' },
+  { title: 'model.event.eventTime', key: 'eventTime' },
+  { title: 'model.event.eventUser', key: 'eventUser' },
+  { title: 'model.event.eventComment', key: 'eventComment' },
 ])
 </script>
 <style scoped>
