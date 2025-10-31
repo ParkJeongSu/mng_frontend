@@ -1,10 +1,10 @@
 <template>
   <v-card class="datatable-card d-flex flex-column" flat color="surface">
-    <!-- 제목과 검색 바는 높이가 고정되어야 하므로, 공간이 줄어들 때 수축하지 않도록 합니다. -->
     <v-card-title class="datatable-title text-h5">
       &nbsp; <v-icon icon="$accountGroup" size="24" /> &nbsp;
       {{ $t(dataTabletitleKey, dataTabletitleKey) }}
     </v-card-title>
+
     <v-card class="search-panel" color="surface" flat elevation="0">
       <v-row class="search-row" dense no-gutters>
         <v-col v-for="item in translatedsearchSchema" :key="item.key" cols="12" md="auto">
@@ -22,7 +22,6 @@
             :type="item.type"
             class="search-input"
           ></component>
-          <!-- :label="item.label" -->
         </v-col>
         <v-spacer></v-spacer>
         <v-col class="search-actions d-flex justify-end align-center" cols="12" md="auto">
@@ -34,84 +33,30 @@
       </v-row>
     </v-card>
 
-    <!-- 툴바 역시 높이가 고정됩니다. -->
     <v-toolbar class="results-toolbar" density="comfortable" flat color="surface">
       <v-spacer></v-spacer>
       <slot name="actions.prepend"></slot>
-      <v-tooltip location="bottom" :text="$t('dataTable.add')">
-        <template v-slot:activator="{ props: tooltipProps }">
-          <v-btn
-            v-if="props.actions.includes('add')"
-            v-bind="tooltipProps"
-            class="ml-2"
-            icon="$plus"
-            density="comfortable"
-            @click="handleAddClick"
-          ></v-btn>
-        </template>
-      </v-tooltip>
 
-      <v-tooltip location="bottom" :text="$t('dataTable.edit')">
+      <v-tooltip
+        v-for="action in toolbarActions"
+        :key="action.key"
+        location="bottom"
+        :text="action.tooltip"
+      >
         <template v-slot:activator="{ props: tooltipProps }">
           <v-btn
-            v-if="props.actions.includes('edit')"
             v-bind="tooltipProps"
             class="ml-2"
-            icon="$pencil"
+            :icon="action.icon"
             density="comfortable"
-            @click="handleEditClick"
-          ></v-btn>
-        </template>
-      </v-tooltip>
-
-      <v-tooltip location="bottom" :text="$t('dataTable.delete')">
-        <template v-slot:activator="{ props: tooltipProps }">
-          <v-btn
-            v-if="props.actions.includes('delete')"
-            v-bind="tooltipProps"
-            class="ml-2"
-            icon="$delete"
-            density="comfortable"
-            @click="openDeleteConfirmDialog"
-          ></v-btn>
-        </template>
-      </v-tooltip>
-
-      <v-tooltip location="bottom" :text="$t('dataTable.export')">
-        <template v-slot:activator="{ props: tooltipProps }">
-          <v-btn
-            v-if="props.actions.includes('excelExport')"
-            v-bind="tooltipProps"
-            class="ml-2"
-            icon="$fileExport"
-            density="comfortable"
-            @click="handleExcelExport"
-          ></v-btn>
-        </template>
-      </v-tooltip>
-
-      <v-tooltip location="bottom" :text="$t('dataTable.import')">
-        <template v-slot:activator="{ props: tooltipProps }">
-          <v-btn
-            v-if="props.actions.includes('excelImport')"
-            v-bind="tooltipProps"
-            class="ml-2"
-            icon="$fileImport"
-            density="comfortable"
-            @click="handleExcelImportClick"
-            :loading="isUploading"
-            :disabled="isUploading"
+            @click="action.onClick"
+            :loading="action.loading"
+            :disabled="action.disabled"
           ></v-btn>
         </template>
       </v-tooltip>
     </v-toolbar>
 
-    <!--
-      핵심 변경사항입니다.
-      이 div 래퍼(wrapper)가 남은 공간을 모두 차지하도록(flex-grow-1) 하고,
-      v-data-table-server가 이 래퍼 안에서 높이를 100%로 채우게 만듭니다.
-      이 구조가 flexbox에서 높이 계산을 가장 안정적으로 만듭니다.
-    -->
     <div class="table-wrapper flex-grow-1">
       <v-data-table-server
         v-model="selectedItems"
@@ -141,6 +86,7 @@
             </span>
           </slot>
         </template>
+
         <template v-slot:footer.prepend>
           <div class="d-flex align-center pa-2 footer-left-actions">
             <v-btn
@@ -191,6 +137,7 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+
     <ConfirmDialog
       v-model:show="showDeleteConfirm"
       :title="$t('title.deleteConfirm')"
@@ -201,44 +148,30 @@
 </template>
 
 <script setup>
+// ✨ [리팩토링] 1. Imports (모든 임포트)
 import { ref, reactive, computed, watch } from 'vue'
-import { componentMap } from '@/constants/componentMap' // componentMap import
+import { useI18n } from 'vue-i18n'
 import { usePanelStore } from '@/stores/panel'
+import { useMetaDataStore } from '@/stores/metaData'
+import { componentMap } from '@/constants/componentMap'
 import {
   fetchListData,
   deleteItems,
   updateItemData,
   createItemData,
   uploadExcelFile,
-} from '@/api/dataTable' // 공통 API 함수 import
-import ConfirmDialog from '@/components/common/ConfirmDialog.vue' // ConfirmDialog import
-import { useI18n } from 'vue-i18n' // 1. useI18n을 import 합니다.
+} from '@/api/dataTable'
+import ConfirmDialog from '@/components/common/ConfirmDialog.vue'
 
-const { t, locale } = useI18n() // 2. useI18n을 호출해서 't' 함수를 가져옵니다.
-
-const showDeleteConfirm = ref(false) // 다이얼로그 표시 상태
-
-const panelStore = usePanelStore()
-const selectedItemLocal = ref(null)
-// v-data-table의 v-model과 연결될 내부 상태
-const selectedItems = ref([])
-// [추가] 엑셀 가져오기(Import) 관련 상태 변수
-const fileInput = ref(null) // <input type="file"> DOM 엘리먼트 참조
-const isUploading = ref(false) // 업로드 중 로딩 상태
-const showImportError = ref(false) // 오류 다이얼로그 표시
-const importErrorMessages = ref([]) // 백엔드에서 받은 오류 메시지 목록
-
-// 1. defineEmits를 사용해 'row-selected' 이벤트를 정의합니다.
-const emit = defineEmits(['row-selected'])
-
+// ✨ [리팩토링] 2. Props & Emits
 const props = defineProps({
   dataTabletitleKey: { type: String, required: true },
   searchSchema: { type: Array, required: true },
   headers: { type: Array, required: true },
   apiEndpoint: { type: String, required: true },
+  formSchema: { type: Array, required: true },
   showCheckbox: { type: Boolean, default: false },
-  isHover: { type: Boolean, default: false }, // 부모로부터 어떤 행이 선택되었는지 받음
-  formSchema: { type: Array, required: true }, // 부모로부터 폼 스키마 받음
+  isHover: { type: Boolean, default: false },
   isOpenPanel: { type: Boolean, default: true },
   actions: {
     type: Array,
@@ -246,93 +179,39 @@ const props = defineProps({
       return []
     },
   },
-  // 2. [추가] 부모로부터 외부 필터 조건을 받을 prop을 정의합니다.
   filterParams: {
     type: Object,
     default: function () {
       return {}
     },
   },
-  // ✨ [추가] 푸터에 표시할 액션 버튼 목록
   footerActions: {
     type: Array,
     default: function () {
-      // 람다식 대신 일반 함수 사용
       return []
     },
   },
 })
 
+const emit = defineEmits(['row-selected'])
+
+// ✨ [리팩토링] 3. Dependencies (외부 주입)
+const { t, locale } = useI18n()
+const panelStore = usePanelStore()
+const metaDataStore = useMetaDataStore()
+
+// ✨ [리팩토링] 4. Core State (모든 ref, reactive)
+// -------------------
+// 기본 상태
+const selectedItemLocal = ref(null)
+const selectedItems = ref([]) // v-data-table v-model
+const showDeleteConfirm = ref(false)
+
+// 검색 패널 (동적 v-select 아이템 포함)
+const searchParams = reactive({})
 const dynamicSelectItems = reactive({})
 
-watch(
-  function () {
-    return props.searchSchema
-  },
-  function (newSchema) {
-    if (!newSchema) return
-    newSchema.forEach(function (item) {
-      if (item.component === 'v-select') {
-        // 이전에 캐시된 (동적으로 로드된) 목록이 없다면
-        // props에서 제공된 초기 목록을 설정합니다.
-        // (의존성 필드는 props.items가 []이므로 빈 배열로 설정됩니다)
-        if (dynamicSelectItems[item.key] === undefined) {
-          dynamicSelectItems[item.key] = item.items || []
-        }
-      }
-    })
-  },
-  { immediate: true, deep: true },
-)
-
-// ✨ [추가] computed 속성을 만듭니다.
-// props.headers가 변경되거나, 언어가 변경(t 함수가 변경)될 때마다
-// 이 코드가 자동으로 다시 실행되어 새로운 번역된 헤더 배열을 만듭니다.
-const translatedHeaders = computed(() => {
-  return props.headers.map((header) => ({
-    ...header, // key, align 등 나머지 속성은 그대로 복사
-    title: t(header.title, header.title), // title 속성만 번역
-  }))
-})
-
-// formSchema를 스토어에서 직접 읽어 번역된 label을 만든다.
-// - 화살표 함수 사용 안 함
-// - locale.value를 touch해서 언어 변경 시 재계산
-const translatedsearchSchema = computed(function () {
-  // 언어 변경에 반응시키기 위한 접근
-  const _ = locale.value
-  _
-
-  return props.searchSchema.map(function (schema) {
-    // 안전한 키/라벨 폴백
-    const key = schema.labelKey != null ? schema.labelKey : schema.label != null ? schema.label : ''
-    // 키가 없으면 그냥 원래 label을 쓰고, 키가 있으면 번역 시도
-    let translated = key ? t(key) : ''
-    if (!translated || translated === key) {
-      // 번역 실패 시 원래 label이 있으면 사용
-      translated = schema.label != null ? schema.label : key
-    }
-    // v-select의
-    // 'items'를 정적 item.items 대신
-    // 동적인 dynamicSelectItems에서 가져옵니다.
-    const finalItems =
-      schema.component === 'v-select' ? dynamicSelectItems[schema.key] : schema.items
-
-    // 나머지 필드는 그대로 유지, label만 치환
-    return Object.assign({}, schema, {
-      label: translated,
-      items: finalItems,
-    })
-  })
-})
-
-const searchParams = reactive({})
-// searchSchema를 기반으로 searchParams 초기화
-props.searchSchema.forEach(function (item) {
-  searchParams[item.key] = null
-})
-console.log('초기 props.searchSchema:', props.searchSchema)
-
+// 데이터 테이블 상태
 const serverItems = ref([])
 const loading = ref(true)
 const totalItems = ref(0)
@@ -342,33 +221,167 @@ const options = ref({
   sortBy: [],
 })
 
-// ✨ [신규] 의존성을 가진 검색 필드(예: menuId) 목록을 미리 찾아둡니다.
+// 엑셀 Import/Export 상태
+const fileInput = ref(null)
+const isUploading = ref(false)
+const showImportError = ref(false)
+const importErrorMessages = ref([])
+
+// -------------------
+// searchParams 초기화 (Props 기반)
+props.searchSchema.forEach(function (item) {
+  searchParams[item.key] = null
+})
+
+// ✨ [리팩토링] 5. Computed (계산된 속성)
+// -------------------
+/**
+ * props.headers를 번역합니다.
+ */
+const translatedHeaders = computed(function () {
+  return props.headers.map(function (header) {
+    return Object.assign({}, header, {
+      title: t(header.title, header.title),
+    })
+  })
+})
+
+/**
+ * props.searchSchema를 번역하고, 동적 'items' 목록을 바인딩합니다.
+ */
+const translatedsearchSchema = computed(function () {
+  const _ = locale.value // 언어 변경 감지
+
+  return props.searchSchema.map(function (schema) {
+    // 1. Label 번역
+    const key = schema.labelKey != null ? schema.labelKey : schema.label != null ? schema.label : ''
+    let translated = key ? t(key) : ''
+    if (!translated || translated === key) {
+      translated = schema.label != null ? schema.label : key
+    }
+
+    // 2. 동적 Items 바인딩
+    const finalItems =
+      schema.component === 'v-select' ? dynamicSelectItems[schema.key] : schema.items
+
+    // 3. 병합
+    return Object.assign({}, schema, {
+      label: translated,
+      items: finalItems,
+    })
+  })
+})
+
+/**
+ * 'searchSchema'에서 의존성을 가진 필드(v-select) 목록을 미리 계산합니다.
+ */
 const dependentFields = computed(function () {
   return props.searchSchema.filter(function (item) {
     return (
       item.component === 'v-select' &&
       item.dependsOn &&
       item.dependsOn.length > 0 &&
-      item.itemsApiEndpoint
+      item.apiEndpoint
     )
   })
 })
 
-// ✨ [신규] 검색 파라미터(searchParams)가 변경될 때 감지
+/**
+ * ✨ [리팩토링] 툴바 액션 버튼 목록을 동적으로 생성합니다.
+ * (템플릿 v-for에서 사용)
+ */
+const toolbarActions = computed(function () {
+  // 클릭 핸들러 함수 매핑
+  const actionHandlers = {
+    add: handleAddClick,
+    edit: handleEditClick,
+    delete: openDeleteConfirmDialog,
+    excelExport: handleExcelExport,
+    excelImport: handleExcelImportClick,
+  }
+
+  // 버튼 기본 정의
+  const actionDefinitions = [
+    { key: 'add', icon: '$plus', tooltipKey: 'dataTable.add' },
+    { key: 'edit', icon: '$pencil', tooltipKey: 'dataTable.edit' },
+    { key: 'delete', icon: '$delete', tooltipKey: 'dataTable.delete' },
+    { key: 'excelExport', icon: '$fileExport', tooltipKey: 'dataTable.export' },
+    { key: 'excelImport', icon: '$fileImport', tooltipKey: 'dataTable.import' },
+  ]
+
+  return actionDefinitions
+    .filter(function (action) {
+      // 1. props.actions에 포함된 것만 필터링
+      return props.actions.includes(action.key)
+    })
+    .map(function (action) {
+      // 2. 번역된 텍스트와 핸들러, 로딩 상태 등을 추가
+      return {
+        ...action,
+        tooltip: t(action.tooltipKey),
+        onClick: actionHandlers[action.key],
+        // 'excelImport' 버튼을 위한 특수 로딩/비활성 상태
+        loading: action.key === 'excelImport' ? isUploading.value : false,
+        disabled: action.key === 'excelImport' ? isUploading.value : false,
+      }
+    })
+})
+
+// ✨ [리팩토링] 6. Watch (반응형 감시)
+// -------------------
+/**
+ * props.searchSchema가 변경될 때 dynamicSelectItems를 초기화합니다.
+ */
+watch(
+  function () {
+    return props.searchSchema
+  },
+  function (newSchema) {
+    if (!newSchema) return
+    newSchema.forEach(async function (item) {
+      if (item.component === 'v-select') {
+        if (dynamicSelectItems[item.key] === undefined) {
+          // --- ✨ [신규] 'apiEndpoint'가 있고, 의존성이 없는 경우 (정적 Select)
+          if (item.apiEndpoint && !item.dependsOn) {
+            // 1. 임시로 빈 배열 설정 (중복 호출 방지)
+            dynamicSelectItems[item.key] = []
+            // 2. 스토어에서 아이템 가져오기
+            const items = await metaDataStore.getItems(
+              item.apiEndpoint,
+              item['item-value'],
+              item['item-title'],
+              true, // 검색 패널이므로 '선택안함' 옵션 추가
+            )
+            // 3. 실제 데이터로 업데이트
+            dynamicSelectItems[item.key] = items
+
+            // --- [기존] 의존성이 있는 경우 (연쇄 Select)
+          } else if (item.dependsOn) {
+            dynamicSelectItems[item.key] = item.items || [] // 예: menuId는 빈 배열로 시작
+
+            // --- [기존] 부모가 'items'를 직접 준 경우 (드문 케이스)
+          } else {
+            dynamicSelectItems[item.key] = item.items || []
+          }
+        }
+      }
+    })
+  },
+  { immediate: true, deep: true },
+)
+
+/**
+ * searchParams (검색 조건)가 변경되면, 연쇄 v-select 목록을 업데이트합니다.
+ */
 watch(
   function () {
     return { ...searchParams }
   },
   function (newParams, oldParams) {
-    // 의존성을 가진 필드 각각에 대해 검사
     dependentFields.value.forEach(function (field) {
-      // field는 'menuId' 스키마 객체
-
-      // 이 필드가 의존하는 키(예: 'systemDefId') 중 하나라도 변경되었는지 확인
       let dependencyChanged = false
       if (field.dependsOn) {
         field.dependsOn.forEach(function (depKey) {
-          // oldParams가 undefined일 수 있는 초기 로드 시점 제외
           if (oldParams && newParams[depKey] !== oldParams[depKey]) {
             dependencyChanged = true
           }
@@ -376,22 +389,69 @@ watch(
       }
 
       if (dependencyChanged) {
-        // 의존하는 값이 변경되었으므로,
-        // 1. 현재 필드('menuId')의 값을 초기화합니다.
+        // 1. 의존하는 값이 바뀌었으므로, 현재 필드(자식) 값 초기화
         searchParams[field.key] = null
-
-        // 2. 이 필드의 'items' 목록을 새로고침합니다.
+        // 2. 자식 필드의 items 목록 새로고침
         fetchDependentItems(field)
       }
     })
   },
 )
 
-// ✨ [신규] 의존성 'items' 목록을 비동기로 가져오는 함수
-async function fetchDependentItems(fieldSchema) {
-  // fieldSchema: 'menuId'의 스키마 정보
+/**
+ * props.filterParams (외부 필터)가 변경되면, 데이터를 새로고침합니다.
+ */
+watch(
+  function () {
+    return props.filterParams
+  },
+  function (newFilters, oldFilters) {
+    options.value.page = 1
+    loadItems()
+  },
+  { deep: true },
+)
 
-  // 1. 모든 의존성 값이 채워져 있는지 확인
+// ✨ [리팩토링] 7. Methods (주요 로직 및 핸들러)
+// -------------------
+/**
+ * [CORE] 서버에서 데이터를 로드합니다.
+ * v-data-table-server의 @update:options 이벤트 및 'search' 버튼 클릭 시 호출됩니다.
+ */
+async function loadItems(newOptions) {
+  if (newOptions) {
+    options.value = newOptions
+  }
+  loading.value = true
+
+  // API 쿼리 파라미터 구성
+  const query = {
+    ...searchParams,
+    ...props.filterParams,
+    page: options.value.page,
+    limit: options.value.itemsPerPage,
+    sortBy: options.value.sortBy.length ? options.value.sortBy[0].key : null,
+    sortOrder: options.value.sortBy.length ? options.value.sortBy[0].order : null,
+  }
+
+  try {
+    const responseData = await fetchListData(props.apiEndpoint, query)
+    serverItems.value = responseData.items
+    totalItems.value = responseData.total
+  } catch (error) {
+    console.error('An error occurred in the component while loading data:', error)
+    serverItems.value = []
+    totalItems.value = 0
+  } finally {
+    loading.value = false
+  }
+}
+
+/**
+ * [CORE] 연쇄 v-select를 위해 의존성 필드의 아이템 목록을 API로 가져옵니다.
+ */
+async function fetchDependentItems(fieldSchema) {
+  // 1. 모든 의존성 값이 채워져 있는지 확인하고 쿼리 객체 생성
   let allDependenciesMet = true
   const query = {}
 
@@ -401,78 +461,146 @@ async function fetchDependentItems(fieldSchema) {
       if (value === null || value === undefined || value === '') {
         allDependenciesMet = false
       }
-      // API 쿼리 파라미터로 사용할 값 (이름은 동일하다고 가정)
-      // 예: { systemDefId: 'SYS-001' }
       query[depKey] = value
     })
   } else {
-    // 의존성 배열이 없으면 실행 중지
     return
   }
 
   // 2. 모든 의존 값이 충족되었다면 API 호출
   if (allDependenciesMet) {
     try {
-      // ❗[필요] '/api/dataTable.js'에 fetchListData 함수가 필요합니다.
-      const response = await fetchListData(fieldSchema.itemsApiEndpoint, query)
+      const response = await fetchListData(fieldSchema.apiEndpoint, query)
 
+      // 3. v-select에 맞게 데이터 매핑
       let itemValue = fieldSchema['item-value']
       let itemTitle = fieldSchema['item-title']
-
       const responseMapData = response.items.map(function (item) {
         return { [itemValue]: item[itemValue], [itemTitle]: item[itemTitle] }
       })
+
+      // 4. '선택 안함' (빈 값) 옵션 추가
       responseMapData.unshift({ [itemValue]: '', [itemTitle]: '' })
 
-      // 3. dynamicSelectItems 상태 업데이트 -> computed가 re-render
       dynamicSelectItems[fieldSchema.key] = responseMapData
     } catch (error) {
       console.error(
         'An error occurred while fetching dependent items for ' + fieldSchema.key,
         error,
       )
-      dynamicSelectItems[fieldSchema.key] = [] // 오류 시 비움
+      dynamicSelectItems[fieldSchema.key] = []
     }
   } else {
-    // 3. 의존 값이 하나라도 비어있다면(예: systemDefId를 '선택안함'으로 변경)
-    //    'menuId'의 목록을 비웁니다.
+    // 3. 의존 값이 하나라도 비어있다면 목록을 비웁니다.
     dynamicSelectItems[fieldSchema.key] = []
   }
 }
 
-// [신규] 엑셀 가져오기(Import) 버튼 클릭 핸들러
+/**
+ * '조회' 버튼 핸들러
+ */
+function search() {
+  options.value.page = 1
+  loadItems()
+}
+
+/**
+ * 테이블 행 클릭 핸들러
+ */
+function handleRowClick(event, { item }) {
+  selectedItemLocal.value = item
+  panelStore.openReadOnlyPanel(props.dataTabletitleKey, props.formSchema, item, props.isOpenPanel)
+  emit('row-selected', item)
+}
+
+// --- CRUD 액션 핸들러 ---
+function handleAddClick() {
+  const newItem = {} // 새 아이템 (필요시 기본값 설정)
+  panelStore.openFormPanel(
+    props.dataTabletitleKey,
+    props.formSchema,
+    newItem,
+    'create',
+    props.apiEndpoint,
+    createItemData,
+    loadItems, // 성공 시 콜백
+  )
+}
+
+function handleEditClick() {
+  if (!selectedItemLocal.value) {
+    // (참고) 보통 행 클릭(handleRowClick)이 선행되어야 함
+    // 만약 체크박스 선택 기준으로 하려면 selectedItems[0]을 사용
+    if (selectedItems.value.length > 0) {
+      selectedItemLocal.value = selectedItems.value[0]
+    } else {
+      alert(t('messages.selectItemFirst', '항목을 먼저 선택해주세요.'))
+      return
+    }
+  }
+
+  panelStore.openFormPanel(
+    props.dataTabletitleKey,
+    props.formSchema,
+    selectedItemLocal.value, // 선택된 아이템
+    'edit',
+    props.apiEndpoint,
+    updateItemData,
+    loadItems, // 성공 시 콜백
+  )
+}
+
+function openDeleteConfirmDialog() {
+  if (selectedItems.value.length === 0) {
+    alert(t('messages.selectItemsToDelete', '삭제할 항목을 선택해주세요.'))
+    return
+  }
+  showDeleteConfirm.value = true
+}
+
+async function handleDeleteClick() {
+  try {
+    const idsToDelete = selectedItems.value.map(function (item) {
+      return item.id
+    })
+    await deleteItems(props.apiEndpoint, idsToDelete)
+
+    alert(t('messages.deleteSuccess', '성공적으로 삭제되었습니다.'))
+    selectedItems.value = [] // 선택 상태 초기화
+    selectedItemLocal.value = null // 상세 패널용 선택도 초기화
+    loadItems()
+  } catch (error) {
+    alert(t('messages.deleteFailed', '삭제 처리 중 오류가 발생했습니다.'))
+    console.error('An error occurred while deleting items:', error)
+  } finally {
+    showDeleteConfirm.value = false
+  }
+}
+
+// --- 엑셀 Import/Export 핸들러 ---
 function handleExcelImportClick() {
-  // input 값을 초기화하여 동일한 파일도 다시 선택 가능하게 함
   if (fileInput.value) {
     fileInput.value.value = null
   }
-  // 숨겨진 <input type="file">을 클릭
   fileInput.value.click()
 }
 
-// [신규] 파일이 실제로 선택되었을 때 실행되는 핸들러
 async function handleFileSelect(event) {
   const file = event.target.files[0]
-  if (!file) {
-    return // 사용자가 '취소'를 누른 경우
-  }
+  if (!file) return
 
-  // --- (1) 프론트엔드 1차 검증 ---
+  // 프론트엔드 1차 검증
   const MAX_FILE_SIZE = 10 * 1024 * 1024 // 10MB
-  const ALLOWED_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' // .xlsx
-
+  const ALLOWED_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
   if (file.type !== ALLOWED_TYPE) {
-    alert('xlsx 파일 형식만 업로드할 수 있습니다.')
+    alert(t('messages.excelOnlyError', 'xlsx 파일 형식만 업로드할 수 있습니다.'))
     return
   }
-
   if (file.size > MAX_FILE_SIZE) {
-    alert('파일 크기는 10MB를 초과할 수 없습니다.')
+    alert(t('messages.fileSizeError', '파일 크기는 10MB를 초과할 수 없습니다.'))
     return
   }
-  // --- (1) 검증 끝 ---
 
-  // FormData에 파일 담기
   const formData = new FormData()
   formData.append('file', file)
 
@@ -480,188 +608,31 @@ async function handleFileSelect(event) {
   importErrorMessages.value = []
 
   try {
-    // [수정] API 엔드포인트에 '/import' 추가
     const importApiEndpoint = props.apiEndpoint + '/import'
-
-    // API 호출
     await uploadExcelFile(importApiEndpoint, formData)
 
-    // 성공
-    alert('성공적으로 가져왔습니다.')
-    loadItems() // 데이터 테이블 새로고침
+    alert(t('messages.importSuccess', '성공적으로 가져왔습니다.'))
+    loadItems()
   } catch (error) {
-    // 실패
     console.error('An error occurred while importing excel:', error)
-
-    // [중요] 백엔드가 { "errors": ["3행: ...", "5행: ..."] } 형식으로
-    // 400 Bad Request 응답을 준다고 가정합니다. (axios 기준)
     if (error.response && error.response.data && error.response.data.errors) {
       importErrorMessages.value = error.response.data.errors
       showImportError.value = true
     } else {
-      // 그 외 일반적인 오류
-      alert('파일 업로드 중 오류가 발생했습니다.')
+      alert(t('messages.importFailed', '파일 업로드 중 오류가 발생했습니다.'))
     }
   } finally {
     isUploading.value = false
   }
 }
 
-function openDeleteConfirmDialog() {
-  // 1. 선택된 항목이 있는지 확인
-  if (selectedItems.value.length === 0) {
-    alert('삭제할 항목을 선택해주세요.')
-    return
-  }
-  // 2. 다이얼로그 표시
-  showDeleteConfirm.value = true
-}
-
-// 데이터 로드 함수
-async function loadItems(newOptions) {
-  // v-data-table-server의 options가 변경될 때마다 이 함수가 호출됩니다.
-  // newOptions 파라미터에 최신 페이지, 정렬 정보가 담겨있습니다.
-  if (newOptions) {
-    options.value = newOptions
-  }
-
-  loading.value = true
-
-  // 1. API로 보낼 쿼리 파라미터를 준비합니다.
-  const query = {
-    ...searchParams, // 검색 조건
-    ...props.filterParams, // [수정] 부모에게서 받은 필터 조건 (예: alarmActionId)
-    page: options.value.page, // 현재 페이지
-    limit: options.value.itemsPerPage, // 페이지 당 항목 수
-    // 정렬 조건 처리 (배열의 첫 번째 항목 사용)
-    sortBy: options.value.sortBy.length ? options.value.sortBy[0].key : null,
-    sortOrder: options.value.sortBy.length ? options.value.sortBy[0].order : null,
-  }
-
-  try {
-    // 2. 공통 API 함수를 호출하고 결과를 받습니다.
-    const responseData = await fetchListData(props.apiEndpoint, query)
-
-    // 3. 컴포넌트의 상태를 업데이트합니다.
-    serverItems.value = responseData.items
-    totalItems.value = responseData.total
-  } catch (error) {
-    // fetchListData 내부에서 에러를 처리하지만,
-    // 컴포넌트 레벨에서 추가적인 에러 처리가 필요하다면 여기에 작성합니다.
-    console.error('An error occurred in the component while loading data:', error)
-    serverItems.value = []
-    totalItems.value = 0
-  } finally {
-    // 4. API 호출 성공/실패와 관계없이 로딩 상태를 해제합니다.
-    loading.value = false
-  }
-}
-
-// 3. [추가] 부모로부터 받은 filterParams가 변경되면, 데이터를 새로고침합니다.
-watch(
-  // 감시할 대상: props.filterParams
-  function () {
-    return props.filterParams
-  },
-  // 변경 감지 시 실행할 함수
-  function (newFilters, oldFilters) {
-    // 필터가 변경되면, 페이지를 1로 리셋하고 데이터를 다시 로드합니다.
-    options.value.page = 1
-    loadItems()
-  },
-  // deep: true는 객체 내부의 값이 바뀌었을 때도 감지하도록 합니다.
-  { deep: true },
-)
-
-// 조회 버튼 클릭 시 1페이지로 리셋 후 조회
-function search() {
-  options.value.page = 1
-  // page만 바꾸고 loadItems를 직접 호출하면 정렬 등의 다른 옵션이 누락될 수 있습니다.
-  // v-data-table-server는 options가 변경되면 자동으로 @update:options 이벤트를 발생시키므로
-  // loadItems()를 직접 호출할 필요가 없습니다. 하지만 명시적으로 호출하는 것이 더 직관적일 수 있습니다.
-  loadItems()
-}
-
-function handleRowClick(event, { item }) {
-  selectedItemLocal.value = item
-  // ✅ [수정] props.dataTabletitleKey를 첫 번째 인자로 전달
-  panelStore.openReadOnlyPanel(props.dataTabletitleKey, props.formSchema, item, props.isOpenPanel)
-
-  // 2. [추가] 부모 컴포넌트로 'row-selected' 이벤트를 발생시키고
-  //         선택된 행(item) 데이터를 함께 보냅니다.
-  emit('row-selected', item)
-}
-
-async function handleDeleteClick() {
-  console.log('삭제할 항목들:', selectedItems.value)
-
-  try {
-    // 3. 선택된 항목들에서 ID만 추출하여 배열 생성
-    const idsToDelete = selectedItems.value.map((item) => item.id)
-    // 4. 공통 API 함수를 호출하여 삭제 요청
-    await deleteItems(props.apiEndpoint, idsToDelete)
-
-    // 5. 성공 처리
-    alert('성공적으로 삭제되었습니다.')
-    selectedItems.value = [] // 선택 상태 초기화
-    loadItems() // 데이터 테이블 새로고침
-  } catch (error) {
-    // 6. 실패 처리
-    alert('삭제 처리 중 오류가 발생했습니다.')
-    console.error('An error occurred while deleting items:', error)
-  } finally {
-    showDeleteConfirm.value = false // 다이얼로그 닫기
-  }
-}
-
-function handleAddClick() {
-  if (selectedItemLocal.value) {
-    panelStore.openFormPanel(
-      props.dataTabletitleKey, // ✅ [추가]
-      props.formSchema,
-      selectedItemLocal.value,
-      'create',
-      props.apiEndpoint,
-      createItemData,
-      loadItems,
-    )
-  } else {
-    // todo: 아래의 newItem format 맞추기
-    const newItem = {}
-    panelStore.openFormPanel(
-      props.dataTabletitleKey, // ✅ [추가]
-      props.formSchema,
-      newItem,
-      'create',
-      props.apiEndpoint,
-      createItemData,
-      loadItems,
-    )
-  }
-}
-
-function handleEditClick() {
-  if (selectedItemLocal.value) {
-    panelStore.openFormPanel(
-      props.dataTabletitleKey, // ✅ [추가]
-      props.formSchema,
-      selectedItemLocal.value,
-      'edit',
-      props.apiEndpoint,
-      updateItemData,
-      loadItems,
-    )
-  }
-}
-
-// [신규] 엑셀 내보내기 함수
 function handleExcelExport() {
-  // 1. 현재 API 엔드포인트에 '/export'를 추가
   const exportApiEndpoint = props.apiEndpoint + '/export'
 
-  // 2. 현재 검색 파라미터(searchParams)를 쿼리 스트링으로 변환
-  // (참고: null이나 빈 문자열 값은 제외)
+  // 현재 모든 검색 조건을 쿼리 스트링으로 변환
   const queryParams = new URLSearchParams()
+
+  // 1. 검색 패널 파라미터
   for (const key in searchParams) {
     const value = searchParams[key]
     if (value !== null && value !== undefined && value !== '') {
@@ -669,7 +640,7 @@ function handleExcelExport() {
     }
   }
 
-  // (만약 부모의 filterParams도 포함해야 한다면)
+  // 2. 외부 필터 파라미터
   for (const key in props.filterParams) {
     const value = props.filterParams[key]
     if (value !== null && value !== undefined && value !== '') {
@@ -681,33 +652,18 @@ function handleExcelExport() {
   const downloadUrl = `${exportApiEndpoint}?${queryString}`
 
   console.log('엑셀 다운로드 URL:', downloadUrl)
-
-  // 3. 브라우저가 이 URL을 방문하여 파일 다운로드를 트리거
-  // (가장 간단한 방법)
-  window.location.href = downloadUrl
-
-  // (참고: 위 방식이 페이지 이동을 유발하면 <a> 태그 트릭 사용)
-  /*
-  const a = document.createElement('a');
-  a.href = downloadUrl;
-  // a.download = 'export.xlsx'; // 백엔드가 Content-Disposition 헤더를 주면 필요 없음
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  */
+  window.location.href = downloadUrl // 다운로드 트리거
 }
 
-// ✨ [추가] 푸터 버튼 클릭을 처리할 중간 핸들러
+// --- 푸터 핸들러 ---
 function handleFooterClick(actionFunction) {
-  // actionFunction은 부모 컴포넌트에서 온
-  // handleTrackIn, handleTrackOut 같은 함수입니다.
-
-  // 이 함수를 실행하면서, 자식 컴포넌트가 가진
-  // 'selectedItems.value'를 첫 번째 인자로 전달합니다.
+  // 부모로부터 받은 함수에 'selectedItems'를 인자로 전달하며 실행
   actionFunction(selectedItems.value)
 }
 </script>
+
 <style scoped>
+/* ✨ [리팩토링] 스타일은 변경 사항 없음 (기존과 동일) */
 .datatable-wrapper {
   height: 100%;
   width: 100%;

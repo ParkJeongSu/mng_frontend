@@ -65,7 +65,7 @@ const formSchema = computed(function () {
 })
 
 const headers = ref([
-  // { title: 'model.common.id', key: 'id' },
+  { title: 'model.common.id', key: 'id' },
   { title: 'model.authority.authorityName', key: 'authorityName' },
   { title: 'model.common.description', key: 'description' },
   { title: 'model.common.checkOutState', key: 'checkOutState' },

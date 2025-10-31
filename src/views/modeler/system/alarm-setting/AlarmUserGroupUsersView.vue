@@ -31,40 +31,22 @@
 
 <script setup>
 import ServerSideDataTableTemplate from '@/components/common/ServerSideDataTableTemplate.vue' // 만든 컴포넌트 임포트
-import { ref, onMounted, onActivated, watch, computed } from 'vue'
+import { ref } from 'vue'
 import { statusColorMap } from '@/constants/columnColorMaps' // 상태 색상 맵 임포트
-import { useTabsStore } from '@/stores/tabs'
-import { useRoute } from 'vue-router'
-
-const tabsStore = useTabsStore()
-const route = useRoute()
-
 const ready = ref(true)
 
-// 데이터를 로드하는 함수를 별도로 분리합니다.
-async function loadInitData() {}
-
-// onActivated: keep-alive로 캐싱된 컴포넌트가 다시 활성화될 때 호출됩니다.
-onActivated(function () {
-  loadInitData()
-})
-
 // 검색 및 폼 스키마 정의
-const searchSchema = computed(function () {
-  return [
-    { key: 'authorityName', labelKey: 'model.authority.authorityName', component: 'v-text-field' },
-  ]
-})
+const searchSchema = [
+  { key: 'authorityName', labelKey: 'model.authority.authorityName', component: 'v-text-field' },
+]
 
 //폼 스키마 정의 (추가/수정에 사용)
-const formSchema = computed(function () {
-  return [
-    { key: 'authorityName', labelKey: 'model.authority.authorityName', component: 'v-text-field' },
-    { key: 'description', labelKey: 'model.common.description', component: 'v-text-field' },
-  ]
-})
+const formSchema = [
+  { key: 'authorityName', labelKey: 'model.authority.authorityName', component: 'v-text-field' },
+  { key: 'description', labelKey: 'model.common.description', component: 'v-text-field' },
+]
 
-const headers = ref([
+const headers = [
   { title: 'model.common.id', key: 'id' },
   { title: 'model.alarm.alarmActionUserGroupId', key: 'alarmActionUserGroupId' },
   { title: 'model.alarm.userGroupName', key: 'userGroupName' },
@@ -74,6 +56,6 @@ const headers = ref([
   { title: 'model.event.eventTime', key: 'eventTime' },
   { title: 'model.event.eventUser', key: 'eventUser' },
   { title: 'model.event.eventComment', key: 'eventComment' },
-])
+]
 </script>
 <style scoped></style>

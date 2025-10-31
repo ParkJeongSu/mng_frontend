@@ -39,17 +39,11 @@
 
 <script setup>
 import ServerSideDataTableTemplate from '@/components/common/ServerSideDataTableTemplate.vue' // 만든 컴포넌트 임포트
-import { ref, onMounted, onActivated, watch, computed } from 'vue'
-import { statusColorMap } from '@/constants/columnColorMaps' // 상태 색상 맵 임포트
-import { useTabsStore } from '@/stores/tabs'
-import { useRoute } from 'vue-router'
+import { ref, computed } from 'vue'
 // 1. 여기에 'Pane'을 추가합니다.
 import { Splitpanes, Pane } from 'splitpanes'
 // 2. splitpanes의 CSS 파일을 임포트합니다.
 import 'splitpanes/dist/splitpanes.css'
-
-const tabsStore = useTabsStore()
-const route = useRoute()
 
 const ready = ref(true)
 const detailURL = ref('/api/transport-job-detail')
@@ -80,31 +74,19 @@ const detailFilterParams = computed(function () {
   return {}
 })
 
-// 데이터를 로드하는 함수를 별도로 분리합니다.
-async function loadInitData() {}
-
-// onActivated: keep-alive로 캐싱된 컴포넌트가 다시 활성화될 때 호출됩니다.
-onActivated(function () {
-  loadInitData()
-})
-
 // AlarmAction search 및 폼 스키마 및 headers 정의
 // 검색 및 폼 스키마 정의
-const searchSchema = computed(function () {
-  return [
-    { key: 'authorityName', labelKey: 'model.authority.authorityName', component: 'v-text-field' },
-  ]
-})
+const searchSchema = [
+  { key: 'authorityName', labelKey: 'model.authority.authorityName', component: 'v-text-field' },
+]
 
 //폼 스키마 정의 (추가/수정에 사용)
-const formSchema = computed(function () {
-  return [
-    { key: 'authorityName', labelKey: 'model.authority.authorityName', component: 'v-text-field' },
-    { key: 'description', labelKey: 'model.common.description', component: 'v-text-field' },
-  ]
-})
+const formSchema = [
+  { key: 'authorityName', labelKey: 'model.authority.authorityName', component: 'v-text-field' },
+  { key: 'description', labelKey: 'model.common.description', component: 'v-text-field' },
+]
 
-const headers = ref([
+const headers = [
   { title: 'model.common.id', key: 'id' },
   { title: 'model.transportJob.transportJobName', key: 'transportJobName' },
   { title: 'model.transportJob.transportJobState', key: 'transportJobState' },
@@ -127,23 +109,19 @@ const headers = ref([
   { title: 'model.event.eventTime', key: 'eventTime' },
   { title: 'model.event.eventUser', key: 'eventUser' },
   { title: 'model.event.eventComment', key: 'eventComment' },
-])
+]
 
 // Alarm Detail Action search 및 폼 스키마 및 headers 정의
 // 검색 및 폼 스키마 정의
-const detailSearchSchema = computed(function () {
-  return []
-})
+const detailSearchSchema = []
 
 //폼 스키마 정의 (추가/수정에 사용)
-const detailFormSchema = computed(function () {
-  return [
-    { key: 'authorityName', labelKey: 'model.authority.authorityName', component: 'v-text-field' },
-    { key: 'description', labelKey: 'model.common.description', component: 'v-text-field' },
-  ]
-})
+const detailFormSchema = [
+  { key: 'authorityName', labelKey: 'model.authority.authorityName', component: 'v-text-field' },
+  { key: 'description', labelKey: 'model.common.description', component: 'v-text-field' },
+]
 
-const detailHeaders = ref([
+const detailHeaders = [
   { title: 'model.common.id', key: 'id' },
   { title: 'model.transportJob.transportJobDetailName', key: 'transportJobDetailName' },
   { title: 'model.transportJob.transportJobId', key: 'transportJobId' },
@@ -168,7 +146,7 @@ const detailHeaders = ref([
   { title: 'model.event.eventTime', key: 'eventTime' },
   { title: 'model.event.eventUser', key: 'eventUser' },
   { title: 'model.event.eventComment', key: 'eventComment' },
-])
+]
 </script>
 <style scoped>
 /* 'splitpanes-height'는 <Splitpanes>에 직접 추가한 클래스입니다.
