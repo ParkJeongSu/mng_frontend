@@ -3,10 +3,10 @@
     <v-card class="fill-height" flat>
       <v-card-title>
         <span v-if="panelStore.formMode === 'create'"
-          >{{ $t(panelStore.panelTitleKey) }} {{ $t('title.create') }}</span
+          >{{ $t(panelStore.panelTitleKey) }} {{ $t('common.create') }}</span
         >
         <span v-else-if="panelStore.formMode === 'edit'">
-          {{ $t(panelStore.panelTitleKey) }} {{ $t('title.edit') }}
+          {{ $t(panelStore.panelTitleKey) }} {{ $t('common.edit') }}
         </span>
         <span v-else>{{ $t(panelStore.panelTitleKey) }} {{ $t('title.details') }}</span>
       </v-card-title>
@@ -54,8 +54,8 @@
 
       <v-card-actions v-if="panelStore.formMode">
         <v-spacer></v-spacer>
-        <v-btn @click="onCancel">{{ $t('buttonLabels.cancel') }}</v-btn>
-        <v-btn @click="onSave">{{ $t('buttonLabels.save') }}</v-btn>
+        <v-btn @click="onCancel">{{ $t('common.cancel') }}</v-btn>
+        <v-btn @click="onSave">{{ $t('common.save') }}</v-btn>
       </v-card-actions>
     </v-card>
   </div>
@@ -180,18 +180,14 @@ watch(
         if (allDependenciesMet && fieldToUpdate.apiEndpoint) {
           // [성공] 모든 부모 값이 채워져 있음 -> API 호출
 
-          let endpoint = fieldToUpdate.apiEndpoint
+          const query = {}
+          dependencies.forEach(function (depKey) {
+            query[depKey] = newFormData[depKey]
+          })
 
-          // 2-D. 모든 플레이스홀더를 실제 값으로 교체합니다.
-          for (const depKey of dependencies) {
-            // new RegExp(..., 'g') : 플레이스홀더가 여러 번 나와도 모두 교체
-            const placeholder = new RegExp('{' + depKey + '}', 'g')
-            endpoint = endpoint.replace(placeholder, newFormData[depKey])
-          }
+          console.log(`API 호출 (동적 쿼리): ${fieldToUpdate.apiEndpoint}`, query)
 
-          console.log(`API 호출 (다중 의존성): ${endpoint}`)
-
-          const response = await fetchListData(endpoint, {})
+          const response = await fetchListData(fieldToUpdate.apiEndpoint, query)
 
           let itemValue = fieldToUpdate['item-value']
           let itemTitle = fieldToUpdate['item-title']
@@ -199,6 +195,7 @@ watch(
           const responseMapData = response.items.map(function (item) {
             return { [itemValue]: item[itemValue], [itemTitle]: item[itemTitle] }
           })
+          responseMapData.unshift({ [itemValue]: '', [itemTitle]: '' })
 
           fieldToUpdate.items = responseMapData
 

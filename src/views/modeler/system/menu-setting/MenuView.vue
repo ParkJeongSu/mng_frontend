@@ -10,6 +10,7 @@
       showCheckbox
       :form-schema="formSchema"
       data-tabletitle-key="menu.Menu"
+      :footer-actions="myLotActions"
     >
       <template v-slot:item.status="slotProps">
         <v-chip
@@ -75,6 +76,7 @@ async function loadInitData() {
     const systemDefListMapData = apiSystemDefList.items.map(function (item) {
       return { id: item.id, systemDefName: item.systemDefName }
     })
+    systemDefListMapData.unshift({ id: '', systemDefName: '' })
 
     const menuListMapData = apiMenuList.items.map(function (item) {
       return { id: item.id, menuName: item.menuName }
@@ -95,11 +97,62 @@ onActivated(function () {
   loadInitData()
 })
 
+// ✨ 부모에서 버튼과 기능을 정의
+const myLotActions = ref([
+  {
+    label: 'Sample1',
+    color: 'primary',
+    action: handleTrackIn, // 버튼 클릭 시 실행할 함수
+  },
+  {
+    label: 'Sample2',
+    color: 'secondary',
+    action: handleTrackOut,
+  },
+  {
+    label: 'Sample3',
+    color: 'info',
+    action: handleAssign,
+  },
+])
+
+// ✨ 실제 기능은 부모 컴포넌트가 가지고 있음
+function handleTrackIn(items) {
+  console.log('부모의 TrackIn 로직 실행!', items)
+
+  if (items.length === 0) {
+    alert('항목을 선택해주세요.') // 이 로직도 부모가 관리
+    return
+  }
+
+  // 'items' (자식이 넘겨준 selectedItems)를 사용해 API 호출
+  const ids = items.map(function (item) {
+    return item.id
+  })
+  console.log('선택된 ID 목록:', ids)
+}
+
+function handleTrackOut(items) {
+  console.log('부모의 TrackOut 로직 실행!', items)
+  if (items.length === 0) {
+    alert('항목을 선택해주세요.')
+    return
+  }
+}
+
+function handleAssign(items) {
+  console.log('부모의 Assign 로직 실행!')
+  if (items.length === 0) {
+    alert('항목을 선택해주세요.')
+    return
+  }
+}
+
 // 검색 및 폼 스키마 정의
 const searchSchema = computed(function () {
   return [
     {
-      key: 'systemId',
+      key: 'systemDefId',
       labelKey: 'model.systemDef.systemDefName',
       component: 'v-select',
       // ⬇⬇ Vuetify v-select 관례에 맞게 전달할 프로퍼티 이름을 명확히
@@ -107,8 +160,10 @@ const searchSchema = computed(function () {
       'item-title': 'systemDefName', // v-select의 item-title에 매핑할 키
       'item-value': 'id', // v-select의 item-value에 매핑할 키
     },
+    { key: 'menuName', labelKey: 'model.menu.menuName', component: 'v-text-field' },
+    { key: 'viewURL', labelKey: 'model.menu.viewURL', component: 'v-text-field' },
     {
-      key: 'menuId',
+      key: 'id',
       labelKey: 'model.menu.menuName',
       component: 'v-select',
       // ⬇⬇ Vuetify v-select 관례에 맞게 전달할 프로퍼티 이름을 명확히

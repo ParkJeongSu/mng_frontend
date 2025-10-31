@@ -141,6 +141,21 @@
             </span>
           </slot>
         </template>
+        <template v-slot:footer.prepend>
+          <div class="d-flex align-center pa-2 footer-left-actions">
+            <v-btn
+              v-for="button in props.footerActions"
+              :key="button.label"
+              :color="button.color || 'primary'"
+              variant="outlined"
+              size="small"
+              class="ml-2 no-uppercase"
+              @click="handleFooterClick(button.action)"
+            >
+              {{ button.label }}
+            </v-btn>
+          </div>
+        </template>
       </v-data-table-server>
     </div>
 
@@ -238,7 +253,38 @@ const props = defineProps({
       return {}
     },
   },
+  // ✨ [추가] 푸터에 표시할 액션 버튼 목록
+  footerActions: {
+    type: Array,
+    default: function () {
+      // 람다식 대신 일반 함수 사용
+      return []
+    },
+  },
 })
+
+const dynamicSelectItems = reactive({})
+
+watch(
+  function () {
+    return props.searchSchema
+  },
+  function (newSchema) {
+    if (!newSchema) return
+    newSchema.forEach(function (item) {
+      if (item.component === 'v-select') {
+        // 이전에 캐시된 (동적으로 로드된) 목록이 없다면
+        // props에서 제공된 초기 목록을 설정합니다.
+        // (의존성 필드는 props.items가 []이므로 빈 배열로 설정됩니다)
+        if (dynamicSelectItems[item.key] === undefined) {
+          dynamicSelectItems[item.key] = item.items || []
+        }
+      }
+    })
+  },
+  { immediate: true, deep: true },
+)
+
 // ✨ [추가] computed 속성을 만듭니다.
 // props.headers가 변경되거나, 언어가 변경(t 함수가 변경)될 때마다
 // 이 코드가 자동으로 다시 실행되어 새로운 번역된 헤더 배열을 만듭니다.
@@ -266,9 +312,17 @@ const translatedsearchSchema = computed(function () {
       // 번역 실패 시 원래 label이 있으면 사용
       translated = schema.label != null ? schema.label : key
     }
+    // v-select의
+    // 'items'를 정적 item.items 대신
+    // 동적인 dynamicSelectItems에서 가져옵니다.
+    const finalItems =
+      schema.component === 'v-select' ? dynamicSelectItems[schema.key] : schema.items
 
     // 나머지 필드는 그대로 유지, label만 치환
-    return Object.assign({}, schema, { label: translated })
+    return Object.assign({}, schema, {
+      label: translated,
+      items: finalItems,
+    })
   })
 })
 
@@ -287,6 +341,104 @@ const options = ref({
   itemsPerPage: 10,
   sortBy: [],
 })
+
+// ✨ [신규] 의존성을 가진 검색 필드(예: menuId) 목록을 미리 찾아둡니다.
+const dependentFields = computed(function () {
+  return props.searchSchema.filter(function (item) {
+    return (
+      item.component === 'v-select' &&
+      item.dependsOn &&
+      item.dependsOn.length > 0 &&
+      item.itemsApiEndpoint
+    )
+  })
+})
+
+// ✨ [신규] 검색 파라미터(searchParams)가 변경될 때 감지
+watch(
+  function () {
+    return { ...searchParams }
+  },
+  function (newParams, oldParams) {
+    // 의존성을 가진 필드 각각에 대해 검사
+    dependentFields.value.forEach(function (field) {
+      // field는 'menuId' 스키마 객체
+
+      // 이 필드가 의존하는 키(예: 'systemDefId') 중 하나라도 변경되었는지 확인
+      let dependencyChanged = false
+      if (field.dependsOn) {
+        field.dependsOn.forEach(function (depKey) {
+          // oldParams가 undefined일 수 있는 초기 로드 시점 제외
+          if (oldParams && newParams[depKey] !== oldParams[depKey]) {
+            dependencyChanged = true
+          }
+        })
+      }
+
+      if (dependencyChanged) {
+        // 의존하는 값이 변경되었으므로,
+        // 1. 현재 필드('menuId')의 값을 초기화합니다.
+        searchParams[field.key] = null
+
+        // 2. 이 필드의 'items' 목록을 새로고침합니다.
+        fetchDependentItems(field)
+      }
+    })
+  },
+)
+
+// ✨ [신규] 의존성 'items' 목록을 비동기로 가져오는 함수
+async function fetchDependentItems(fieldSchema) {
+  // fieldSchema: 'menuId'의 스키마 정보
+
+  // 1. 모든 의존성 값이 채워져 있는지 확인
+  let allDependenciesMet = true
+  const query = {}
+
+  if (fieldSchema.dependsOn) {
+    fieldSchema.dependsOn.forEach(function (depKey) {
+      const value = searchParams[depKey]
+      if (value === null || value === undefined || value === '') {
+        allDependenciesMet = false
+      }
+      // API 쿼리 파라미터로 사용할 값 (이름은 동일하다고 가정)
+      // 예: { systemDefId: 'SYS-001' }
+      query[depKey] = value
+    })
+  } else {
+    // 의존성 배열이 없으면 실행 중지
+    return
+  }
+
+  // 2. 모든 의존 값이 충족되었다면 API 호출
+  if (allDependenciesMet) {
+    try {
+      // ❗[필요] '/api/dataTable.js'에 fetchListData 함수가 필요합니다.
+      const response = await fetchListData(fieldSchema.itemsApiEndpoint, query)
+
+      let itemValue = fieldSchema['item-value']
+      let itemTitle = fieldSchema['item-title']
+
+      const responseMapData = response.items.map(function (item) {
+        return { [itemValue]: item[itemValue], [itemTitle]: item[itemTitle] }
+      })
+      responseMapData.unshift({ [itemValue]: '', [itemTitle]: '' })
+
+      // 3. dynamicSelectItems 상태 업데이트 -> computed가 re-render
+      dynamicSelectItems[fieldSchema.key] = responseMapData
+    } catch (error) {
+      console.error(
+        'An error occurred while fetching dependent items for ' + fieldSchema.key,
+        error,
+      )
+      dynamicSelectItems[fieldSchema.key] = [] // 오류 시 비움
+    }
+  } else {
+    // 3. 의존 값이 하나라도 비어있다면(예: systemDefId를 '선택안함'으로 변경)
+    //    'menuId'의 목록을 비웁니다.
+    dynamicSelectItems[fieldSchema.key] = []
+  }
+}
 
 // [신규] 엑셀 가져오기(Import) 버튼 클릭 핸들러
 function handleExcelImportClick() {
@@ -544,6 +696,16 @@ function handleExcelExport() {
   document.body.removeChild(a);
   */
 }
+
+// ✨ [추가] 푸터 버튼 클릭을 처리할 중간 핸들러
+function handleFooterClick(actionFunction) {
+  // actionFunction은 부모 컴포넌트에서 온
+  // handleTrackIn, handleTrackOut 같은 함수입니다.
+
+  // 이 함수를 실행하면서, 자식 컴포넌트가 가진
+  // 'selectedItems.value'를 첫 번째 인자로 전달합니다.
+  actionFunction(selectedItems.value)
+}
 </script>
 <style scoped>
 .datatable-wrapper {
@@ -800,5 +962,14 @@ function handleExcelExport() {
     padding-top: 8px; /* 입력창과 간격 */
     justify-content: flex-end; /* d-flex가 있으므로 justify-end 사용 */
   }
+}
+
+/* ✨ [핵심] 푸터 왼쪽 정렬 강제
+  .v-data-table-footer (flex 컨테이너) 내부의
+  .footer-left-actions 요소에 오른쪽 마진을 'auto'로 주어
+  페이지네이션을 오른쪽 끝으로 밀어냅니다.
+*/
+:deep(.v-data-table-footer .footer-left-actions) {
+  margin-right: auto;
 }
 </style>
