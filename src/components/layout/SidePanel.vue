@@ -21,6 +21,7 @@
             :placeholder="field.label"
             :label="field.label"
             :items="field.items"
+            clearable
             :item-title="field['item-title']"
             :item-value="field['item-value']"
             :model-value="activeDataItem[field.key]"
@@ -238,8 +239,8 @@ async function fetchDependentItems(fieldToUpdate, newFormData) {
         return { [itemValue]: item[itemValue], [itemTitle]: item[itemTitle] }
       })
 
-      responseMapData.unshift({ [itemValue]: '', [itemTitle]: '' })
-      // 5. 로컬 스키마의 'items' 업데이트
+      // responseMapData.unshift({ [itemValue]: '', [itemTitle]: '' })
+      // // 5. 로컬 스키마의 'items' 업데이트
       fieldToUpdate.items = responseMapData
     } catch (error) {
       console.error(

@@ -245,6 +245,7 @@
       "actionType": "Action Type",
       "alarmType": "Alarm Type",
       "alarmDefId": "Alarm Definition ID",
+      "alarmDefName": "Alarm Def Name",
       "alarmCodeName": "Alarm Code Name",
       "authorityName": "Authority Name",
       "alarmActionId": "Alarm Action ID",

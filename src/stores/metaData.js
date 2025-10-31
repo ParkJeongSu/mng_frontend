@@ -44,10 +44,10 @@ export const useMetaDataStore = defineStore('metaData', function () {
       })
 
       // 5. '선택 안함' 옵션 추가
-      if (addEmptyOption) {
-        const emptyOpt = { [itemValueKey]: '', [itemTitleKey]: '' }
-        mappedData.unshift(emptyOpt)
-      }
+      // if (addEmptyOption) {
+      //   const emptyOpt = { [itemValueKey]: '', [itemTitleKey]: '' }
+      //   mappedData.unshift(emptyOpt)
+      // }
 
       // 3. 캐시에 '데이터'와 '새 유효 시간' 저장
       cache[cacheKey] = {

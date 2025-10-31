@@ -91,7 +91,7 @@ const headers = [
   { title: 'model.alarm.alarmActionName', key: 'alarmActionName' },
   { title: 'model.alarm.actionType', key: 'actionType' },
   { title: 'model.alarm.alarmDefId', key: 'alarmDefId' },
-  { title: 'model.alarm.alarmCodeName', key: 'alarmCodeName' },
+  { title: 'model.alarm.alarmDefName', key: 'alarmDefName' },
   { title: 'model.common.description', key: 'description' },
   { title: 'model.common.dataState', key: 'dataState' },
   { title: 'model.common.checkOutState', key: 'checkOutState' },

@@ -12,6 +12,7 @@
             :is="componentMap[item.component]"
             v-model="searchParams[item.key]"
             :placeholder="item.label"
+            clearable
             :items="item.items"
             :item-title="item['item-title']"
             :item-value="item['item-value']"

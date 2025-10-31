@@ -38,7 +38,7 @@ const ready = ref(true)
 
 // 검색 및 폼 스키마 정의
 const searchSchema = [
-  { key: 'alarmCodeName', labelKey: 'model.alarm.alarmCodeName', component: 'v-text-field' },
+  { key: 'alarmDefName', labelKey: 'model.alarm.alarmDefName', component: 'v-text-field' },
   {
     key: 'alarmType',
     labelKey: 'model.alarm.alarmType',
@@ -65,7 +65,7 @@ const formSchema = [
 
 const headers = [
   { title: 'model.common.id', key: 'id' },
-  { title: 'model.alarm.alarmCodeName', key: 'alarmCodeName' },
+  { title: 'model.alarm.alarmDefName', key: 'alarmDefName' },
   { title: 'model.alarm.alarmType', key: 'alarmType' },
   { title: 'model.common.description', key: 'description' },
   { title: 'model.alarm.alarmLevel', key: 'alarmLevel' },

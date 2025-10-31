@@ -245,6 +245,7 @@
       "actionType": "액션 유형",
       "alarmType": "알람 유형",
       "alarmDefId": "알람 정의 ID",
+      "alarmDefName": "Alarm Def Name",
       "alarmCodeName": "알람 코드명",
       "authorityName": "권한명",
       "alarmActionId": "알람 액션 ID",
