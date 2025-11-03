@@ -46,7 +46,7 @@ export async function fetchListData(endpoint, params) {
     // 컴포넌트 필요: { items: [...], total: 100 }
     return {
       items: response.data.content || [],
-      total: response.data.totalElements || 0,
+      total: response.data.page.totalElements || 0,
     }
   } catch (error) {
     console.error(`[API Error] Failed to fetch list data from ${endpoint}:`, error)
