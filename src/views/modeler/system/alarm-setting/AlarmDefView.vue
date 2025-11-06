@@ -71,11 +71,11 @@ const headers = [
   { title: 'model.alarm.alarmLevel', key: 'alarmLevel' },
   { title: 'model.common.dataState', key: 'dataState' },
   { title: 'model.common.checkOutState', key: 'checkOutState' },
-  { title: 'model.common.checkOutTime', key: 'checkOutTime' },
+  { title: 'model.common.checkOutTime', key: 'checkOutTime', type: 'datetime' },
   { title: 'model.common.checkOutUser', key: 'checkOutUser' },
   { title: 'model.event.eventName', key: 'eventName' },
   { title: 'model.event.timeKey', key: 'timeKey' },
-  { title: 'model.event.eventTime', key: 'eventTime' },
+  { title: 'model.event.eventTime', key: 'eventTime', type: 'datetime' },
   { title: 'model.event.eventUser', key: 'eventUser' },
   { title: 'model.event.eventComment', key: 'eventComment' },
 ]

@@ -51,7 +51,7 @@ const headers = [
   { title: 'model.alarm.userGroupName', key: 'userGroupName' },
   { title: 'model.event.eventName', key: 'eventName' },
   { title: 'model.event.timeKey', key: 'timeKey' },
-  { title: 'model.event.eventTime', key: 'eventTime' },
+  { title: 'model.event.eventTime', key: 'eventTime', type: 'datetime' },
   { title: 'model.event.eventUser', key: 'eventUser' },
   { title: 'model.event.eventComment', key: 'eventComment' },
 ]

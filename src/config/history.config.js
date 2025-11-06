@@ -13,7 +13,7 @@ const alarm = {
     { title: 'columns.equipmentName', key: 'equipmentName' },
     { title: 'columns.alarmState', key: 'alarmState' },
     { title: 'columns.eventName', key: 'eventName' },
-    { title: 'columns.eventTime', key: 'eventTime' },
+    { title: 'columns.eventTime', key: 'eventTime', type: 'datetime' },
     { title: 'columns.eventUser', key: 'eventUser' },
   ],
 }
@@ -29,7 +29,7 @@ const alarm_def = {
     { title: 'columns.alarmType', key: 'alarmType' },
     { title: 'columns.alarmLevel', key: 'alarmLevel' },
     { title: 'columns.eventName', key: 'eventName' },
-    { title: 'columns.eventTime', key: 'eventTime' },
+    { title: 'columns.eventTime', key: 'eventTime', type: 'datetime' },
   ],
 }
 

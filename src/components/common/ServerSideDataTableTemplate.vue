@@ -83,7 +83,7 @@
         >
           <slot :name="`item.${header.key}`" v-bind="slotProps">
             <span class="cell-ellipsis" :title="String(slotProps.value ?? '')">
-              {{ slotProps.value }}
+              {{ getFormattedValue(header, slotProps.value) }}
             </span>
           </slot>
         </template>
@@ -163,6 +163,8 @@ import {
   uploadExcelFile,
 } from '@/api/dataTable'
 import ConfirmDialog from '@/components/common/ConfirmDialog.vue'
+// [추가] 날짜 포맷터 유틸리티를 import 합니다.
+import { formatDateTime, formatDate } from '@/utils/formatters'
 
 // ✨ [리팩토링] 2. Props & Emits
 const props = defineProps({
@@ -412,6 +414,34 @@ watch(
   },
   { deep: true },
 )
+
+/**
+ * header에 정의된 type에 따라 값을 포맷팅합니다.
+ * @param {object} header - props.headers의 개별 헤더 객체
+ * @param {*} value - 셀의 원본 값 (예: '...T...')
+ */
+function getFormattedValue(header, value) {
+  // 1. 값이 없으면 빈 문자열 반환 (null이나 undefined가 'null'로 표시되는 것 방지)
+  if (value === null || value === undefined) {
+    return ''
+  }
+
+  // 2. header.type에 따라 분기
+  if (header.type === 'datetime') {
+    return formatDateTime(value) // 예: 2025-10-21 12:50:24
+  }
+  if (header.type === 'date') {
+    return formatDate(value) // 예: 2025-10-21
+  }
+
+  // (향후 확장)
+  // if (header.type === 'currency') {
+  //   return value.toLocaleString('ko-KR') + '원'
+  // }
+
+  // 3. 일치하는 type이 없으면 원본 값 반환
+  return value
+}
 
 // ✨ [리팩토링] 7. Methods (주요 로직 및 핸들러)
 // -------------------

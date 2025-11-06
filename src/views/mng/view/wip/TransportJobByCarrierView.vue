@@ -102,11 +102,11 @@ const headers = [
   { title: 'model.transportJob.errorCode', key: 'errorCode' },
   { title: 'model.transportJob.errorText', key: 'errorText' },
   { title: 'model.transportJob.requestType', key: 'requestType' },
-  { title: 'model.carrier.createTime', key: 'createTime' },
+  { title: 'model.carrier.createTime', key: 'createTime', type: 'datetime' },
   { title: 'model.carrier.reasonCode', key: 'reasonCode' },
   { title: 'model.event.eventName', key: 'eventName' },
   { title: 'model.event.timeKey', key: 'timeKey' },
-  { title: 'model.event.eventTime', key: 'eventTime' },
+  { title: 'model.event.eventTime', key: 'eventTime', type: 'datetime' },
   { title: 'model.event.eventUser', key: 'eventUser' },
   { title: 'model.event.eventComment', key: 'eventComment' },
 ]
@@ -143,7 +143,7 @@ const detailHeaders = [
   { title: 'model.transportJob.stepPhase', key: 'stepPhase' },
   { title: 'model.event.eventName', key: 'eventName' },
   { title: 'model.event.timeKey', key: 'timeKey' },
-  { title: 'model.event.eventTime', key: 'eventTime' },
+  { title: 'model.event.eventTime', key: 'eventTime', type: 'datetime' },
   { title: 'model.event.eventUser', key: 'eventUser' },
   { title: 'model.event.eventComment', key: 'eventComment' },
 ]
