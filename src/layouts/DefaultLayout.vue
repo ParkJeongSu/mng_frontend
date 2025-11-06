@@ -106,6 +106,8 @@ onMounted(() => {
   flex-grow: 1;
   /* ✨ 핵심: 패널이 열릴 때 이 영역이 줄어들 수 있도록 허용합니다. */
   min-width: 0;
+
+  transition: none !important;
 }
 
 /* 2. v-footer 내부 레이아웃을 위한 스타일 추가 */
@@ -224,8 +226,8 @@ onMounted(() => {
   아래 코드로 v-app-bar의 속도를 직접 강제합니다.
 */
 .content-wrapper > .v-app-bar {
+  /* 레이아웃 관련 속성만 전환, 배경/글자색은 전환 금지 */
+  transition-property: width, left, right, transform !important;
   transition-duration: 0.6s !important;
-  /* 모든 속성 변경(width, left, right 등)에 대해 0.6초 적용 */
-  transition-property: all !important;
 }
 </style>
