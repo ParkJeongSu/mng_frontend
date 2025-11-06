@@ -86,7 +86,7 @@ const headers = [
   { title: 'model.carrier.reasonCode', key: 'reasonCode' },
   { title: 'model.lot.ownerCode', key: 'ownerCode' },
   { title: 'model.event.eventName', key: 'eventName' },
-  { title: 'model.event.timeKey', key: 'timeKey' },
+
   { title: 'model.event.eventTime', key: 'eventTime', type: 'datetime' },
   { title: 'model.event.eventUser', key: 'eventUser' },
   { title: 'model.event.eventComment', key: 'eventComment' },

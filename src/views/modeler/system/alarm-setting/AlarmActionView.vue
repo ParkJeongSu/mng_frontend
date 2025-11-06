@@ -98,7 +98,7 @@ const headers = [
   { title: 'model.common.checkOutTime', key: 'checkOutTime', type: 'datetime' },
   { title: 'model.common.checkOutUser', key: 'checkOutUser' },
   { title: 'model.event.eventName', key: 'eventName' },
-  { title: 'model.event.timeKey', key: 'timeKey' },
+
   { title: 'model.event.eventTime', key: 'eventTime', type: 'datetime' },
   { title: 'model.event.eventUser', key: 'eventUser' },
   { title: 'model.event.eventComment', key: 'eventComment' },
@@ -123,7 +123,7 @@ const detailHeaders = [
   { title: 'model.alarm.subject', key: 'subject' },
   { title: 'model.alarm.contents', key: 'contents' },
   { title: 'model.event.eventName', key: 'eventName' },
-  { title: 'model.event.timeKey', key: 'timeKey' },
+
   { title: 'model.event.eventTime', key: 'eventTime', type: 'datetime' },
   { title: 'model.event.eventUser', key: 'eventUser' },
   { title: 'model.event.eventComment', key: 'eventComment' },
