@@ -37,7 +37,7 @@ const ready = ref(true)
 
 // 검색 및 폼 스키마 정의
 const searchSchema = [
-  { key: 'authorityName', labelKey: 'model.authority.authorityName', component: 'v-text-field' },
+  { key: 'userGroupName', labelKey: 'model.alarm.userGroupName', component: 'v-text-field' },
 ]
 
 //폼 스키마 정의 (추가/수정에 사용)
@@ -52,7 +52,6 @@ const headers = [
   { title: 'model.alarm.userGroupName', key: 'userGroupName' },
   { title: 'model.user.userId', key: 'userId' },
   { title: 'model.event.eventName', key: 'eventName' },
-
   { title: 'model.event.eventTime', key: 'eventTime', type: 'datetime' },
   { title: 'model.event.eventUser', key: 'eventUser' },
   { title: 'model.event.eventComment', key: 'eventComment' },

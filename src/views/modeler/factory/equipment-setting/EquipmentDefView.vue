@@ -38,7 +38,11 @@ const ready = ref(true)
 
 // 검색 및 폼 스키마 정의
 const searchSchema = [
-  { key: 'authorityName', labelKey: 'model.authority.authorityName', component: 'v-text-field' },
+  {
+    key: 'equipmentDefName',
+    labelKey: 'model.equipment.equipmentDefName',
+    component: 'v-text-field',
+  },
 ]
 
 //폼 스키마 정의 (추가/수정에 사용)
@@ -65,7 +69,6 @@ const headers = [
   { title: 'model.common.checkOutUser', key: 'checkOutUser' },
   { title: 'model.common.dataState', key: 'dataState' },
   { title: 'model.event.eventName', key: 'eventName' },
-
   { title: 'model.event.eventTime', key: 'eventTime', type: 'datetime' },
   { title: 'model.event.eventUser', key: 'eventUser' },
   { title: 'model.event.eventComment', key: 'eventComment' },

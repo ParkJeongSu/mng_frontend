@@ -39,12 +39,9 @@ const ready = ref(true)
 // 검색 및 폼 스키마 정의
 const searchSchema = [
   {
-    key: 'alarmDefId',
+    key: 'alarmDefName',
     labelKey: 'model.alarm.alarmDefName',
-    component: 'v-select',
-    'item-title': 'alarmDefName', // v-select의 item-title에 매핑할 키
-    'item-value': 'id', // v-select의 item-value에 매핑할 키
-    apiEndpoint: '/api/alarm-def',
+    component: 'v-text-field',
   },
   { key: 'equipmentName', labelKey: 'model.alarm.equipmentName', component: 'v-text-field' },
   {
@@ -65,12 +62,12 @@ const formSchema = [
 const headers = [
   { title: 'model.common.id', key: 'id' },
   { title: 'model.alarm.alarmDefId', key: 'alarmDefId' },
+  { title: 'model.alarm.alarmDefName', key: 'alarmDefName' },
   { title: 'model.equipment.equipmentName', key: 'equipmentName' },
   { title: 'model.alarm.alarmState', key: 'alarmState' },
   { title: 'model.carrier.createTime', key: 'createTime', type: 'datetime' },
   { title: 'model.alarm.clearTime', key: 'clearTime', type: 'datetime' },
   { title: 'model.event.eventName', key: 'eventName' },
-
   { title: 'model.event.eventTime', key: 'eventTime', type: 'datetime' },
   { title: 'model.event.eventUser', key: 'eventUser' },
   { title: 'model.event.eventComment', key: 'eventComment' },

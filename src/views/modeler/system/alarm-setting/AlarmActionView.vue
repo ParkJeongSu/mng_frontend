@@ -77,7 +77,7 @@ const detailFilterParams = computed(function () {
 // AlarmAction search 및 폼 스키마 및 headers 정의
 // 검색 및 폼 스키마 정의
 const searchSchema = [
-  { key: 'authorityName', labelKey: 'model.authority.authorityName', component: 'v-text-field' },
+  { key: 'alarmActionName', labelKey: 'model.alarm.alarmActionName', component: 'v-text-field' },
 ]
 
 //폼 스키마 정의 (추가/수정에 사용)
@@ -98,7 +98,6 @@ const headers = [
   { title: 'model.common.checkOutTime', key: 'checkOutTime', type: 'datetime' },
   { title: 'model.common.checkOutUser', key: 'checkOutUser' },
   { title: 'model.event.eventName', key: 'eventName' },
-
   { title: 'model.event.eventTime', key: 'eventTime', type: 'datetime' },
   { title: 'model.event.eventUser', key: 'eventUser' },
   { title: 'model.event.eventComment', key: 'eventComment' },

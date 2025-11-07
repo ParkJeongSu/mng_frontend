@@ -140,44 +140,65 @@ const router = createRouter({
           name: 'EquipmentDefView',
           component: () =>
             import('../views/modeler/factory/equipment-setting/EquipmentDefView.vue'),
-          meta: { titleKey: 'menu.EquipmentDef' },
+          meta: {
+            icon: '$device',
+            titleKey: 'menu.EquipmentDef',
+          },
         },
         {
           path: 'modeler/factory/equipment-setting/equipment-group',
           name: 'EquipmentGroupView',
           component: () =>
             import('../views/modeler/factory/equipment-setting/EquipmentGroupView.vue'),
-          meta: { titleKey: 'menu.EquipmentGroup' },
+          meta: {
+            icon: '$device',
+            titleKey: 'menu.EquipmentGroup',
+          },
         },
         {
           path: 'modeler/factory/equipment-setting/equipments',
           name: 'EquipmentsView',
           component: () => import('../views/modeler/factory/equipment-setting/EquipmentsView.vue'),
-          meta: { titleKey: 'menu.Equipments' },
+          meta: {
+            icon: '$device',
+            titleKey: 'menu.Equipments',
+          },
         },
         {
           path: 'modeler/factory/port-setting/port-def',
           name: 'PortDefView',
           component: () => import('../views/modeler/factory/port-setting/PortDefView.vue'),
-          meta: { titleKey: 'menu.PortDef' },
+          meta: {
+            icon: '$import',
+            titleKey: 'menu.PortDef',
+          },
         },
         {
           path: 'modeler/factory/port-setting/ports',
           name: 'PortsView',
           component: () => import('../views/modeler/factory/port-setting/PortsView.vue'),
-          meta: { titleKey: 'menu.Ports' },
+          meta: {
+            icon: '$import',
+            titleKey: 'menu.Ports',
+          },
         },
         {
           path: 'modeler/factory/carrier-setting/carrier-def',
           name: 'CarrierDefView',
           component: () => import('../views/modeler/factory/carrier-setting/CarrierDefView.vue'),
-          meta: { titleKey: 'menu.CarrierDef' },
+          meta: {
+            icon: '$trainCarFlatbed',
+            titleKey: 'menu.CarrierDef',
+          },
         },
         {
           path: 'modeler/factory/carrier-setting/carriers',
           name: 'CarriersView',
           component: () => import('../views/modeler/factory/carrier-setting/CarriersView.vue'),
-          meta: { titleKey: 'menu.Carriers' },
+          meta: {
+            icon: '$trainCarFlatbed',
+            titleKey: 'menu.Carriers',
+          },
         },
         {
           path: 'modeler/history/modeler-history/historys',

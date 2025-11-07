@@ -68,7 +68,7 @@ const detailFilterParams = computed(function () {
   // selectedActionObject가 존재하고, 그 안에 id 속성이 있다면
   if (selectedActionObject.value && selectedActionObject.value.id) {
     // API가 원하는 키 이름 'alarmActionId'로 값을 매핑합니다.
-    return { alarmActionId: selectedActionObject.value.id }
+    return { transportJobId: selectedActionObject.value.id }
   }
   // 선택된 것이 없으면 빈 객체를 반환
   return {}
@@ -77,7 +77,11 @@ const detailFilterParams = computed(function () {
 // AlarmAction search 및 폼 스키마 및 headers 정의
 // 검색 및 폼 스키마 정의
 const searchSchema = [
-  { key: 'authorityName', labelKey: 'model.authority.authorityName', component: 'v-text-field' },
+  {
+    key: 'transportJobName',
+    labelKey: 'model.transportJob.transportJobName',
+    component: 'v-text-field',
+  },
 ]
 
 //폼 스키마 정의 (추가/수정에 사용)
@@ -105,7 +109,6 @@ const headers = [
   { title: 'model.carrier.createTime', key: 'createTime', type: 'datetime' },
   { title: 'model.carrier.reasonCode', key: 'reasonCode' },
   { title: 'model.event.eventName', key: 'eventName' },
-
   { title: 'model.event.eventTime', key: 'eventTime', type: 'datetime' },
   { title: 'model.event.eventUser', key: 'eventUser' },
   { title: 'model.event.eventComment', key: 'eventComment' },

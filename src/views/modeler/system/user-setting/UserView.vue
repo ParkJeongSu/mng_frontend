@@ -39,7 +39,14 @@ const ready = ref(true)
 // 검색 및 폼 스키마 정의
 const searchSchema = [
   { key: 'userId', labelKey: 'model.user.userId', component: 'v-text-field' },
-  { key: 'authorityId', labelKey: 'model.authority.authorityId', component: 'v-text-field' },
+  {
+    key: 'authorityId',
+    labelKey: 'model.authority.authorityName',
+    component: 'v-select',
+    'item-title': 'authorityName', // v-select의 item-title에 매핑할 키
+    'item-value': 'id', // v-select의 item-value에 매핑할 키
+    apiEndpoint: '/api/auth',
+  },
   { key: 'userName', labelKey: 'model.user.userName', component: 'v-text-field' },
   { key: 'email', labelKey: 'model.user.email', component: 'v-text-field' },
   { key: 'phone1', labelKey: 'model.user.phone1', component: 'v-text-field' },

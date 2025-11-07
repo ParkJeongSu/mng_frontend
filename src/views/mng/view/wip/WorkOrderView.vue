@@ -38,7 +38,7 @@ const ready = ref(true)
 
 // 검색 및 폼 스키마 정의
 const searchSchema = [
-  { key: 'authorityName', labelKey: 'model.authority.authorityName', component: 'v-text-field' },
+  { key: 'workOrderName', labelKey: 'model.workorder.workOrderName', component: 'v-text-field' },
 ]
 
 //폼 스키마 정의 (추가/수정에 사용)

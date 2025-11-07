@@ -37,9 +37,7 @@ import { statusColorMap } from '@/constants/columnColorMaps' // 상태 색상 �
 const ready = ref(true)
 
 // 검색 및 폼 스키마 정의
-const searchSchema = [
-  { key: 'authorityName', labelKey: 'model.authority.authorityName', component: 'v-text-field' },
-]
+const searchSchema = [{ key: 'lotName', labelKey: 'model.lot.lotName', component: 'v-text-field' }]
 
 //폼 스키마 정의 (추가/수정에 사용)
 const formSchema = [
@@ -86,7 +84,6 @@ const headers = [
   { title: 'model.carrier.reasonCode', key: 'reasonCode' },
   { title: 'model.lot.ownerCode', key: 'ownerCode' },
   { title: 'model.event.eventName', key: 'eventName' },
-
   { title: 'model.event.eventTime', key: 'eventTime', type: 'datetime' },
   { title: 'model.event.eventUser', key: 'eventUser' },
   { title: 'model.event.eventComment', key: 'eventComment' },

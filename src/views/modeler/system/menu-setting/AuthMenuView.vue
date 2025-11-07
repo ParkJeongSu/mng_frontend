@@ -63,7 +63,7 @@ const searchSchema = [
     dependsOn: ['systemDefId'], // 2. 'systemDefId' 키에 의존한다고 명시합니다.
     // 3. 다시 조회할 API 주소를 명시합니다.
     // (백엔드는 /api/menus/find-by-system?systemDefId=... 형식으로 호출받게 됩니다)
-    apiEndpoint: '/api/menus',
+    apiEndpoint: '/api/menus/options',
   },
 ]
 
