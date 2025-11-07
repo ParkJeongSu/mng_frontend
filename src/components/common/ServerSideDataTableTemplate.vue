@@ -1,7 +1,7 @@
 <template>
   <v-card class="datatable-card d-flex flex-column" flat color="surface">
     <v-card-title class="datatable-title text-h5">
-      &nbsp; <v-icon icon="$accountGroup" size="24" /> &nbsp;
+      &nbsp; <v-icon :icon="$route.meta.icon || '$databaseOutline'" size="24" /> &nbsp;
       {{ $t(dataTabletitleKey, dataTabletitleKey) }}
     </v-card-title>
 

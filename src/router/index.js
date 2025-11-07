@@ -46,63 +46,93 @@ const router = createRouter({
           path: 'modeler/system/menu-setting/menu',
           name: 'MenuView',
           component: () => import('../views/modeler/system/menu-setting/MenuView.vue'),
-          meta: { titleKey: 'menu.Menu' },
+          meta: {
+            icon: '$menu',
+            titleKey: 'menu.Menu',
+          },
         },
         {
           path: 'modeler/system/menu-setting/system-def',
           name: 'SystemDefView',
           component: () => import('../views/modeler/system/menu-setting/SystemDefView.vue'),
-          meta: { titleKey: 'menu.SystemDef' },
+          meta: {
+            icon: '$cogSyncOutline',
+            titleKey: 'menu.SystemDef',
+          },
         },
         {
           path: 'modeler/system/menu-setting/auth-menu',
           name: 'AuthMenuView',
           component: () => import('../views/modeler/system/menu-setting/AuthMenuView.vue'),
-          meta: { titleKey: 'menu.AuthMenu' },
+          meta: {
+            icon: '$textAccount',
+            titleKey: 'menu.AuthMenu',
+          },
         },
         {
           path: 'modeler/system/user-setting/auth',
           name: 'AuthView',
           component: () => import('../views/modeler/system/user-setting/AuthView.vue'),
-          meta: { titleKey: 'menu.Auth' },
+          meta: {
+            icon: '$handFrontRightOutline',
+            titleKey: 'menu.Auth',
+          },
         },
         {
           path: 'modeler/system/user-setting/user',
           name: 'UserView',
           component: () => import('../views/modeler/system/user-setting/UserView.vue'),
-          meta: { titleKey: 'menu.User' },
+          meta: {
+            icon: '$account',
+            titleKey: 'menu.User',
+          },
         },
 
         {
           path: 'modeler/system/alarm-setting/alarm-def',
           name: 'AlarmDefView',
           component: () => import('../views/modeler/system/alarm-setting/AlarmDefView.vue'),
-          meta: { titleKey: 'menu.AlarmDef' },
+          meta: {
+            icon: '$alarmPanel',
+            titleKey: 'menu.AlarmDef',
+          },
         },
         {
           path: 'modeler/system/alarm-setting/alarm',
           name: 'AlarmView',
           component: () => import('../views/modeler/system/alarm-setting/AlarmView.vue'),
-          meta: { titleKey: 'menu.Alarm' },
+          meta: {
+            icon: '$alarm',
+            titleKey: 'menu.Alarm',
+          },
         },
         {
           path: 'modeler/system/alarm-setting/alarm-user-group',
           name: 'AlarmUserGroupView',
           component: () => import('../views/modeler/system/alarm-setting/AlarmUserGroupView.vue'),
-          meta: { titleKey: 'menu.AlarmUserGroup' },
+          meta: {
+            icon: '$accountGroup',
+            titleKey: 'menu.AlarmUserGroup',
+          },
         },
         {
           path: 'modeler/system/alarm-setting/alarm-user-group-users',
           name: 'AlarmUserGroupUsersView',
           component: () =>
             import('../views/modeler/system/alarm-setting/AlarmUserGroupUsersView.vue'),
-          meta: { titleKey: 'menu.AlarmUserGroupUsers' },
+          meta: {
+            icon: '$accountConvert',
+            titleKey: 'menu.AlarmUserGroupUsers',
+          },
         },
         {
           path: 'modeler/system/alarm-setting/alarm-action',
           name: 'AlarmActionView',
           component: () => import('../views/modeler/system/alarm-setting/AlarmActionView.vue'),
-          meta: { titleKey: 'menu.AlarmAction' },
+          meta: {
+            icon: '$emailOutline',
+            titleKey: 'menu.AlarmAction',
+          },
         },
         // 시작
         {
@@ -154,92 +184,137 @@ const router = createRouter({
           name: 'ModelerHistoryView',
           component: () =>
             import('../views/modeler/history/modeler-history/ModelerHistoryView.vue'),
-          meta: { titleKey: 'menu.ModelerHistory' },
+          meta: {
+            icon: '$history',
+            titleKey: 'menu.ModelerHistory',
+          },
         },
         {
           path: 'mng/history/mng-history/historys',
           name: 'MNGHistoryView',
           component: () => import('../views/mng/history/mng-history/MNGHistoryView.vue'),
-          meta: { titleKey: 'menu.MNGHistory' },
+          meta: {
+            icon: '$history',
+            titleKey: 'menu.MNGHistory',
+          },
         },
         {
           path: 'mng/view/wip/wip-by-lot',
           name: 'WipByLotView',
           component: () => import('../views/mng/view/wip/WipByLotView.vue'),
-          meta: { titleKey: 'menu.WipByLot' },
+          meta: {
+            icon: '$formatListBulleted',
+            titleKey: 'menu.WipByLot',
+          },
         },
         {
           path: 'mng/view/wip/transport-job-by-carrier',
           name: 'TransportJobByCarrierView',
           component: () => import('../views/mng/view/wip/TransportJobByCarrierView.vue'),
-          meta: { titleKey: 'menu.TransportJobByCarrier' },
+          meta: {
+            icon: '$formatListBulleted',
+            titleKey: 'menu.TransportJobByCarrier',
+          },
         },
         {
           path: 'mng/view/wip/workorders',
           name: 'WorkOrderView',
           component: () => import('../views/mng/view/wip/WorkOrderView.vue'),
-          meta: { titleKey: 'menu.WorkOrder' },
+          meta: {
+            icon: '$formatListBulleted',
+            titleKey: 'menu.WorkOrder',
+          },
         },
         {
           path: 'mng/view/interface/wms-receive-job',
           name: 'WMSReceiveJobView',
           component: () => import('../views/mng/view/interface/WMSReceiveJobView.vue'),
-          meta: { titleKey: 'menu.WMSReceiveJob' },
+          meta: {
+            icon: '$transfer',
+            titleKey: 'menu.WMSReceiveJob',
+          },
         },
         {
           path: 'mng/view/interface/wms-send-container',
           name: 'WMSSendContainerView',
           component: () => import('../views/mng/view/interface/WMSSendContainerView.vue'),
-          meta: { titleKey: 'menu.WMSSendContainer' },
+          meta: {
+            icon: '$transfer',
+            titleKey: 'menu.WMSSendContainer',
+          },
         },
         {
           path: 'mng/view/interface/wms-receive-container',
           name: 'WMSReceiveContainerView',
           component: () => import('../views/mng/view/interface/WMSReceiveContainerView.vue'),
-          meta: { titleKey: 'menu.WMSReceiveContainer' },
+          meta: {
+            icon: '$transfer',
+            titleKey: 'menu.WMSReceiveContainer',
+          },
         },
         {
           path: 'mng/view/interface/wms-send-start',
           name: 'WMSSendStartView',
           component: () => import('../views/mng/view/interface/WMSSendStartView.vue'),
-          meta: { titleKey: 'menu.WMSSendStart' },
+          meta: {
+            icon: '$transfer',
+            titleKey: 'menu.WMSSendStart',
+          },
         },
         {
           path: 'mng/view/interface/wms-send-end',
           name: 'WMSSendEndView',
           component: () => import('../views/mng/view/interface/WMSSendEndView.vue'),
-          meta: { titleKey: 'menu.WMSSendEnd' },
+          meta: {
+            icon: '$transfer',
+            titleKey: 'menu.WMSSendEnd',
+          },
         },
         {
           path: 'report/production/input/from-transport-completed',
           name: 'InputTimePerArriveView',
           component: () => import('../views/report/production/input/InputTimePerArriveView.vue'),
-          meta: { titleKey: 'menu.InputTimePerArrive' },
+          meta: {
+            icon: '$bankTransferIn',
+            titleKey: 'menu.InputTimePerArrive',
+          },
         },
         {
           path: 'report/production/out/from-start-to-end',
           name: 'FromStartToEndView',
           component: () => import('../views/report/production/output/FromStartToEndView.vue'),
-          meta: { titleKey: 'menu.FromStartToEnd' },
+          meta: {
+            icon: '$chartLine',
+            titleKey: 'menu.FromStartToEnd',
+          },
         },
         {
           path: 'report/production/out/job-end-by-operation',
           name: 'JobEndByOperationView',
           component: () => import('../views/report/production/output/JobEndByOperationView.vue'),
-          meta: { titleKey: 'menu.JobEndByOperation' },
+          meta: {
+            icon: '$chartBar',
+            titleKey: 'menu.JobEndByOperation',
+          },
         },
         {
           path: 'report/transport/arrived/arrived-by-start',
           name: 'ArrivedBySrartView',
           component: () => import('../views/report/transport/arrived/ArrivedBySrartView.vue'),
-          meta: { titleKey: 'menu.ArrivedBySrart' },
+          meta: {
+            icon: '$chartDonut',
+            titleKey: 'menu.ArrivedBySrart',
+          },
         },
         {
           path: 'report/transport/arrived/average-by-start',
           name: 'ArrivedAverageByStartView',
           component: () =>
             import('../views/report/transport/arrived/ArrivedAverageByStartView.vue'),
-          meta: { titleKey: 'menu.ArrivedAverageByStart' },
+          meta: {
+            icon: '$chartTimeline',
+            titleKey: 'menu.ArrivedAverageByStart',
+          },
         },
         {
           path: 'report/equipment/status/equipment-by-time',
@@ -248,7 +323,10 @@ const router = createRouter({
             import(
               '../views/report/equipment-report/equipment-status/EquipmentStatusByTimeView.vue'
             ),
-          meta: { titleKey: 'menu.EquipmentStatusByTime' },
+          meta: {
+            icon: '$radar',
+            titleKey: 'menu.EquipmentStatusByTime',
+          },
         },
         {
           path: 'report/equipment/status/equipment-by-day',
@@ -257,7 +335,10 @@ const router = createRouter({
             import(
               '../views/report/equipment-report/equipment-status/EquipmentStatusByDayView.vue'
             ),
-          meta: { titleKey: 'menu.EquipmentStatusByDay' },
+          meta: {
+            icon: '$chartScatter',
+            titleKey: 'menu.EquipmentStatusByDay',
+          },
         },
         {
           path: 'report/equipment/status/equipment-per-average',
@@ -266,7 +347,10 @@ const router = createRouter({
             import(
               '../views/report/equipment-report/equipment-status/EquipmentStatusAverageView.vue'
             ),
-          meta: { titleKey: 'menu.EquipmentStatusAverage' },
+          meta: {
+            icon: '$chartSankey',
+            titleKey: 'menu.EquipmentStatusAverage',
+          },
         },
         {
           path: 'modeler/sample/subsample1/user-list-view',

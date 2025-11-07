@@ -2,7 +2,8 @@
   <v-container fluid class="page-container pa-0">
     <v-card class="chart-container d-flex flex-column" rounded="lg" flat>
       <v-card-title class="chart-title text-h5 flex-shrink-0">
-        &nbsp; <v-icon icon="$chartSankey" size="24" /> &nbsp; 1호기 프레스 압력 (실시간)
+        &nbsp; <v-icon :icon="$route.meta.icon || '$databaseOutline'" size="24" /> &nbsp; 1호기
+        프레스 압력 (실시간)
       </v-card-title>
       <v-card flat elevation="0" class="flex-grow-1 d-flex chart-card">
         <div class="chart">

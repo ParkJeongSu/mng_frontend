@@ -2,7 +2,8 @@
   <v-container fluid class="page-container pa-0">
     <v-card class="chart-container d-flex flex-column" rounded="lg" flat>
       <v-card-title class="chart-title text-h5 flex-shrink-0">
-        &nbsp; <v-icon icon="$chartDonut" size="24" /> &nbsp; 주간 불량 유형
+        &nbsp; <v-icon :icon="$route.meta.icon || '$databaseOutline'" size="24" /> &nbsp; 주간 불량
+        유형
       </v-card-title>
       <v-card flat elevation="0" class="flex-grow-1 d-flex chart-card">
         <div class="chart">
