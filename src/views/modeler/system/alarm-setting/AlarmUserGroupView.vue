@@ -42,8 +42,7 @@ const searchSchema = [
 
 //폼 스키마 정의 (추가/수정에 사용)
 const formSchema = [
-  { key: 'authorityName', labelKey: 'model.authority.authorityName', component: 'v-text-field' },
-  { key: 'description', labelKey: 'model.common.description', component: 'v-text-field' },
+  { key: 'userGroupName', labelKey: 'model.alarm.userGroupName', component: 'v-text-field' },
 ]
 
 const headers = [

@@ -47,8 +47,44 @@ const searchSchema = [
 
 //폼 스키마 정의 (추가/수정에 사용)
 const formSchema = [
-  { key: 'authorityName', labelKey: 'model.authority.authorityName', component: 'v-text-field' },
+  {
+    key: 'equipmentDefName',
+    labelKey: 'model.equipment.equipmentDefName',
+    component: 'v-text-field',
+  },
   { key: 'description', labelKey: 'model.common.description', component: 'v-text-field' },
+  {
+    key: 'equipmentType',
+    labelKey: 'model.equipment.equipmentType',
+    component: 'v-select',
+    'item-title': 'code', // v-select의 item-title에 매핑할 키
+    'item-value': 'code', // v-select의 item-value에 매핑할 키
+    apiEndpoint: '/api/meta-data/equipment-type',
+  },
+  {
+    key: 'equipmentGroupName',
+    labelKey: 'model.equipment.equipmentGroupName',
+    component: 'v-autocomplete',
+    'item-title': 'equipmentGroupName', // v-select의 item-title에 매핑할 키
+    'item-value': 'equipmentGroupName', // v-select의 item-value에 매핑할 키
+    apiEndpoint: '/api/equipment-group',
+  },
+  {
+    key: 'detailEquipmentType',
+    labelKey: 'model.equipment.detailEquipmentType',
+    component: 'v-select',
+    'item-title': 'code', // v-select의 item-title에 매핑할 키
+    'item-value': 'code', // v-select의 item-value에 매핑할 키
+    apiEndpoint: '/api/meta-data/equipment-detail-type',
+  },
+  {
+    key: 'containerType',
+    labelKey: 'model.carrier.containerType',
+    component: 'v-select',
+    'item-title': 'code', // v-select의 item-title에 매핑할 키
+    'item-value': 'code', // v-select의 item-value에 매핑할 키
+    apiEndpoint: '/api/meta-data/container-type',
+  },
 ]
 
 const headers = [

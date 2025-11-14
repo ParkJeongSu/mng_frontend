@@ -55,8 +55,31 @@ const searchSchema = [
 ]
 
 const formSchema = [
-  { key: 'authorityName', labelKey: 'model.authority.authorityName', component: 'v-text-field' },
+  {
+    key: 'alarmDefId',
+    labelKey: 'model.alarm.alarmDefId',
+    component: 'v-autocomplete',
+    'item-title': 'alarmDefName', // v-select의 item-title에 매핑할 키
+    'item-value': 'id', // v-select의 item-value에 매핑할 키
+    apiEndpoint: '/api/alarm-def',
+  },
   { key: 'description', labelKey: 'model.common.description', component: 'v-text-field' },
+  {
+    key: 'equipmentName',
+    labelKey: 'model.equipment.equipmentName',
+    component: 'v-autocomplete',
+    'item-title': 'equipmentName', // v-select의 item-title에 매핑할 키
+    'item-value': 'equipmentName', // v-select의 item-value에 매핑할 키
+    apiEndpoint: '/api/equipments',
+  },
+  {
+    key: 'alarmState',
+    labelKey: 'model.alarm.alarmState',
+    component: 'v-select',
+    'item-title': 'code', // v-select의 item-title에 매핑할 키
+    'item-value': 'code', // v-select의 item-value에 매핑할 키
+    apiEndpoint: '/api/meta-data/alarm-state',
+  },
 ]
 
 const headers = [

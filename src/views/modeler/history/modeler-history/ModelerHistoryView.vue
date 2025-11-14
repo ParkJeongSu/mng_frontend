@@ -13,12 +13,12 @@
         >
           <template v-slot:item="{ item, props }">
             <v-list-item v-bind="props">
-              <span>{{ $t('history.resources.' + item.value, item.value) }}</span>
+              <span>{{ $t('pages.history.resources.' + item.value, item.value) }}</span>
             </v-list-item>
           </template>
 
           <template v-slot:selection="{ item }">
-            <span>{{ $t('history.resources.' + item.value, item.value) }}</span>
+            <span>{{ $t('pages.history.resources.' + item.value, item.value) }}</span>
           </template>
         </v-select>
       </v-card-text>
@@ -44,7 +44,7 @@
 import ServerSideDataTableTemplate from '@/components/common/ServerSideDataTableTemplate.vue'
 import { ref, computed, onActivated } from 'vue'
 import { useRoute } from 'vue-router'
-// import { fetchHistoryResourceList } from '@/api/historyMeta' // (가정) API 함수
+import { requestGet } from '@/api/common'
 import { historyConfig } from '@/config/history.config.js' // 1번에서 만든 설정 파일
 
 // (가정) 현재 시스템이 "MES"라고 가정
@@ -76,24 +76,21 @@ const commonSearchSchema = [
 const formSchema = []
 
 // (가정) /api/history-meta/resources API 호출 함수
-// fetchListData 함수를 재사용해도 됨
 async function fetchHistoryResourceList(system) {
-  // return await fetchListData('/api/history-meta/resources', { system: system })
-
   // 임시 하드코딩 (테스트용)
   console.log(`${system} 시스템의 리소스 목록을 요청합니다.`)
-  return ['alarm', 'alarm-def', 'alarm-action']
+  return await requestGet('/api/history-meta/resources', { system: system })
 }
 
 onActivated(async function () {
   // (가정) API를 호출하여 이 시스템(MES)이 볼 수 있는 리소스 목록을 가져옴
   try {
     const responseData = await fetchHistoryResourceList(currentSystem)
-    resourceList.value = responseData // ['alarm', 'alarm_def','alarm_action']
+    resourceList.value = responseData.data // ['alarm', 'alarm_def','alarm_action']
 
     // 기본값으로 첫 번째 리소스를 선택 (선택 사항)
-    if (responseData.length > 0 && !selectedResource.value) {
-      selectedResource.value = responseData[0]
+    if (resourceList.value.length > 0 && !selectedResource.value) {
+      selectedResource.value = responseData.data[0]
     }
   } catch (error) {
     console.error('History 리소스 목록 로드 실패:', error)
@@ -108,6 +105,7 @@ const dynamicApiEndpoint = computed(function () {
   if (!selectedResource.value) {
     return null
   }
+
   // 예: 'alarm' -> '/api/alarm/history'
   // (참고) 사용자 요청에 따라 /api/modeler/alarm/history 등으로 변경 필요
   return `/api/${selectedResource.value}/history`
@@ -118,9 +116,11 @@ const dynamicSearchSchema = computed(function () {
   if (!selectedResource.value) {
     return []
   }
+  // [수정] 하이픈(-)을 언더스코어(_)로 변환
+  const configKey = selectedResource.value.replace(/-/g, '_') // "alarm-def" -> "alarm_def"
 
   // history.config.js에서 'alarm'에 해당하는 고유 필터를 가져옴
-  const specificSchema = historyConfig[selectedResource.value]?.searchSchema || []
+  const specificSchema = historyConfig[configKey]?.searchSchema || []
 
   // [공통 필터] ...와 [고유 필터] ...를 합쳐서 반환
   return [...commonSearchSchema, ...specificSchema]
@@ -131,8 +131,10 @@ const dynamicHeaders = computed(function () {
   if (!selectedResource.value) {
     return []
   }
+  // [수정] 하이픈(-)을 언더스코어(_)로 변환
+  const configKey = selectedResource.value.replace(/-/g, '_') // "alarm-def" -> "alarm_def"
   // history.config.js 에서 'alarm'에 해당하는 headers를 반환
-  return historyConfig[selectedResource.value]?.headers || []
+  return historyConfig[configKey]?.headers || []
 })
 
 // 4. 동적 제목 (다국어 키)
@@ -141,7 +143,7 @@ const dynamicTitleKey = computed(function () {
     return '...'
   }
   // 예: 'history.resources.alarm' (다국어 파일에 정의된 키)
-  return 'history.resources.' + selectedResource.value
+  return 'pages.history.resources.' + selectedResource.value
 })
 </script>
 <style scoped></style>

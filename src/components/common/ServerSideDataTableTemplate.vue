@@ -11,6 +11,7 @@
           <component
             :is="componentMap[item.component]"
             v-model="searchParams[item.key]"
+            @update:model-value="onSearchParamUpdate(item.key, $event, item.component)"
             :placeholder="item.label"
             clearable
             :items="item.items"
@@ -22,7 +23,24 @@
             hide-details
             :type="item.type"
             class="search-input"
-          ></component>
+            :loading="autocompleteLoadingKey === item.key"
+            @update:search="onAutocompleteSearch($event, item)"
+            no-filter
+          >
+            <template
+              v-if="item.component === 'v-autocomplete' && !item.isLastPage"
+              v-slot:append-item
+            >
+              <div v-intersect="onAutocompleteLoadMore" class="pa-2 text-center">
+                <v-progress-circular
+                  v-if="item.loadingMore"
+                  indeterminate
+                  color="primary"
+                  size="20"
+                ></v-progress-circular>
+              </div>
+            </template>
+          </component>
         </v-col>
         <v-spacer></v-spacer>
         <v-col class="search-actions d-flex justify-end align-center" cols="12" md="auto">
@@ -230,6 +248,11 @@ const isUploading = ref(false)
 const showImportError = ref(false)
 const importErrorMessages = ref([])
 
+// [추가] Autocomplete 상태
+const autocompleteLoadingKey = ref(null) // 로딩 중인 필드 키 (기존 loading과 충돌 방지)
+const searchTimeouts = ref({}) // 디바운싱 타이머
+const intersectingField = ref(null) // 무한 스크롤 감지용 필드
+const isSelecting = ref(false) // 💡 [플래그 추가]
 // -------------------
 // searchParams 초기화 (Props 기반)
 props.searchSchema.forEach(function (item) {
@@ -263,14 +286,14 @@ const translatedsearchSchema = computed(function () {
       translated = schema.label != null ? schema.label : key
     }
 
-    // 2. 동적 Items 바인딩
-    const finalItems =
-      schema.component === 'v-select' ? dynamicSelectItems[schema.key] : schema.items
+    // 2. dynamicSelectItems에서 '상태 객체'를 가져옵니다.
+    const state = dynamicSelectItems[schema.key] || {}
 
-    // 3. 병합
+    // 3. 병합 (기존: finalItems 계산 로직)
+    // 'schema' (원본) + 'label' (번역) + 'state' (items, page, isLastPage 등)
     return Object.assign({}, schema, {
       label: translated,
-      items: finalItems,
+      ...state, // 👈 [핵심] 여기에 state 객체의 모든 속성이 병합됩니다.
     })
   })
 })
@@ -342,29 +365,39 @@ watch(
   function (newSchema) {
     if (!newSchema) return
     newSchema.forEach(async function (item) {
-      if (item.component === 'v-select') {
+      // ✨ [수정] v-select와 v-autocomplete 모두 처리
+      if (item.component === 'v-select' || item.component === 'v-autocomplete') {
         if (dynamicSelectItems[item.key] === undefined) {
-          // --- ✨ [신규] 'apiEndpoint'가 있고, 의존성이 없는 경우 (정적 Select)
-          if (item.apiEndpoint && !item.dependsOn) {
-            // 1. 임시로 빈 배열 설정 (중복 호출 방지)
-            dynamicSelectItems[item.key] = []
-            // 2. 스토어에서 아이템 가져오기
+          // [분기 1] v-select (정적 API 호출)
+          if (item.apiEndpoint && !item.dependsOn && item.component === 'v-select') {
+            dynamicSelectItems[item.key] = { items: [] } // 중복 호출 방지
             const items = await metaDataStore.getItems(
               item.apiEndpoint,
               item['item-value'],
               item['item-title'],
               true, // 검색 패널이므로 '선택안함' 옵션 추가
             )
-            // 3. 실제 데이터로 업데이트
-            dynamicSelectItems[item.key] = items
+            dynamicSelectItems[item.key] = { items: items } // 👈 상태 객체로 저장
 
-            // --- [기존] 의존성이 있는 경우 (연쇄 Select)
+            // ✨ [분기 2] v-autocomplete (비동기 검색)
+          } else if (item.apiEndpoint && item.component === 'v-autocomplete') {
+            // 👈 'SidePanel'에서 복사해 온 상태 객체 초기화
+            dynamicSelectItems[item.key] = {
+              items: [],
+              page: 1,
+              totalPages: 1,
+              isLastPage: false,
+              loadingMore: false,
+              currentSearch: '',
+            }
+
+            // [분기 3] 연쇄 v-select (의존성 O)
           } else if (item.dependsOn) {
-            dynamicSelectItems[item.key] = item.items || [] // 예: menuId는 빈 배열로 시작
+            dynamicSelectItems[item.key] = { items: item.items || [] }
 
-            // --- [기존] 부모가 'items'를 직접 준 경우 (드문 케이스)
+            // [분기 4] items를 prop으로 직접 받은 경우
           } else {
-            dynamicSelectItems[item.key] = item.items || []
+            dynamicSelectItems[item.key] = { items: item.items || [] }
           }
         }
       }
@@ -436,7 +469,7 @@ function getFormattedValue(header, value) {
 
   // (향후 확장)
   // if (header.type === 'currency') {
-  //   return value.toLocaleString('ko-KR') + '원'
+  //   return value.toLocaleString('ko-KR') + '원'
   // }
 
   // 3. 일치하는 type이 없으면 원본 값 반환
@@ -445,6 +478,41 @@ function getFormattedValue(header, value) {
 
 // ✨ [리팩토링] 7. Methods (주요 로직 및 핸들러)
 // -------------------
+
+/**
+ * 💡 [신규] 검색 파라미터 업데이트 핸들러 (v-model 대체)
+ * v-autocomplete 버그 수정을 위해 컴포넌트 타입을 분기합니다.
+ */
+function onSearchParamUpdate(key, value, componentType) {
+  // 1. v-autocomplete에서 "선택"한 경우
+  if (componentType === 'v-autocomplete') {
+    // 1-1. 선택 플래그 설정
+    isSelecting.value = true
+    console.log('(검색 플래그) ' + key + ' 선택 시작. isSelecting = true')
+
+    // 1-2. (SidePanel과 동일) 펜딩 중인 '타이핑' 타이머 취소
+    if (searchTimeouts.value[key]) {
+      console.log('(검색) 타이머(ID: ' + searchTimeouts.value[key] + ')를 취소합니다.')
+      clearTimeout(searchTimeouts.value[key])
+      searchTimeouts.value[key] = null
+    }
+
+    // 1-3. 데이터 업데이트 (v-model이 하던 일)
+    searchParams[key] = value
+
+    // 1-4. 플래그 해제 (setTimeout 0)
+    setTimeout(function () {
+      isSelecting.value = false
+      console.log('(검색 플래그) 선택 로직 완료. isSelecting = false')
+    }, 0)
+
+    // 2. 그 외 컴포넌트 (v-text-field, v-select 등)
+  } else {
+    // v-model의 기본 동작만 수행
+    searchParams[key] = value
+  }
+}
+
 /**
  * [CORE] 서버에서 데이터를 로드합니다.
  * v-data-table-server의 @update:options 이벤트 및 'search' 버튼 클릭 시 호출됩니다.
@@ -513,17 +581,17 @@ async function fetchDependentItems(fieldSchema) {
       // 4. '선택 안함' (빈 값) 옵션 추가
       responseMapData.unshift({ [itemValue]: '', [itemTitle]: '' })
 
-      dynamicSelectItems[fieldSchema.key] = responseMapData
+      dynamicSelectItems[fieldSchema.key] = { items: responseMapData } // 👈 상태 객체로 저장
     } catch (error) {
       console.error(
         'An error occurred while fetching dependent items for ' + fieldSchema.key,
         error,
       )
-      dynamicSelectItems[fieldSchema.key] = []
+      dynamicSelectItems[fieldSchema.key] = { items: [] }
     }
   } else {
     // 3. 의존 값이 하나라도 비어있다면 목록을 비웁니다.
-    dynamicSelectItems[fieldSchema.key] = []
+    dynamicSelectItems[fieldSchema.key] = { items: [] }
   }
 }
 
@@ -690,6 +758,153 @@ function handleExcelExport() {
 function handleFooterClick(actionFunction) {
   // 부모로부터 받은 함수에 'selectedItems'를 인자로 전달하며 실행
   actionFunction(selectedItems.value)
+}
+
+// --- ✨ [신규] Autocomplete 핸들러 ---
+
+/**
+ * Autocomplete API 호출을 담당하는 공통 함수
+ */
+async function fetchAutocompleteItems(field, search) {
+  // 'field'는 computed 객체이므로, '원본 상태'는 dynamicSelectItems에서 가져옵니다.
+  const originalState = dynamicSelectItems[field.key]
+  if (!originalState) {
+    console.error('dynamicSelectItems에 원본 state가 없습니다!', field.key)
+    return
+  }
+
+  if (originalState.loadingMore) return
+
+  const PAGE_SIZE = 20
+
+  originalState.loadingMore = true
+  if (originalState.page === 0) {
+    autocompleteLoadingKey.value = field.key
+  }
+
+  try {
+    const itemValue = field['item-value'] // 👈 ID 키를 미리 가져옵니다. (e.g., 'id')
+    const itemTitle = field['item-title']
+
+    const query = {
+      [itemTitle]: search.trim(),
+      size: PAGE_SIZE,
+      page: originalState.page,
+    }
+
+    const response = await fetchListData(field.apiEndpoint, query)
+    const items = response.items || response.content || []
+
+    const mappedItems = items.map(function (item) {
+      return { [itemValue]: item[itemValue], [itemTitle]: item[itemTitle] }
+    })
+
+    // 'originalState.items' (원본)을 수정
+    if (originalState.page === 0) {
+      originalState.items = mappedItems
+    } else {
+      // [중복 제거 로직]
+      const existingIds = new Set(
+        originalState.items.map(function (item) {
+          return item[itemValue]
+        }),
+      )
+      const newItemsOnly = mappedItems.filter(function (item) {
+        return !existingIds.has(item[itemValue])
+      })
+      // [새 배열 할당]
+      originalState.items = [...originalState.items, ...newItemsOnly]
+    }
+
+    // [isLastPage 판별]
+    if (response.last !== undefined) {
+      originalState.isLastPage = response.last
+    } else {
+      originalState.isLastPage = items.length < PAGE_SIZE // API 원본 응답 기준
+    }
+  } catch (error) {
+    console.error(`Error fetching autocomplete data for ${field.key}`, error)
+    originalState.items = [] // 원본 수정
+    originalState.isLastPage = true // 원본 수정
+  } finally {
+    originalState.loadingMore = false
+    autocompleteLoadingKey.value = null
+  }
+}
+
+/**
+ * v-autocomplete 검색 핸들러 (디바운싱 적용)
+ */
+function onAutocompleteSearch(search, field) {
+  // 💡 [수정] 선택 플래그가 true이면 검색 로직을 즉시 중단
+  if (isSelecting.value) {
+    console.log('(검색 방어) 현재 항목 선택 중이므로, @update:search 이벤트를 무시합니다.')
+    return
+  }
+  // 'field'는 computed 복사본
+  if (field.component !== 'v-autocomplete') return
+
+  // 1. '원본 상태'를 가져옵니다.
+  const originalState = dynamicSelectItems[field.key]
+  if (!originalState) return
+
+  // 2. v-intersect가 'computed field'를 참조하도록 설정
+  intersectingField.value = field
+
+  // 3. '원본 상태'에 현재 검색어 저장
+  originalState.currentSearch = search || ''
+
+  if (searchTimeouts.value[field.key]) {
+    clearTimeout(searchTimeouts.value[field.key])
+  }
+
+  if (!search || search.trim().length < 1) {
+    // (선택) 검색어 없으면 목록 비우기
+    // originalState.items = [];
+    // originalState.isLastPage = true;
+    return
+  }
+
+  // 300ms 디바운싱
+  searchTimeouts.value[field.key] = setTimeout(async function () {
+    // 4. '원본 상태' 초기화
+    originalState.page = 1
+    originalState.isLastPage = false
+    originalState.items = []
+
+    // 5. 'computed field'(API 정보)와 '검색어'를 전달
+    await fetchAutocompleteItems(field, originalState.currentSearch)
+  }, 300)
+}
+
+/**
+ * v-intersect 스크롤 감지 핸들러
+ */
+function onAutocompleteLoadMore(isIntersecting, entries, observer) {
+  // 1. 'intersectingField'에 저장된 'computed field'를 가져옵니다.
+  const field = intersectingField.value
+  if (!field) return
+
+  // 2. '원본 상태'를 가져옵니다.
+  const originalState = dynamicSelectItems[field.key]
+  if (!originalState) return
+
+  // [핵심] 4가지 조건을 모두 만족해야 "더보기"가 실행됩니다.
+  if (
+    isIntersecting &&
+    !originalState.loadingMore && // 1. "더보기" 로딩 중이 아님
+    !originalState.isLastPage && // 2. 마지막 페이지 아님
+    autocompleteLoadingKey.value === null && // 3. "새 검색" 로딩 중이 아님
+    originalState.items.length > 0 // 4. Page 0의 결과가 1개라도 로드됨
+  ) {
+    console.log(`(검색) 스크롤 감지: ${field.key} (Page: ${originalState.page + 1})`)
+
+    // 4. '원본 상태'의 page를 증가시킵니다.
+    originalState.page++
+
+    // 5. 'computed field'와 '검색어'를 전달
+    fetchAutocompleteItems(field, originalState.currentSearch)
+  }
 }
 </script>
 

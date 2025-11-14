@@ -4,32 +4,31 @@
 const alarm = {
   // 검색 영역 정의
   searchSchema: [
-    { key: 'equipmentName', labelKey: 'columns.equipmentName', component: 'v-text-field' },
-    { key: 'alarmState', labelKey: 'columns.alarmState', component: 'v-text-field' },
-    { key: 'eventName', labelKey: 'columns.eventName', component: 'v-text-field' },
+    { key: 'equipmentName', labelKey: 'model.alarm.equipmentName', component: 'v-text-field' },
+    { key: 'alarmState', labelKey: 'model.alarm.alarmState', component: 'v-text-field' },
   ],
   // 그리드 헤더 정의
   headers: [
-    { title: 'columns.equipmentName', key: 'equipmentName' },
-    { title: 'columns.alarmState', key: 'alarmState' },
-    { title: 'columns.eventName', key: 'eventName' },
-    { title: 'columns.eventTime', key: 'eventTime', type: 'datetime' },
-    { title: 'columns.eventUser', key: 'eventUser' },
+    { title: 'model.alarm.equipmentName', key: 'equipmentName' },
+    { title: 'model.alarm.alarmState', key: 'alarmState' },
+    { title: 'model.event.eventName', key: 'eventName' },
+    { title: 'model.event.eventTime', key: 'eventTime', type: 'datetime' },
+    { title: 'model.event.eventUser', key: 'eventUser' },
   ],
 }
 
 // alarm_def 리소스의 메타데이터
 const alarm_def = {
   searchSchema: [
-    { key: 'alarmCodeName', labelKey: 'columns.alarmCodeName', component: 'v-text-field' },
-    { key: 'alarmType', labelKey: 'columns.alarmType', component: 'v-text-field' },
+    { key: 'alarmDefName', labelKey: 'model.alarm.alarmDefName', component: 'v-text-field' },
+    { key: 'alarmType', labelKey: 'model.alarm.alarmType', component: 'v-text-field' },
   ],
   headers: [
-    { title: 'columns.alarmCodeName', key: 'alarmCodeName' },
-    { title: 'columns.alarmType', key: 'alarmType' },
-    { title: 'columns.alarmLevel', key: 'alarmLevel' },
-    { title: 'columns.eventName', key: 'eventName' },
-    { title: 'columns.eventTime', key: 'eventTime', type: 'datetime' },
+    { title: 'model.alarm.alarmDefName', key: 'alarmDefName' },
+    { title: 'model.alarm.alarmType', key: 'alarmType' },
+    { title: 'model.alarm.alarmLevel', key: 'alarmLevel' },
+    { title: 'model.event.eventName', key: 'eventName' },
+    { title: 'model.event.eventTime', key: 'eventTime', type: 'datetime' },
   ],
 }
 

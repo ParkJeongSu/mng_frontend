@@ -38,6 +38,15 @@ const ready = ref(true)
 
 // 검색 및 폼 스키마 정의
 const searchSchema = [
+  // {
+  //   key: 'id',
+  //   labelKey: 'model.alarm.alarmDefId',
+  //   component: 'v-autocomplete',
+  //   'item-title': 'alarmDefName', // v-select의 item-title에 매핑할 키
+  //   'item-value': 'id', // v-select의 item-value에 매핑할 키
+  //   apiEndpoint: '/api/alarm-def',
+  // },
+
   { key: 'alarmDefName', labelKey: 'model.alarm.alarmDefName', component: 'v-text-field' },
   {
     key: 'alarmType',
@@ -59,8 +68,29 @@ const searchSchema = [
 
 //폼 스키마 정의 (추가/수정에 사용)
 const formSchema = [
-  { key: 'authorityName', labelKey: 'model.authority.authorityName', component: 'v-text-field' },
+  {
+    key: 'alarmDefName',
+    labelKey: 'model.alarm.alarmDefName',
+    component: 'v-text-field',
+    editAvailable: false,
+  },
+  {
+    key: 'alarmType',
+    labelKey: 'model.alarm.alarmType',
+    component: 'v-select',
+    'item-title': 'code', // v-select의 item-title에 매핑할 키
+    'item-value': 'code', // v-select의 item-value에 매핑할 키
+    apiEndpoint: '/api/meta-data/alarm-type',
+  },
   { key: 'description', labelKey: 'model.common.description', component: 'v-text-field' },
+  {
+    key: 'alarmLevel',
+    labelKey: 'model.alarm.alarmLevel',
+    component: 'v-select',
+    'item-title': 'code', // v-select의 item-title에 매핑할 키
+    'item-value': 'code', // v-select의 item-value에 매핑할 키
+    apiEndpoint: '/api/meta-data/alarm-level',
+  },
 ]
 
 const headers = [
@@ -74,7 +104,6 @@ const headers = [
   { title: 'model.common.checkOutTime', key: 'checkOutTime', type: 'datetime' },
   { title: 'model.common.checkOutUser', key: 'checkOutUser' },
   { title: 'model.event.eventName', key: 'eventName' },
-
   { title: 'model.event.eventTime', key: 'eventTime', type: 'datetime' },
   { title: 'model.event.eventUser', key: 'eventUser' },
   { title: 'model.event.eventComment', key: 'eventComment' },

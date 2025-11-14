@@ -26,11 +26,29 @@
             :item-value="field['item-value']"
             :model-value="activeDataItem[field.key]"
             @update:model-value="activeUpdateHandler(field.key, $event)"
+            :readonly="isFieldReadOnly(field)"
             density="compact"
             variant="solo"
             flat
-            class="mb-2"
-          ></component>
+            :class="['mb-2', { 'readonly-field': isFieldReadOnly(field) }]"
+            :loading="loadingKey === field.key"
+            @update:search="onAutocompleteSearch($event, field)"
+            no-filter
+          >
+            <template
+              v-if="field.component === 'v-autocomplete' && !field.isLastPage"
+              v-slot:append-item
+            >
+              <div v-intersect="onAutocompleteLoadMore" class="pa-2 text-center">
+                <v-progress-circular
+                  v-if="field.loadingMore"
+                  indeterminate
+                  color="primary"
+                  size="20"
+                ></v-progress-circular>
+              </div>
+            </template>
+          </component>
         </div>
       </v-card-text>
 
@@ -66,10 +84,21 @@ const panelStore = usePanelStore()
 const metaDataStore = useMetaDataStore()
 
 // ✨ [리팩토링] 4. State
-// 스토어의 스키마를 복사하여 'items' 목록 등을 로컬에서 수정/관리합니다.
 const localFormSchema = ref([])
+const loadingKey = ref(null)
+const searchTimeouts = ref({})
+const intersectingField = ref(null)
+const isSelecting = ref(false) // 💡 [플래그 추가]
 
 // ✨ [리팩토링] 5. Computed
+
+// 💡 [해결책] isReadOnly computed 속성 추가
+const isReadOnly = computed(function () {
+  // formMode가 null (falsy)이면 true (읽기 전용)
+  // formMode가 'create' 또는 'edit' (truthy)이면 false
+  return !panelStore.formMode
+})
+
 /**
  * localFormSchema의 'labelKey'를 i18n으로 번역합니다.
  */
@@ -83,22 +112,15 @@ const translatedFormSchema = computed(function () {
       translated = schema.label != null ? schema.label : key
     }
 
+    // 'schema'의 원본 속성(items, page 등)과 'label'을 합친 '복사본'이 반환됩니다.
     return Object.assign({}, schema, { label: translated })
   })
 })
 
-/**
- * ✨ [리팩토링] 템플릿 중복 제거용:
- * 현재 모드(form/readonly)에 맞는 데이터 객체를 반환합니다.
- */
 const activeDataItem = computed(function () {
   return panelStore.formMode ? panelStore.formData : panelStore.selectedItem
 })
 
-/**
- * ✨ [리팩토링] 템플릿 중복 제거용:
- * 현재 모드에 맞는 데이터 업데이트 함수를 반환합니다.
- */
 const activeUpdateHandler = computed(function () {
   return panelStore.formMode ? updateItemData : updateSelectedItemData
 })
@@ -116,29 +138,53 @@ watch(
     if (newSchema && newSchema.length > 0) {
       console.log('패널이 열렸습니다. 로컬 폼 스키마를 스토어에서 복사합니다.')
 
-      // 1. 먼저 스키마 구조를 깊은 복사합니다.
       const newLocalSchema = JSON.parse(JSON.stringify(newSchema))
 
-      // 2. 복사된 스키마를 순회하며 API가 필요한 항목을 채웁니다.
-      // (Promise.all을 사용해 모든 API 호출을 병렬로 처리)
       const fetchTasks = newLocalSchema.map(async function (item) {
-        // ✨ [신규] 'apiEndpoint'가 있고, 의존성이 없는 경우
-        // (참고: SidePanel은 'apiEndpoint' 키를 사용하도록 수정했었습니다)
         if (item.component === 'v-select' && item.apiEndpoint && !item.dependsOn) {
           item.items = await metaDataStore.getItems(
             item.apiEndpoint,
             item['item-value'],
             item['item-title'],
-            false, // 폼 패널이므로 '선택안함' 옵션 *미포함*
+            false,
           )
+        }
+        // (2) ✨ [수정] v-autocomplete 로직
+        else if (item.component === 'v-autocomplete' && item.apiEndpoint) {
+          // A. 상태 객체 초기화
+          item.items = []
+          item.page = 1 // 👈 [수정] 0-based -> 1-based
+          item.totalPages = 1
+          item.isLastPage = false
+          item.loadingMore = false
+          item.currentSearch = ''
+
+          // B. 수정 모드일 때, 현재 ID에 해당하는 항목 이름을 표시
+          const selectedValue = panelStore.formData[item.key]
+          if (selectedValue !== null && selectedValue !== undefined && selectedValue !== '') {
+            try {
+              const query = { [item['item-value']]: selectedValue }
+              const response = await fetchListData(item.apiEndpoint, query)
+              const items = response.items || response.content || response
+
+              if (items.length > 0) {
+                const itemValue = item['item-value']
+                const itemTitle = item['item-title']
+                item.items = items.map(function (i) {
+                  return { [itemValue]: i[itemValue], [itemTitle]: i[itemTitle] }
+                })
+                item.isLastPage = true
+              }
+            } catch (e) {
+              console.error('Failed to fetch initial v-autocomplete item', e)
+              item.items = []
+            }
+          }
         }
         return item
       })
 
-      // 3. 모든 데이터 로딩이 완료될 때까지 기다립니다.
       const populatedSchema = await Promise.all(fetchTasks)
-
-      // 4. 데이터가 모두 채워진 스키마를 최종적으로 할당합니다.
       localFormSchema.value = populatedSchema
     } else {
       localFormSchema.value = []
@@ -149,27 +195,182 @@ watch(
 
 /**
  * 'formData'가 변경될 때마다 연쇄 v-select 처리를 위해
- * 'handleFormDataChange' 함수를 호출합니다.
  */
 watch(
   function () {
     return { ...panelStore.formData }
   },
   function (newFormData, oldFormData) {
-    // oldFormData가 있어야만(초기 로드 제외) 변경 감지 로직 실행
     if (oldFormData) {
       handleFormDataChange(newFormData, oldFormData)
     }
   },
-  // { deep: true } // 얕은 복사본을 반환하므로 deep: true 불필요
 )
 
 // ✨ [리팩토링] 7. Methods
+
+// 💡 [추가] 7-X. 필드별 Readonly 상태를 계산하는 함수
+/**
+ * 현재 필드가 읽기 전용 상태여야 하는지 판단합니다.
+ * @param {object} field - v-for 루프의 현재 schema 필드
+ * @returns {boolean} - 읽기 전용 여부
+ */
+function isFieldReadOnly(field) {
+  // 1. (전역) '읽기 모드'일 경우 (formMode: null)
+  //    모든 필드는 무조건 true
+  if (isReadOnly.value) {
+    return true
+  }
+
+  // 2. (필드) '수정 모드'일 경우 (formMode: 'edit')
+  if (panelStore.formMode === 'edit') {
+    // 2-1. field.editAvailable가 false로 명시된 경우
+    if (field.editAvailable === false) {
+      // 👈 'editAvailble' 오타일 경우 여기를 수정하세요
+      return true
+    }
+  }
+
+  // 3. '생성 모드' (formMode: 'create') 이거나
+  //    '수정 모드'에서 editAvailable가 true 또는 undefined인 경우
+  return false
+}
+
+/**
+ * Autocomplete API 호출을 담당하는 공통 함수
+ */
+async function fetchAutocompleteItems(field, search) {
+  // 'field'는 computed 복사본이므로, 'localFormSchema' (원본)에서 'originalField'를 찾습니다.
+  const originalField = localFormSchema.value.find(function (f) {
+    return f.key === field.key
+  })
+  if (!originalField) {
+    console.error('localFormSchema에서 원본 field를 찾을 수 없습니다!', field.key)
+    return
+  }
+
+  if (originalField.loadingMore) return
+
+  const PAGE_SIZE = 20
+
+  originalField.loadingMore = true
+  if (originalField.page === 1) {
+    // 👈 [수정] 1-based
+    loadingKey.value = originalField.key
+  }
+
+  try {
+    const itemValue = originalField['item-value']
+    const itemTitle = originalField['item-title']
+
+    const query = {
+      [itemTitle]: search.trim(),
+      size: PAGE_SIZE,
+      page: originalField.page, // 👈 [수정] 1-based
+    }
+
+    const response = await fetchListData(originalField.apiEndpoint, query)
+    const items = response.items || response.content || []
+
+    const mappedItems = items.map(function (item) {
+      return { [itemValue]: item[itemValue], [itemTitle]: item[itemTitle] }
+    })
+
+    if (originalField.page === 1) {
+      // 👈 [수정] 1-based
+      originalField.items = mappedItems
+    } else {
+      // 🚨 [추가] 중복 제거 로직 (SidePanel에도 동일하게 적용)
+      const existingIds = new Set(
+        originalField.items.map(function (item) {
+          return item[itemValue]
+        }),
+      )
+      const newItemsOnly = mappedItems.filter(function (item) {
+        return !existingIds.has(item[itemValue])
+      })
+      originalField.items = [...originalField.items, ...newItemsOnly]
+    }
+
+    if (response.last !== undefined) {
+      originalField.isLastPage = response.last
+    } else {
+      originalField.isLastPage = items.length < PAGE_SIZE
+    }
+  } catch (error) {
+    console.error(`Error fetching autocomplete data for ${originalField.key}`, error)
+    originalField.items = []
+    originalField.isLastPage = true
+  } finally {
+    originalField.loadingMore = false
+    loadingKey.value = null
+  }
+}
+
+/**
+ * v-autocomplete 검색 핸들러 (디바운싱 적용)
+ */
+function onAutocompleteSearch(search, field) {
+  // 💡 [수정 1] 선택 플래그가 true이면 검색 로직을 즉시 중단
+  if (isSelecting.value) {
+    console.log('(방어) 현재 항목 선택 중이므로, @update:search 이벤트를 무시합니다.')
+    return
+  }
+
+  // 'field'는 computed 복사본
+  if (field.component !== 'v-autocomplete') return
+
+  const originalField = localFormSchema.value.find(function (f) {
+    return f.key === field.key
+  })
+  if (!originalField) return
+
+  intersectingField.value = originalField
+  originalField.currentSearch = search || ''
+
+  if (searchTimeouts.value[originalField.key]) {
+    clearTimeout(searchTimeouts.value[originalField.key])
+  }
+
+  if (!search || search.trim().length < 1) {
+    return
+  }
+
+  searchTimeouts.value[originalField.key] = setTimeout(async function () {
+    originalField.page = 1 // 👈 [수정] 0-based -> 1-based
+    originalField.isLastPage = false
+    originalField.items = []
+
+    await fetchAutocompleteItems(originalField, originalField.currentSearch)
+  }, 300)
+}
+
+/**
+ * v-intersect 스크롤 감지 핸들러
+ */
+function onAutocompleteLoadMore(isIntersecting, entries, observer) {
+  const field = intersectingField.value
+
+  // 🚨 [수정] ServerSide와 동일한 4가지 조건으로 강화
+  if (
+    isIntersecting &&
+    field &&
+    !field.loadingMore &&
+    !field.isLastPage &&
+    loadingKey.value === null &&
+    field.items.length > 0 // [중요] Page 1 로드 완료 조건
+  ) {
+    console.log(`(패널) 스크롤 감지: ${field.key} (Page: ${field.page + 1})`)
+
+    field.page++
+    fetchAutocompleteItems(field, field.currentSearch)
+  }
+}
+
 /**
  * 폼 데이터 변경 감지 시 실행되는 메인 핸들러
  */
 async function handleFormDataChange(newFormData, oldFormData) {
-  // 변경된 필드 키 목록 찾기
   const changedKeys = Object.keys(newFormData).filter(function (key) {
     return newFormData[key] !== oldFormData[key]
   })
@@ -178,21 +379,21 @@ async function handleFormDataChange(newFormData, oldFormData) {
   console.log('변경된 필드:', changedKeys)
 
   for (const changedKey of changedKeys) {
-    // 이 'changedKey'에 의존하는 'localFormSchema' 내의 필드들 찾기
     const dependentFields = localFormSchema.value.filter(function (field) {
       if (!field.dependsOn) return false
-      // 배열 방식 (권장)
+      // 2. [핵심] 자기 자신은 종속 필드가 아님
+      if (field.key === changedKey) {
+        return false
+      }
       if (Array.isArray(field.dependsOn)) {
         return field.dependsOn.includes(changedKey)
       }
-      // (호환성) 문자열 방식
       if (typeof field.dependsOn === 'string') {
         return field.dependsOn === changedKey
       }
       return false
     })
 
-    // 찾은 모든 의존 필드(자식 필드)의 목록을 업데이트
     for (const fieldToUpdate of dependentFields) {
       console.log(`'${fieldToUpdate.key}' 필드는 '${changedKey}'의 변경을 감지했습니다.`)
       await fetchDependentItems(fieldToUpdate, newFormData)
@@ -204,7 +405,6 @@ async function handleFormDataChange(newFormData, oldFormData) {
  * 'fieldToUpdate'의 'items' 목록을 API로 가져오는 헬퍼 함수
  */
 async function fetchDependentItems(fieldToUpdate, newFormData) {
-  // 1. 의존성 목록(dependencies) 확보 (배열/문자열 호환)
   let dependencies = []
   if (Array.isArray(fieldToUpdate.dependsOn)) {
     dependencies = fieldToUpdate.dependsOn
@@ -212,7 +412,6 @@ async function fetchDependentItems(fieldToUpdate, newFormData) {
     dependencies = [fieldToUpdate.dependsOn]
   }
 
-  // 2. 모든 의존성(부모) 값이 채워져 있는지 확인 및 쿼리 객체 생성
   let allDependenciesMet = true
   const query = {}
 
@@ -222,67 +421,91 @@ async function fetchDependentItems(fieldToUpdate, newFormData) {
       allDependenciesMet = false
       break
     }
-    query[depKey] = value // API 요청에 사용할 쿼리 파라미터
+    query[depKey] = value
   }
 
-  // 3. API 엔드포인트가 있고, 모든 의존성이 충족되었는지 확인
   if (allDependenciesMet && fieldToUpdate.apiEndpoint) {
-    // [성공] API 호출
     try {
-      console.log(`API 호출 (동적 쿼리): ${fieldToUpdate.apiEndpoint}`, query)
-      const response = await fetchListData(fieldToUpdate.apiEndpoint, query)
+      let response
+      if (fieldToUpdate.PathVariable) {
+        let PathVariableURL
+        for (const property in query) {
+          PathVariableURL = fieldToUpdate.apiEndpoint + '/' + query[property]
+        }
+        console.log(`API 호출 (동적 쿼리): ${PathVariableURL}`)
+        response = await fetchListData(PathVariableURL, {})
+      } else {
+        console.log(`API 호출 (동적 쿼리): ${fieldToUpdate.apiEndpoint}`, query)
+        response = await fetchListData(fieldToUpdate.apiEndpoint, query)
+      }
 
-      // 4. v-select에 맞게 데이터 매핑
+      const items = response.items || response.content || response
+
       const itemValue = fieldToUpdate['item-value']
       const itemTitle = fieldToUpdate['item-title']
-      const responseMapData = response.items.map(function (item) {
+      const responseMapData = items.map(function (item) {
         return { [itemValue]: item[itemValue], [itemTitle]: item[itemTitle] }
       })
 
-      // responseMapData.unshift({ [itemValue]: '', [itemTitle]: '' })
-      // // 5. 로컬 스키마의 'items' 업데이트
       fieldToUpdate.items = responseMapData
     } catch (error) {
       console.error(
         'An error occurred while fetching dependent items for ' + fieldToUpdate.key,
         error,
       )
-      fieldToUpdate.items = [] // 오류 시 비움
+      fieldToUpdate.items = []
     }
   } else {
-    // [실패] 부모 값이 비어있음 -> 자식 필드 초기화
     console.log('부모 값 중 하나가 비어있으므로 자식 필드를 초기화합니다.')
     fieldToUpdate.items = []
   }
 
-  // 6. (중요) 부모 값이 변경되었으므로, 자식 필드의 '값'을 초기화
   panelStore.updateFormDataField(fieldToUpdate.key, null)
 }
 
-/**
- * 폼 모드에서 데이터 업데이트
- */
 function updateItemData(key, value) {
+  // 💡 [수정 2] 선택 시작 플래그 설정
+  isSelecting.value = true
+  console.log('(플래그) ' + key + ' 선택 시작. isSelecting = true')
+
+  // 💡 [디버깅 코드 추가]
+  console.log('--- [항목 선택] ---')
+  console.log('선택한 필드 key:', key)
+  console.log('현재 searchTimeouts 객체:', JSON.parse(JSON.stringify(searchTimeouts.value)))
+  console.log('해당 key로 타이머를 찾았나?:', searchTimeouts.value[key])
+  if (searchTimeouts.value[key]) {
+    console.log('타이머(ID: ' + searchTimeouts.value[key] + ')를 취소합니다.')
+    clearTimeout(searchTimeouts.value[key])
+    searchTimeouts.value[key] = null // 타이머 ID 정리
+  } else {
+    console.log('취소할 타이머가 없습니다.') // 👈 아마 이 로그가 뜰 것 같습니다.
+  }
   panelStore.updateFormDataField(key, value)
+  // 💡 [수정 3] '선택' 이벤트 처리가 모두 끝난 후 플래그를 해제
+  // @update:search 이벤트가 처리될 시간을 주기 위해
+  // 이벤트 루프의 맨 뒤로 작업을 보냅니다.
+  setTimeout(function () {
+    isSelecting.value = false
+    console.log('(플래그) 선택 로직 완료. isSelecting = false')
+  }, 0) // 0ms 타이머
 }
 
-/**
- * 읽기 전용 모드에서 데이터 업데이트 (필요시 사용)
- */
 function updateSelectedItemData(key, value) {
+  // 💡 [버그 수정] - 동일한 로직 적용
+  if (searchTimeouts.value[key]) {
+    clearTimeout(searchTimeouts.value[key])
+    searchTimeouts.value[key] = null
+  }
   panelStore.updateSelectedItemField(key, value)
+  setTimeout(function () {
+    isSelecting.value = false
+  }, 0)
 }
 
-/**
- * '취소' 버튼 핸들러
- */
 function onCancel() {
   panelStore.closePanel()
 }
 
-/**
- * '저장' 버튼 핸들러
- */
 function onSave() {
   panelStore.saveForm()
 }
@@ -320,5 +543,30 @@ function onSave() {
 .side-panel.is-open {
   width: 400px;
   max-width: 400px;
+}
+
+/* 읽기 전용 필드(.readonly-field) 내부의
+  실제 입력창 UI(.v-field) 스타일을 지정합니다.
+*/
+:deep(.readonly-field .v-field) {
+  /* 'variant="solo"'가 적용된 Vuetify 컴포넌트의 배경색을
+    덮어쓰기 위해 !important를 사용합니다.
+  */
+  background-color: #f0f0f0 !important; /* 연한 회색 배경 */
+  color: #666666; /* 내부 텍스트 색상 */
+}
+
+/* v-select나 v-autocomplete의 드롭다운 화살표 클릭을 막고
+  시각적으로 비활성화된 것처럼 보입니다.
+*/
+:deep(.readonly-field) {
+  pointer-events: none;
+}
+
+/*
+  화살표 아이콘을 연하게 처리합니다.
+*/
+:deep(.readonly-field .v-field__append-inner) {
+  opacity: 0.5;
 }
 </style>

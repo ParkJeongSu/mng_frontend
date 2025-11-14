@@ -27,7 +27,7 @@
           isHover
           showCheckbox
           :form-schema="detailFormSchema"
-          data-tabletitle-key="menu.AlarmAction"
+          data-tabletitle-key="menu.AlarmMailDetailAction"
           :filter-params="detailFilterParams"
           :is-open-panel="false"
         >
@@ -82,7 +82,23 @@ const searchSchema = [
 
 //폼 스키마 정의 (추가/수정에 사용)
 const formSchema = [
-  { key: 'authorityName', labelKey: 'model.authority.authorityName', component: 'v-text-field' },
+  { key: 'alarmActionName', labelKey: 'model.alarm.alarmActionName', component: 'v-text-field' },
+  {
+    key: 'alarmType',
+    labelKey: 'model.alarm.alarmType',
+    component: 'v-select',
+    'item-title': 'code', // v-select의 item-title에 매핑할 키
+    'item-value': 'code', // v-select의 item-value에 매핑할 키
+    apiEndpoint: '/api/meta-data/alarm-action-type',
+  },
+  {
+    key: 'alarmDefId',
+    labelKey: 'model.alarm.alarmDefId',
+    component: 'v-autocomplete',
+    'item-title': 'alarmDefName', // v-select의 item-title에 매핑할 키
+    'item-value': 'id', // v-select의 item-value에 매핑할 키
+    apiEndpoint: '/api/alarm-def',
+  },
   { key: 'description', labelKey: 'model.common.description', component: 'v-text-field' },
 ]
 
@@ -109,8 +125,24 @@ const detailSearchSchema = []
 
 //폼 스키마 정의 (추가/수정에 사용)
 const detailFormSchema = [
-  { key: 'authorityName', labelKey: 'model.authority.authorityName', component: 'v-text-field' },
-  { key: 'description', labelKey: 'model.common.description', component: 'v-text-field' },
+  {
+    key: 'alarmActionName',
+    labelKey: 'model.alarm.alarmActionName',
+    component: 'v-autocomplete',
+    'item-title': 'alarmActionName', // v-select의 item-title에 매핑할 키
+    'item-value': 'id', // v-select의 item-value에 매핑할 키
+    apiEndpoint: '/api/alarm-action',
+  },
+  {
+    key: 'userGroupName',
+    labelKey: 'model.alarm.userGroupName',
+    component: 'v-autocomplete',
+    'item-title': 'userGroupName', // v-select의 item-title에 매핑할 키
+    'item-value': 'id', // v-select의 item-value에 매핑할 키
+    apiEndpoint: '/api/alarm-user-group',
+  },
+  { key: 'subject', labelKey: 'model.alarm.subject', component: 'v-text-field' },
+  { key: 'contents', labelKey: 'model.alarm.contents', component: 'v-textarea' },
 ]
 
 const detailHeaders = [

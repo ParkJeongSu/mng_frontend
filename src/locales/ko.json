@@ -31,8 +31,8 @@
       "selectTitle": "히스토리 선택",
       "resources": {
         "alarm": "알람 이력",
-        "alarm_def": "알람 정의 이력",
-        "alarm_action": "알람 액션 이력",
+        "alarm-def": "알람 정의 이력",
+        "alarm-action": "알람 액션 이력",
         "lot": "Lot 이력",
         "machine": "설비 상태 이력"
       }
@@ -85,6 +85,7 @@
     "Dashboard": "대시보드",
     "UserManagement": "사용자 관리",
     "AlarmAction": "알람 액션",
+    "AlarmMailDetailAction": "알람 메일 상세 액션",
     "AlarmDef": "알람 정의",
     "AlarmUserGroupUsers": "알람 사용자 그룹 구성원",
     "AlarmUserGroup": "알람 사용자 그룹",

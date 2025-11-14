@@ -42,8 +42,60 @@ const searchSchema = [
 
 //폼 스키마 정의 (추가/수정에 사용)
 const formSchema = [
-  { key: 'authorityName', labelKey: 'model.authority.authorityName', component: 'v-text-field' },
-  { key: 'description', labelKey: 'model.common.description', component: 'v-text-field' },
+  { key: 'equipmentName', labelKey: 'model.equipment.equipmentName', component: 'v-text-field' },
+  {
+    key: 'equipmentDefName',
+    labelKey: 'model.equipment.equipmentDefName',
+    component: 'v-autocomplete',
+    'item-title': 'equipmentDefName', // v-select의 item-title에 매핑할 키
+    'item-value': 'equipmentDefName', // v-select의 item-value에 매핑할 키
+    apiEndpoint: '/api/equipment-def',
+  },
+  {
+    key: 'parentEquipmentName',
+    labelKey: 'model.equipment.parentEquipmentName',
+    component: 'v-autocomplete',
+    'item-title': 'equipmentName', // v-select의 item-title에 매핑할 키
+    'item-value': 'equipmentName', // v-select의 item-value에 매핑할 키
+    apiEndpoint: '/api/equipments',
+  },
+  {
+    key: 'equipmentLevel',
+    labelKey: 'model.equipment.equipmentLevel',
+    component: 'v-select',
+    'item-title': 'code', // v-select의 item-title에 매핑할 키
+    'item-value': 'code', // v-select의 item-value에 매핑할 키
+    apiEndpoint: '/api/meta-data/equipment-level',
+  },
+  {
+    key: 'equipmentState',
+    labelKey: 'model.equipment.equipmentState',
+    component: 'v-select',
+    'item-title': 'code', // v-select의 item-title에 매핑할 키
+    'item-value': 'code', // v-select의 item-value에 매핑할 키
+    apiEndpoint: '/api/meta-data/equipment-state',
+  },
+  {
+    key: 'communicationState',
+    labelKey: 'model.equipment.communicationState',
+    component: 'v-select',
+    'item-title': 'code', // v-select의 item-title에 매핑할 키
+    'item-value': 'code', // v-select의 item-value에 매핑할 키
+    apiEndpoint: '/api/meta-data/communication-state',
+  },
+  {
+    key: 'operationMode',
+    labelKey: 'model.equipment.operationMode',
+    component: 'v-select',
+    'item-title': 'code', // v-select의 item-title에 매핑할 키
+    'item-value': 'code', // v-select의 item-value에 매핑할 키
+    apiEndpoint: '/api/meta-data/equipment-operation-mode',
+  },
+  {
+    key: 'messageServiceAddress',
+    labelKey: 'model.equipment.messageServiceAddress',
+    component: 'v-text-field',
+  },
 ]
 
 const headers = [
@@ -66,7 +118,6 @@ const headers = [
   { title: 'model.equipment.operationMode', key: 'operationMode' },
   { title: 'model.equipment.messageServiceAddress', key: 'messageServiceAddress' },
   { title: 'model.event.eventName', key: 'eventName' },
-
   { title: 'model.event.eventTime', key: 'eventTime', type: 'datetime' },
   { title: 'model.event.eventUser', key: 'eventUser' },
   { title: 'model.event.eventComment', key: 'eventComment' },

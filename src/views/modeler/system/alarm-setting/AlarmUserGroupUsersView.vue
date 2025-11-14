@@ -42,8 +42,22 @@ const searchSchema = [
 
 //폼 스키마 정의 (추가/수정에 사용)
 const formSchema = [
-  { key: 'authorityName', labelKey: 'model.authority.authorityName', component: 'v-text-field' },
-  { key: 'description', labelKey: 'model.common.description', component: 'v-text-field' },
+  {
+    key: 'alarmActionUserGroupId',
+    labelKey: 'model.alarm.alarmActionUserGroupId',
+    component: 'v-autocomplete',
+    'item-title': 'userGroupName', // v-autocomplete item-title에 매핑할 키
+    'item-value': 'id', // v-autocomplete item-value에 매핑할 키
+    apiEndpoint: '/api/alarm-user-group',
+  },
+  {
+    key: 'userId',
+    labelKey: 'model.user.userId',
+    component: 'v-autocomplete',
+    'item-title': 'userId', // v-autocomplete item-title에 매핑할 키
+    'item-value': 'id', // v-autocomplete item-value에 매핑할 키
+    apiEndpoint: '/api/users',
+  },
 ]
 
 const headers = [

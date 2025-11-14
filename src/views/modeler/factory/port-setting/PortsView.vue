@@ -44,8 +44,25 @@ const searchSchema = [
 
 //폼 스키마 정의 (추가/수정에 사용)
 const formSchema = [
-  { key: 'authorityName', labelKey: 'model.authority.authorityName', component: 'v-text-field' },
+  { key: 'equipmentName', labelKey: 'model.equipment.equipmentName', component: 'v-text-field' },
+  { key: 'portName', labelKey: 'model.port.portName', component: 'v-text-field' },
+  {
+    key: 'portDefName',
+    labelKey: 'model.port.portDefName',
+    component: 'v-autocomplete',
+    'item-title': 'portDefName', // v-select의 item-title에 매핑할 키
+    'item-value': 'portDefName', // v-select의 item-value에 매핑할 키
+    apiEndpoint: '/api/port-def',
+  },
   { key: 'description', labelKey: 'model.common.description', component: 'v-text-field' },
+  {
+    key: 'portState',
+    labelKey: 'model.port.portState',
+    component: 'v-select',
+    'item-title': 'code', // v-select의 item-title에 매핑할 키
+    'item-value': 'code', // v-select의 item-value에 매핑할 키
+    apiEndpoint: '/api/port-state',
+  },
 ]
 
 const headers = [
@@ -62,7 +79,6 @@ const headers = [
   { title: 'model.carrier.transportState', key: 'transportState' },
   { title: 'model.carrier.carrierName', key: 'carrierName' },
   { title: 'model.event.eventName', key: 'eventName' },
-
   { title: 'model.event.eventTime', key: 'eventTime', type: 'datetime' },
   { title: 'model.event.eventUser', key: 'eventUser' },
   { title: 'model.event.eventComment', key: 'eventComment' },

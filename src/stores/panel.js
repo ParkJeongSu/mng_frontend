@@ -42,7 +42,9 @@ export const usePanelStore = defineStore('panel', () => {
   function openReadOnlyPanel(titleKey, schema, item, openFormPanel = true) {
     selectedItem.value = item
     formMode.value = null
-    isPanelOpen.value = openFormPanel
+    if (isPanelOpen.value == false) {
+      isPanelOpen.value = openFormPanel
+    }
     formSchema.value = schema
     formData.value = { ...item } // 원본 수정을 방지하기 위해 복사해서 사용
     panelTitleKey.value = titleKey // ✅ [추가] 4. 제목 키 저장

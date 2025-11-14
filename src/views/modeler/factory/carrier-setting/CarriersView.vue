@@ -44,8 +44,32 @@ const searchSchema = [
 
 //폼 스키마 정의 (추가/수정에 사용)
 const formSchema = [
-  { key: 'authorityName', labelKey: 'model.authority.authorityName', component: 'v-text-field' },
-  { key: 'description', labelKey: 'model.common.description', component: 'v-text-field' },
+  { key: 'carrierName', labelKey: 'model.carrier.carrierName', component: 'v-text-field' },
+  {
+    key: 'carrierDefName',
+    labelKey: 'model.carrier.carrierDefName',
+    component: 'v-autocomplete',
+    'item-title': 'carrierDefName', // v-autocomplete item-title에 매핑할 키
+    'item-value': 'carrierDefName', // v-autocomplete item-value에 매핑할 키
+    apiEndpoint: '/api/carrier-def',
+  },
+  { key: 'capacity', labelKey: 'model.carrier.capacity', component: 'v-text-field' },
+  {
+    key: 'cleanState',
+    labelKey: 'model.carrier.cleanState',
+    component: 'v-select',
+    'item-title': 'code', // v-select의 item-title에 매핑할 키
+    'item-value': 'code', // v-select의 item-value에 매핑할 키
+    apiEndpoint: '/api/meta-data/carrier-clean-state',
+  },
+  {
+    key: 'holdState',
+    labelKey: 'model.carrier.holdState',
+    component: 'v-select',
+    'item-title': 'code', // v-select의 item-title에 매핑할 키
+    'item-value': 'code', // v-select의 item-value에 매핑할 키
+    apiEndpoint: '/api/meta-data/hold-state',
+  },
 ]
 
 const headers = [

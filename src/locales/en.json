@@ -31,8 +31,8 @@
       "selectTitle": "selectTitle",
       "resources": {
         "alarm": "alarmHistory",
-        "alarm_def": "alarmDefHistory",
-        "alarm_action": "alarmActionHistory",
+        "alarm-def": "alarmDefHistory",
+        "alarm-action": "alarmActionHistory",
         "lot": "lotHistory",
         "machine": "machineHistory"
       }
@@ -85,6 +85,7 @@
     "Dashboard": "Dashboard",
     "UserManagement": "User Management",
     "AlarmAction": "Alarm Action",
+    "AlarmMailDetailAction": "Alarm Mail Detail Action",
     "AlarmDef": "Alarm Definition",
     "AlarmUserGroupUsers": "Alarm User Group Users",
     "AlarmUserGroup": "Alarm User Group",
